@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Home | Pinkmantaray Connect</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="my-connections">
+
+	<h2>My Connections</h2>
+
+	<script>
+		console.log("Connections: " + JSON.stringify(connections));
+		console.log("Pending: " + JSON.stringify(pending))
+	</script>
+
+	<table>
+		<tr>
+			<th>ID(?)</th>
+			<th>Location</th>
+			<th>Age</th>
+			<th>Gender</th>
+			<th>Sexuality</th>
+			<th>Race & Ethnicity</th>
+			<th>Interests</th>
+		</tr>
+
+		<% if (connections.length > 0) { %>
+		<% for(var i = 0; i < connections.length; i++) { %>
+			<tr>
+				<td><%= connections[i].id %></td>
+				<td><%= connections[i].country %></td>
+				<td><%= connections[i].year %></td>
+				<td><%= connections[i].gender %></td>
+				<td><%= connections[i].sexuality %></td>
+				<td><%= connections[i].race_ethnicity %></td>
+				<td>INTERESTS (TODO)</td>
+			</tr>
+		<% } %>
+		<% } %>
+
+		<!--<tr>
+			<td>123</td>
+			<td>Minnesota, USA</td>>
+			<td>45</td>
+			<td>Transgender Woman</td>
+			<td>Straight</td>
+			<td>Mixed</td>
+			<td>Running, Music</td>
+		</tr>-->
+	</table>
+</div>
+
+<div id="pending-connections">
+	<h2>Pending Connections</h2>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Location</th>
+			<th>Age</th>
+			<th>Gender</th>
+			<th>Sexuality</th>
+			<th>Race & Ethnicity</th>
+			<th>Interests</th>
+		</tr>
+
+		<% if (pending.length > 0) {%>
+		<% for(var i = 0; i < pending.length; i++) { %>
+			<tr>
+				<td><%= pending[i].id %></td>
+				<td><%= pending[i].country %></td>
+				<td><%= pending[i].year %></td>
+				<td><%= pending[i].gender %></td>
+				<td><%= pending[i].sexuality %></td>
+				<td><%= pending[i].race_ethnicity %></td>
+				<td>INTERESTS (TODO)</td>
+			</tr>
+		<% } %>
+		<% } %>
+
+	</table>
+</div>
+
+</body>
+</html>
