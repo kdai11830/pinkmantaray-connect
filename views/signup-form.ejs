@@ -15,20 +15,44 @@ body {
 <div class="signup-form">
 	<form action="new-user-auth" method="POST">
 
+	<div id="name_div">
 	<label for="entry_name">Name: </label>
 	<input type="text" placeholder="Name" name="entry_name" required>
+	</div>
 
+	<div id="email_div">
 	<label for="entry_email">Email: </label>
 	<input type="email" placeholder="Email" name="entry_email" required>
+	</div>
 
+	<div id="year_div">
 	<label for="entry_year">Birth Year: </label>
-	<input type="number" placeholder="Birth Year" name="entry_year" required> <!__Maybe make this drop down__>
+	<select name="entry_year" id="select_year" required> <!--Maybe make this drop down-->
+		<option value="">--Select Year--</option>
+	</select>
+	</div>
 
+	<!-- dynamically add dates to dropdown menu -->
+	<script>
+		var e = document.getElementById("select_year");
+		for (var i = new Date().getFullYear(); i > 1900; i--) {
+			var option = document.createElement("option");
+			option.text = i.toString();
+			option.value = i;
+			e.add(option);
+		}
+	</script>
+
+
+	<div id="instagram_div">
 	<label for="entry_instagram">Instagram Handle: </label>
 	<input type="text" placeholder="Instagram Handle" name="entry_instagram" maxlength="30" required>
+	</div>
 	
+	<div id="country_div"></div>
 	<label for="entry_country">Country: </label>
-	<select name="entry_country">
+	<select name="entry_country" id="select_country" onchange="stateController()" required>
+		<option value="">--Select Country--</option>
 	    <option value="AFG">Afghanistan</option>
 	    <option value="ALA">Åland Islands</option>
 	    <option value="ALB">Albania</option>
@@ -280,61 +304,82 @@ body {
 	    <option value="ZWE">Zimbabwe</option>
 	</select>
 
-	<label for="entry_state">State: </label>
-	<select name="entry_state">
-		<option value="AL">Alabama</option>
-		<option value="AK">Alaska</option>
-		<option value="AZ">Arizona</option>
-		<option value="AR">Arkansas</option>
-		<option value="CA">California</option>
-		<option value="CO">Colorado</option>
-		<option value="CT">Connecticut</option>
-		<option value="DE">Delaware</option>
-		<option value="DC">District Of Columbia</option>
-		<option value="FL">Florida</option>
-		<option value="GA">Georgia</option>
-		<option value="HI">Hawaii</option>
-		<option value="ID">Idaho</option>
-		<option value="IL">Illinois</option>
-		<option value="IN">Indiana</option>
-		<option value="IA">Iowa</option>
-		<option value="KS">Kansas</option>
-		<option value="KY">Kentucky</option>
-		<option value="LA">Louisiana</option>
-		<option value="ME">Maine</option>
-		<option value="MD">Maryland</option>
-		<option value="MA">Massachusetts</option>
-		<option value="MI">Michigan</option>
-		<option value="MN">Minnesota</option>
-		<option value="MS">Mississippi</option>
-		<option value="MO">Missouri</option>
-		<option value="MT">Montana</option>
-		<option value="NE">Nebraska</option>
-		<option value="NV">Nevada</option>
-		<option value="NH">New Hampshire</option>
-		<option value="NJ">New Jersey</option>
-		<option value="NM">New Mexico</option>
-		<option value="NY">New York</option>
-		<option value="NC">North Carolina</option>
-		<option value="ND">North Dakota</option>
-		<option value="OH">Ohio</option>
-		<option value="OK">Oklahoma</option>
-		<option value="OR">Oregon</option>
-		<option value="PA">Pennsylvania</option>
-		<option value="RI">Rhode Island</option>
-		<option value="SC">South Carolina</option>
-		<option value="SD">South Dakota</option>
-		<option value="TN">Tennessee</option>
-		<option value="TX">Texas</option>
-		<option value="UT">Utah</option>
-		<option value="VT">Vermont</option>
-		<option value="VA">Virginia</option>
-		<option value="WA">Washington</option>
-		<option value="WV">West Virginia</option>
-		<option value="WI">Wisconsin</option>
-		<option value="WY">Wyoming</option>
-	</select>
+	<div id="state_div">
+		<label for="entry_state">State: </label>
+		<select name="entry_state" id="select_state">
+			<option value="">--Select State--</option>
+			<option value="AL">Alabama</option>
+			<option value="AK">Alaska</option>
+			<option value="AZ">Arizona</option>
+			<option value="AR">Arkansas</option>
+			<option value="CA">California</option>
+			<option value="CO">Colorado</option>
+			<option value="CT">Connecticut</option>
+			<option value="DE">Delaware</option>
+			<option value="DC">District Of Columbia</option>
+			<option value="FL">Florida</option>
+			<option value="GA">Georgia</option>
+			<option value="HI">Hawaii</option>
+			<option value="ID">Idaho</option>
+			<option value="IL">Illinois</option>
+			<option value="IN">Indiana</option>
+			<option value="IA">Iowa</option>
+			<option value="KS">Kansas</option>
+			<option value="KY">Kentucky</option>
+			<option value="LA">Louisiana</option>
+			<option value="ME">Maine</option>
+			<option value="MD">Maryland</option>
+			<option value="MA">Massachusetts</option>
+			<option value="MI">Michigan</option>
+			<option value="MN">Minnesota</option>
+			<option value="MS">Mississippi</option>
+			<option value="MO">Missouri</option>
+			<option value="MT">Montana</option>
+			<option value="NE">Nebraska</option>
+			<option value="NV">Nevada</option>
+			<option value="NH">New Hampshire</option>
+			<option value="NJ">New Jersey</option>
+			<option value="NM">New Mexico</option>
+			<option value="NY">New York</option>
+			<option value="NC">North Carolina</option>
+			<option value="ND">North Dakota</option>
+			<option value="OH">Ohio</option>
+			<option value="OK">Oklahoma</option>
+			<option value="OR">Oregon</option>
+			<option value="PA">Pennsylvania</option>
+			<option value="RI">Rhode Island</option>
+			<option value="SC">South Carolina</option>
+			<option value="SD">South Dakota</option>
+			<option value="TN">Tennessee</option>
+			<option value="TX">Texas</option>
+			<option value="UT">Utah</option>
+			<option value="VT">Vermont</option>
+			<option value="VA">Virginia</option>
+			<option value="WA">Washington</option>
+			<option value="WV">West Virginia</option>
+			<option value="WI">Wisconsin</option>
+			<option value="WY">Wyoming</option>
+		</select>
+	</div>
 
+	<!-- enable-disable script for selecting countries and states -->
+	<script>
+		document.getElementById("state_div").style.display = "none";
+		function stateController() {
+			var e = document.getElementById("select_country");
+			var selectedCountry = e.options[e.selectedIndex].value;
+
+			var s = document.getElementById("state_div");
+			if (selectedCountry == "USA") {
+				s.style.display = "block";
+			} else {
+				s.selectedIndex = 0;
+				s.style.display = "none";
+			}
+		}
+	</script>
+
+	<div id="gender_div">
 	<label for="entry_gender_div">Gender (select all that apply): </label>
 	<div id="entry_gender_div">
 		<label>
@@ -368,7 +413,9 @@ body {
 			<input type="checkbox" name="entry_gender[]" value="noanswer"> Prefer not to say
 		</label>
 	</div>
+	</div>
 
+	<div id="sexuality_div">
 	<label for="entry_sexuality_div">Sexuality (select all that apply): </label>
 	<div id="entry_sexuality_div">
 		<label>
@@ -395,10 +442,10 @@ body {
 		<label>
 			<input type="checkbox" name="entry_sexuality[]" value="noanswer"> Prefer not to say
 		</label>
-
-
+	</div>
 	</div>
 
+	<div id="race_div">
 	<label for="entry_race_div">Race and ethnicity (select all that apply): </label>
 	<div id="entry_race_div">
 		<label>
@@ -419,9 +466,10 @@ body {
 		<label>
 			<input type="checkbox" name="entry_race[]" value="noanswer"> Prefer not to say
 		</label>
-
+	</div>
 	</div>
 
+	<div id="religion_div">
 	<label for="entry_religion_div">Religion (select all that apply): </label>
 	<div id="entry_religion_div">
 		<label>
@@ -446,23 +494,26 @@ body {
 			<input type="checkbox" name="entry_religion[]" value="noanswer"> Prefer not to say
 		</label>
 	</div>
+	</div>
 
+	<div id="interests_div">
 	<label for="entry_interests">Interests: </label>
 	<input type="text" name="entry_interests" placeholder="Type interests separated by a comma.">
 	<datalist>
-		<option value="watermelon">
-		<option value="Canada">
-		<option value="refrigerator">
-		<option value="Valentine's Day">
+		<option value="watermelon"/>
+		<option value="Canada"/>
+		<option value="refrigerator"/>
+		<option value="Valentine's Day"/>
 	</datalist>
+	</div>
 
-	<div>
+	<div id="terms_div">
 	<input type="checkbox" name="read_terms_conditions" value="read" required>
-	<p>I have read and agree to the <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+	<label for="read_terms_conditions">I have read and agree to the <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</label>
 	</div>
 
 
-	<input type="submit">Register</button>
+	<input type="submit" value="Register" />
 
 	</form>
 </div>
