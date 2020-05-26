@@ -81,45 +81,6 @@ function restrict(req, res, next) {
 
 /** HOME PAGE **/
 app.get('/', restrict, function(req, res) {
-	/*var tableVals = [];
-
-	// TODO: CLEAN THIS UP, HOPEFULLY COMBINE THE TWO QUERY CALLS
-	// USE PROMISE IF POSSIBLE
-	connection.query(`SELECT * FROM user_info 
-		RIGHT JOIN connections ON connections.connection_id = user_info.id 
-		WHERE connections.user_id = ? AND connections.pending = 0`, req.session.id, function(error, result, fields) {
-			if (error) {
-				console.log("THIS SHIT HAPPENED")
-				console.log(error);
-				res.render('index', {"error": true});
-				return;
-			} else {
-				console.log(result);
-				var jsonList = [result];
-				// addJSON(result);
-
-				// begin nested query
-				connection.query(`SELECT * FROM user_info 
-					RIGHT JOIN connections ON connections.connection_id = user_info.id 
-					WHERE connections.user_id = ? AND connections.pending = 1`, req.session.id, function(error, result) {
-						if (error) {
-							console.log(error);
-							res.render('index', {"error": true}); // TODO: FIGURE OUT IF THIS MEANS NO CONNECTIONS OR WHAT
-							return;
-						} else {
-							console.log(result);
-							addJSON(result)
-						}	
-				});
-			}
-	});	
-
-	res.render('index', {"connections": tableVals[0], "pending": tableVals[1]});
-	return;
-
-	function addJSON(obj) {
-		tableVals.push(obj);
-	}*/
 
 	// double sql query
 	var sql = `SELECT * FROM user_info 
@@ -127,8 +88,14 @@ app.get('/', restrict, function(req, res) {
 		WHERE connections.user_id = ? AND connections.pending = 0; 
 		SELECT * FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
-		WHERE connections.user_id = ? AND connections.pending = 1`
-	connection.query(sql, [req.session.user_id, req.session.user_id], function(err, results, fields) {
+		WHERE connections.user_id = ? AND connections.pending = 1;
+		SELECT * FROM user_interests
+		RIGHT JOIN connections ON connections.connection_id = user_interests.user_id
+		WHERE connections.user_id = ? AND connections.pending = 0;
+		SELECT * FROM user_interests
+		RIGHT JOIN connections ON connections.connection_id = user_interests.user_id
+		WHERE connections.user_id = ? AND connections.pending = 1;`
+	connection.query(sql, [req.session.user_id, req.session.user_id, req.session.user_id, req.session.user_id], function(err, results, fields) {
 		if (err) {
 			console.log(err);
 			res.redirect('/login');
@@ -136,7 +103,7 @@ app.get('/', restrict, function(req, res) {
 		}
 		console.log(req.session.user_id);
 		console.log(results);
-		res.render('index', {"connections": results[0], "pending": results[1]});
+		res.render('index', {"c": results[0], "c_pending": results[1], "c_interests": results[2], "c_pending_interests:": results[3]});
 		return;
 	});
 

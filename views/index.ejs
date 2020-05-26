@@ -21,8 +21,8 @@ body {
 	<h2>My Connections</h2>
 
 	<script>
-		console.log("Connections: " + JSON.stringify(connections));
-		console.log("Pending: " + JSON.stringify(pending))
+		console.log("info: " + JSON.stringify(c));
+		console.log("c_pending: " + JSON.stringify(c_pending))
 	</script>
 
 	<table>
@@ -36,16 +36,28 @@ body {
 			<th>Interests</th>
 		</tr>
 
-		<% if (connections.length > 0) { %>
-		<% for(var i = 0; i < connections.length; i++) { %>
+		<% if (c.length > 0) { %>
+		<% for(var i = 0; i < c.length; i++) { %>
 			<tr>
-				<td><%= connections[i].id %></td>
-				<td><%= connections[i].country %></td>
-				<td><%= connections[i].year %></td>
-				<td><%= connections[i].gender %></td>
-				<td><%= connections[i].sexuality %></td>
-				<td><%= connections[i].race_ethnicity %></td>
-				<td>INTERESTS (TODO)</td>
+				<td><%= c[i].id %></td>
+				<td><%= c[i].country + ", " + c[i].state %></td> <!-- fix this with state only for USA -->
+				<td><%= new Date().getFullYear() - c[i].year %></td>
+				<td><%= c[i].gender %></td>
+				<td><%= c[i].sexuality %></td>
+				<td><%= c[i].race_ethnicity %></td>
+				<% var interestString = "" %>
+				<% for (var j = 0; j < c_interests.length; j++) { %>
+					<% if (c_interests[j].connection_id == c[i].id) { %>
+						<% interestString = interestString + c_interests[j].interest + ', ' %>
+					<% } %>
+				<% } %> 
+				<td>
+					<% if (interestString == "") { %>
+						<%= "None" %>
+					<% } else { %>
+						<%= interestString.substring(0, interestString.length - 2) %>
+					<% } %>
+				</td>
 			</tr>
 		<% } %>
 		<% } %>
@@ -62,7 +74,7 @@ body {
 	</table>
 </div>
 
-<div id="pending-connections">
+<div id="c_pending-c">
 	<h2>Pending Connections</h2>
 	<table>
 		<tr>
@@ -75,16 +87,28 @@ body {
 			<th>Interests</th>
 		</tr>
 
-		<% if (pending.length > 0) {%>
-		<% for(var i = 0; i < pending.length; i++) { %>
+		<% if (c_pending.length > 0) {%>
+		<% for(var i = 0; i < c_pending.length; i++) { %>
 			<tr>
-				<td><%= pending[i].id %></td>
-				<td><%= pending[i].country %></td>
-				<td><%= pending[i].year %></td>
-				<td><%= pending[i].gender %></td>
-				<td><%= pending[i].sexuality %></td>
-				<td><%= pending[i].race_ethnicity %></td>
-				<td>INTERESTS (TODO)</td>
+				<td><%= c_pending[i].id %></td>
+				<td><%= c_pending[i].country + ", " + c_pending[i].state %></td> <!-- fix this with state only for USA -->
+				<td><%= c_pending[i].year %></td>
+				<td><%= c_pending[i].gender %></td>
+				<td><%= c_pending[i].sexuality %></td>
+				<td><%= c_pending[i].race_ethnicity %></td>
+				<% var p_interestString = "" %>
+				<% for (var j = 0; j < c_pending_interests.length; j++) { %>
+					<% if (c_pending_interests[j].connection_id == c[i].id) { %>
+						<% interestString = interestString + c_pending_interests[j].interest + ', ' %>
+					<% } %>
+				<% } %> 
+				<td>
+					<% if (interestString == "") { %>
+						<%= "None" %>
+					<% } else { %>
+						<%= interestString.substring(0, interestString.length - 2) %>
+					<% } %>
+				</td>
 			</tr>
 		<% } %>
 		<% } %>
