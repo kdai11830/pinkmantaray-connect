@@ -51,9 +51,16 @@ if (app.get('env') === 'production') {
 }
 
 app.use(session(sess));
+app.use(function(req, res, next) {
+    if (!req.user)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
 
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
+
+app.use(express.static(__dirname + "/scripts"));
 
 
 // test connection to port

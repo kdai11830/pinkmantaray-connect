@@ -9,6 +9,11 @@ body {
   font_family: Arial, Helvetica, sans_serif;
 }
 </style>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="/scripts.js"></script>
+
 </head>
 <body>
 
@@ -32,26 +37,14 @@ body {
 	</select>
 	</div>
 
-	<!-- dynamically add dates to dropdown menu -->
-	<script>
-		var e = document.getElementById("select_year");
-		for (var i = new Date().getFullYear(); i > 1900; i--) {
-			var option = document.createElement("option");
-			option.text = i.toString();
-			option.value = i;
-			e.add(option);
-		}
-	</script>
-
-
 	<div id="instagram_div">
 	<label for="entry_instagram">Instagram Handle: </label>
-	<input type="text" placeholder="Instagram Handle" name="entry_instagram" maxlength="30" required>
+	<input type="text" placeholder="Instagram Handle" id="instagram" name="entry_instagram" maxlength="30" required>
 	</div>
-	
+
 	<div id="country_div"></div>
 	<label for="entry_country">Country: </label>
-	<select name="entry_country" id="select_country" onchange="stateController()" required>
+	<select name="entry_country" id="select_country" required>
 		<option value="">--Select Country--</option>
 	    <option value="AFG">Afghanistan</option>
 	    <option value="ALA">Åland Islands</option>
@@ -304,7 +297,7 @@ body {
 	    <option value="ZWE">Zimbabwe</option>
 	</select>
 
-	<div id="state_div">
+	<div id="state_div" hidden>
 		<label for="entry_state">State: </label>
 		<select name="entry_state" id="select_state">
 			<option value="">--Select State--</option>
@@ -361,23 +354,6 @@ body {
 			<option value="WY">Wyoming</option>
 		</select>
 	</div>
-
-	<!-- enable-disable script for selecting countries and states -->
-	<script>
-		document.getElementById("state_div").style.display = "none";
-		function stateController() {
-			var e = document.getElementById("select_country");
-			var selectedCountry = e.options[e.selectedIndex].value;
-
-			var s = document.getElementById("state_div");
-			if (selectedCountry == "USA") {
-				s.style.display = "block";
-			} else {
-				s.selectedIndex = 0;
-				s.style.display = "none";
-			}
-		}
-	</script>
 
 	<div id="gender_div">
 	<label for="entry_gender_div">Gender (select all that apply): </label>
@@ -498,13 +474,15 @@ body {
 
 	<div id="interests_div">
 	<label for="entry_interests">Interests: </label>
-	<input type="text" name="entry_interests" placeholder="Type interests separated by a comma.">
-	<datalist>
+
+	<input list="interests_datalist" name="entry_interests" id="interests" placeholder="Add interests by typing and pressing enter.">
+	<datalist id="interests_datalist">
 		<option value="watermelon"/>
 		<option value="Canada"/>
 		<option value="refrigerator"/>
 		<option value="Valentine's Day"/>
 	</datalist>
+	<ul id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
 	</div>
 
 	<div id="terms_div">
