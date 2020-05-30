@@ -11,12 +11,21 @@ body {
 </style>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <script type="text/javascript" src="/scripts.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#header").load("../views/header.html");
+	});
+</script>
 
 </head>
 <body>
 
+<!-- placeholder div for header -->
+<div id="header"></div>
+
+
+<!-- form begins -->
 <div class="signup-form">
 	<form action="new-user-auth" method="POST">
 
