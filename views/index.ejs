@@ -16,98 +16,28 @@ body {
 
 <body>
 
-<%- include("../partials/header") %>
+<%- include("partials/header") %>
 
 <div id="my-connections">
 
 	<h2>My Connections</h2>
 
 	<table>
-		<tr>
-			<th>ID(?)</th>
-			<th>Location</th>
-			<th>Age</th>
-			<th>Gender</th>
-			<th>Sexuality</th>
-			<th>Race & Ethnicity</th>
-			<th>Interests</th>
-		</tr>
 
-		<% if (c.length > 0) { %>
-		<% for(var i = 0; i < c.length; i++) { %>
-			<tr>
-				<td><%= c[i].id %></td>
-				<td><%= c[i].country + ", " + c[i].state %></td> <!-- fix this with state only for USA -->
-				<td><%= new Date().getFullYear() - c[i].year %></td>
-				<td><%= c[i].gender %></td>
-				<td><%= c[i].sexuality %></td>
-				<td><%= c[i].race_ethnicity %></td>
-				<% var interestString = "" %>
-				<% for (var j = 0; j < c_interests.length; j++) { %>
-					<% if (c_interests[j].connection_id == c[i].id) { %>
-						<% interestString = interestString + c_interests[j].interest + ', ' %>
-					<% } %>
-				<% } %> 
-				<td>
-					<% if (interestString == "") { %>
-						<%= "None" %>
-					<% } else { %>
-						<%= interestString.substring(0, interestString.length - 2) %>
-					<% } %>
-				</td>
-			</tr>
-		<% } %>
-		<% } %>
-
-		<!--<tr>
-			<td>123</td>
-			<td>Minnesota, USA</td>>
-			<td>45</td>
-			<td>Transgender Woman</td>
-			<td>Straight</td>
-			<td>Mixed</td>
-			<td>Running, Music</td>
-		</tr>-->
-	</table>
-</div>
-
-<div id="c_pending-c">
-	<h2>Pending Connections</h2>
-	<table>
-		<tr>
-			<th>ID</th>
-			<th>Location</th>
-			<th>Age</th>
-			<th>Gender</th>
-			<th>Sexuality</th>
-			<th>Race & Ethnicity</th>
-			<th>Interests</th>
-		</tr>
-
-		<% if (c_pending.length > 0) {%>
-		<% for(var i = 0; i < c_pending.length; i++) { %>
-			<tr>
-				<td><%= c_pending[i].id %></td>
-				<td><%= c_pending[i].country + ", " + c_pending[i].state %></td> <!-- fix this with state only for USA -->
-				<td><%= c_pending[i].year %></td>
-				<td><%= c_pending[i].gender %></td>
-				<td><%= c_pending[i].sexuality %></td>
-				<td><%= c_pending[i].race_ethnicity %></td>
-				<% var p_interestString = "" %>
-				<% for (var j = 0; j < c_pending_interests.length; j++) { %>
-					<% if (c_pending_interests[j].connection_id == c[i].id) { %>
-						<% interestString = interestString + c_pending_interests[j].interest + ', ' %>
-					<% } %>
-				<% } %> 
-				<td>
-					<% if (interestString == "") { %>
-						<%= "None" %>
-					<% } else { %>
-						<%= interestString.substring(0, interestString.length - 2) %>
-					<% } %>
-				</td>
-			</tr>
-		<% } %>
+		<% if (results.length > 0) { %>
+			<% for(var i = 0; i < results.length; i++) { %>
+				<tr>
+					<td><%= results[i].name %></td>
+					<td><a href="https://www.instagram.com/<%= results[i].instagram %>">
+						<img border="0" alt="www.instagram.com/<%=results[i].instagram %>" 
+						src="/views/imgs/instagram_logo.png" width="20" height="20"></a>
+					</td>
+					<td><a href=""><img border="0" alt="email" 
+						src="/views/imgs/email_icon.png" width="20" height="20"></a></td>
+					<td><a href="/report"><img border="0" alt="Report user" 
+						src="/views/imgs/report_icon.png" width="20" height="20"></a></td>			
+				</tr>
+			<% } %>
 		<% } %>
 
 	</table>
