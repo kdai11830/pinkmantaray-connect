@@ -15,7 +15,9 @@ var app = new express();
 const port = 3000;
 
 var server = http.createServer(app);
-var io = require('io').listen(server);
+var io = require('socket.io').listen(server);
+
+
 
 server.listen(port);
 
@@ -54,12 +56,18 @@ var sess = {
 	saveUninitialized: true
 };
 
+var sessionMiddleware = session(sess);
+
+io.use(function(socket, next) {
+	sessionMiddleware(socket.request, socket.request.res || {}, next);
+})
+
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
 }
 
-app.use(session(sess));
+app.use(sessionMiddleware);
 app.use(function(req, res, next) {
     if (!req.user)
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -99,7 +107,7 @@ function restrict(req, res, next) {
 app.get('/', restrict, function(req, res) {
 
 	// double sql query
-	var sql = `SELECT name, email, instagram FROM user_info 
+	var sql = `SELECT name, pronouns, email, instagram FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
 		WHERE connections.user_id = ? AND connections.pending = 0; `
 
@@ -140,164 +148,6 @@ app.get('/signup', function(req, res) {
 /** CONNECT PAGE **/
 app.get('/connect', restrict, function(req, res) {
 	res.render('connect/index');
-});
-
-
-/** CONNECT PAGE POST **/
-app.post('/connect', function(req, res) {
-	// put all of the query parameters within dict
-	var paramDict = {};
-
-	if (req.body.option_location) {
-		paramDict["country"] = req.body.option_location;
-	}
-
-	if (req.body.option_age1 && req.body.option_age2) {
-		paramDict["age1"] = req.body.option_age1;
-		paramDict["age2"] = req.body.option_age2;
-	}
-
-	if (req.body.option_gender) {
-		paramDict["gender"] = req.body.option_gender;
-	}
-
-	if (req.body.option_sexuality) {
-		paramDict["sexuality"] = req.body.option_sexuality;
-	}
-
-	if (req.body.option_race) {
-		paramDict["race_ethnicity"] = req.body.option_race;
-	}
-
-	if (req.body.option_religion) {
-		paramDict["religion"] = req.body.option_religion;
-	}
-
-	if (req.body.entry_interests) {
-		paramDict["interests"] = req.body.entry_interests;
-	}
-
-	// stringify dict into url and redirect to results page
-	var queryString = qs.stringify();
-	res.redirect('/results?' + queryString);
-});
-
-
-/** SEARCH RESULTS OF CONNECT PAGE **/
-// TODO: EVERYTHING LOL
-app.get('/results', restrict, function(req, res) {
-	// TODO: check if parsed correctly
-	var queryResults = req.query;
-	var queryLimit = 20;
-
-	
-
-	// if there are query strings do initial query to get IDs and then use IDs to get information
-	if (Object.keys(queryResults).length !== 0) {
-		var sql = `SELECT info.id FROM pinkmantaray_connect.user_info info
-		LEFT JOIN user_gender gender ON
-		gender.user_id = info.id
-		LEFT JOIN user_sexuality sexuality ON
-		sexuality.user_id = info.id
-		LEFT JOIN user_race_ethnicity race ON
-		race.user_id = info.id
-		LEFT JOIN user_religion religion ON
-		religion.user_id = info.id
-		LEFT JOIN user_interests interests ON
-		interests.user_id = info.id WHERE`
-
-		var insertVals = [];
-		// go through querystring and check every element and add to sql
-		if ("country" in queryResults) {
-			sql += " (info.country = ?) OR";
-			insertVals.push(queryResults["country"]);
-		}
-		if (("age1" in queryResults) && ("age2" in queryResults)) {
-			var curYear = new Date().getFullYear();
-			var year1 = curYear - queryResults["age2"]; // older
-			var year2 = curYear - queryResults["age1"]; // younger
-			sql += ' (info.year BETWEEN ? AND ?) OR';
-			insertVals.push(year1);
-			insertVals.push(year2);
-		}
-		if ("gender" in queryResults) {
-			sql += " (gender.gender IN (";
-			// gender should be an array
-			for (var i = 0; i < queryResults["gender"].length; i++) {
-				sql += '?,';
-				insertVals.push(queryResults["gender"][i]);
-			}
-			sql -= ',';
-			sql += ')) OR';
-		}
-		if ("sexuality" in queryResults) {
-			sql += " (sexuality.sexuality IN (";
-			// gender should be an array
-			for (var i = 0; i < queryResults["sexuality"].length; i++) {
-				sql += '?,';
-				insertVals.push(queryResults["sexuality"][i]);
-			}
-			sql -= ',';
-			sql += ')) OR';
-		}
-		if ("race_ethnicity" in queryResults) {
-			sql += " (race.race_ethnicity IN (";
-			// gender should be an array
-			for (var i = 0; i < queryResults["race_ethnicity"].length; i++) {
-				sql += '?,';
-				insertVals.push(queryResults["race_ethnicity"][i]);
-			}
-			sql -= ',';
-			sql += ')) OR';
-		}
-		if ("religion" in queryResults) {
-			sql += " (religion.religion IN (";
-			// gender should be an array
-			for (var i = 0; i < queryResults["religion"].length; i++) {
-				sql += '?,';
-				insertVals.push(queryResults["religion"][i]);
-			}
-			sql -= ',';
-			sql += ')) OR';
-		}
-		if ("interests" in queryResults) {
-			sql += " (interests.interest IN (";
-			// gender should be an array
-			for (var i = 0; i < queryResults["interests"].length; i++) {
-				sql += '?,';
-				insertVals.push(queryResults["interests"][i]);
-			}
-			sql -= ',';
-			sql += ')) OR';
-		}
-
-		// remove tailing OR
-		sql = sql.substring(0, sql.length - 2);
-		sql += 'GROUP BY info.id;';
-
-		// begin outer query
-		connection.query(sql, function(error, results, fields) {
-			console.log(results);
-
-			var sqlTemp = `SELECT id, `
-			// pass on results to inner query
-		}) 
-
-
-
-	// else query queryLimit number of items and send to results page
-	} else {
-		sql += 'LIMIT 0, ' + queryLimit; 
-		connection.query(sql, function(error, results, fields) {
-			console.log(results);
-			// send results to html template to display
-			// if no results, should be blank anyways
-			// ^ CHECK THIS
-			res.render('connect/results', {'results': results});
-			return;
-		});
-	}
-
 });
 
 
@@ -547,7 +397,7 @@ app.post('/new-user-auth', function(req, res) {
 
 
 /** SOCKET.IO LISTEN AND EMIT FUNCTIONS **/
-io.on('connection', function(socket) {
+io.socket.on('connection', function(socket) {
 	console.log('socket connected...');
 
 	socket.on('search', function(vals) {
@@ -564,9 +414,12 @@ io.on('connection', function(socket) {
 			LEFT JOIN user_religion religion ON
 			religion.user_id = info.id
 			LEFT JOIN user_interests interests ON
-			interests.user_id = info.id WHERE `;
+			interests.user_id = info.id 
+			LEFT JOIN connections conn ON
+			conn.user_id = info.id WHERE 
+			info.id <> ? AND conn.connection_id <> ? AND `;
 
-		var insertVals = [];
+		var insertVals = [socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] !== '') {
 			sql += '(info.country = ?) OR ';
 			insertVals.push(vals["location"]);
@@ -628,11 +481,121 @@ io.on('connection', function(socket) {
 
 		// query database
 		connection.query(sql, function(error, results, fields) {
-			if (error) {
-				console.log(error);
-			}
+			console.log(results);
 
+			var ids = results[0]; // TEST TO SEE IF THIS IS RIGHT
+			var insertIds = '(';
+
+			for (var i = 0; i < ids.length; i++) {
+				insertIds += ids[i] + ',';
+			}
+			insertIds = insertIds.substring(0, insertIds.length - 1);
+			insertIds += '); ';
 			
-		})
-	})
-})
+			// info sql
+			var sqlTemp = `SELECT id, name, pronouns, country, year FROM user_info
+				WHERE user_info.id IN `;
+			sqlTemp += insertIds;
+
+			// gender sql
+			sqlTemp += `SELECT user_id gender FROM user_gender
+				WHERE user_id IN `;
+			sqlTemp += insertIds;
+
+			// sexuality sql
+			sqlTemp += `SELECT user_id, sexuality FROM user_sexuality
+				WHERE user_id IN `;
+			sqlTemp += insertIds;
+
+			// race sql
+			sqlTemp += `SELECT user_id, race_ethnicity FROM user_race_ethnicity
+				WHERE user_id IN `;
+			sqlTemp += insertIds;
+
+			// religion sql
+			sqlTemp += `SELECT user_id, religion FROM user_religion
+				WHERE user_id IN `;
+			sqlTemp += insertIds;
+
+			// interests sql
+			sqlTemp += `SELECT user_id, interest FROM user_interests
+				WHERE user_id IN `;
+			sqlTemp += insertIds;
+
+			// pass on results to inner query
+			connection.query(sqlTemp, function(error, results, fields) {
+				console.log(results);
+				// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
+				/* structure of results:
+					0: name, pronouns, country, year
+					1: gender
+					2: sexuality
+					3: race_ethnicity
+					4: religion
+					5: interest
+				*/
+				// goal: organize by id, nested array
+				var orgVals = [];
+				for (var i = 0; i < results[0]; i++) {
+					var tempVals = [
+						results[0][i].id, 
+						results[0][i].name, 
+						results[0][i].pronouns,
+						results[0][i].country,
+						results[0][i].year
+					];
+
+					// gender
+					var genderStr = [];
+					for (var j = 0; j < results[1].length; j++) {
+						if (results[1][j].user_id === results[0][j]) {
+							genderStr.push(results[1][j].gender);
+						}
+					}
+					tempVals.push(genderStr);
+
+					// sexuality
+					var sexualityStr = [];
+					for (var j = 0; j < results[2].length; j++) {
+						if (results[2][j].user_id === results[0][i]) {
+							genderStr.push(results[2][j].sexuality);
+						}
+					}
+					tempVals.push(sexualityStr);
+
+					// race_ethnicity
+					var race_ethnicityStr = [];
+					for (var j = 0; j < results[3].length; j++) {
+						if (results[3][j].user_id === results[0][j]) {
+							race_ethnicityStr.push(results[3][j].race_ethnicity);
+						}
+					}
+					tempVals.push(race_ethnicityStr);
+
+					// religion
+					var religionStr = [];
+					for (var j = 0; j < results[4].length; j++) {
+						if (results[4][j].user_id === results[0][j]) {
+							religionStr.push(results[4][j].religion);
+						}
+					}
+					tempVals.push(religionStr);
+
+					// interests
+					var interestsStr = [];
+					for (var j = 0; j < results[5].length; j++) {
+						if (results[5][j].user_id === results[0][j]) {
+							interestsStr.push(results[5][j].interest);
+						}
+					}
+					tempVals.push(interestsStr);
+
+					// add profile array to organized values
+					orgVals.push(tempVals);
+				}
+
+				socket.emit('searchResults', {"data": orgVals});
+			});
+		});
+	});
+});

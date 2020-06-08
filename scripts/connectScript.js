@@ -40,14 +40,69 @@ $(document).ready(function() {
 
 		// emit values to application.js with socket
 		socket.emit('search', emitVals);
+		$("#resultsDisplay").empty();
 		return false;
 	});
 
 
 	// when receiving data back from backend display in table
-	socket.on('searchResults', function(data) {
-		
-	})
+	socket.on('searchResults', function(d) {
+		var data = d["data"];
+
+		/* data: 
+			0: id
+			1: name
+			2: pronouns
+			3: country
+			4: year
+			5: gender
+			6: sexuality
+			7: race_ethnicity
+			8: religion
+			9: interests
+		*/
+
+		// create table headers
+		$('#resultsDisplay').append('<tr id="tableHeaders></tr>');
+		var headers = `<th></th>
+			<th>Pronouns</th>
+			<th>Country</th>
+			<th>Age</th>
+			<th>Gender</th>
+			<th>Sexuality</th>
+			<th>Race/Ethnicity</th>
+			<th>Religion</th>
+			<th>Interests</th>`;
+		$('#tableHeaders').append(headers);
+
+		for (var i = 0; i < data.length; i++) {
+			var curRow = 'entry' + i;
+			$("#resultsDisplay").append('<tr id="' + curRow + '"></tr>');
+
+			var connectBtn = '<td><button class="connectBtn">Connect</button></td>;'
+			$("#" + curRow).append(connectBtn);
+			$("#" + curRow).append('<td>' + data[i][2] + '</td>') // pronouns
+			$("#" + curRow).append('<td>' + data[i][3] + '</td>') // country
+			$("#" + curRow).append('<td>' + (new Date().getFullYear() - parseInt(data[i][4])) + '</td>') // age
+			$("#" + curRow).append('<td>' + data[i][5].join(', ') + '</td>');
+			$('#' + curRow).append('<td>' + data[i][6].join(', ') + '</td>');
+			$('#' + curRow).append('<td>' + data[i][7].join(', ') + '</td>');
+			$('#' + curRow).append('<td>' + data[i][8].join(', ') + '</td>');
+			$('#' + curRow).append('<td>' + data[i][9].join(', ') + '</td>');
+		}
+	});
+
+
+	$('.connectBtn').click(function() {
+		var confirmMsg = `Are you sure you want to connect? When you select CONNECT, 
+			a request with your (unidentifiable) information will be shared with 
+			[this person] so that they can either accept or reject your request. 
+			You can view your pending under NOTIFICATIONS tab.`
+		if (confirm(confirmMsg)) {
+			// replace button with text
+			$(this).replaceWith('Invitation pending!');
+		}
+	});
 
 
 	$('#interests').bind('keydown', function(e) {

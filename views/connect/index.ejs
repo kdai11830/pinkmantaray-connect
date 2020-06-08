@@ -22,7 +22,7 @@ body {
 </div>
 
 <div id="searchDiv">
-	<form id="connectForm" action="connect" method="POST">
+	<form id="connectForm" method="POST">
 
 	<div id="div_location">
 	<label for="option_location">Location:</label> <!-- just use country for now, refine later -->
@@ -404,11 +404,16 @@ body {
 	<!-- add interests to hidden input with name "entry_interests" -->
 	</div>
 
+	<button type="submit" id="submitButton">Search</button>
 	</form>
-
 </div>
 
-
+<div id="resultsDiv">
+	<table id="resultsDisplay">
+		
+	</table>
+	
+</div>
 
 
 
