@@ -14,12 +14,13 @@ var http = require('http');
 var app = new express();
 const port = 3000;
 
-var server = http.createServer(app);
+// var server = http.createServer(app);
+var server = app.listen(port, function() {
+	console.log(new Date().toISOString() + ": server started on port " + port)
+})
 var io = require('socket.io').listen(server);
 
-
-
-server.listen(port);
+// server.listen(port);
 
 
 const saltRounds = 10;
@@ -80,14 +81,6 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
 
-// test connection to port
-app.listen(port, function(err) {  
-	if (typeof(err) == "undefined") {  
-		console.log('Your application is running on : ' + port + ' port');  
-	}  
-}); 
-
-
 /*****************************************************************************
 ******************************************************************************
 *****************************************************************************/
@@ -107,7 +100,7 @@ function restrict(req, res, next) {
 app.get('/', restrict, function(req, res) {
 
 	// double sql query
-	var sql = `SELECT name, pronouns, email, instagram FROM user_info 
+	var sql = `SELECT id, name, pronouns, email, instagram FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
 		WHERE connections.user_id = ? AND connections.pending = 0; `
 
@@ -147,8 +140,25 @@ app.get('/signup', function(req, res) {
 
 /** CONNECT PAGE **/
 app.get('/connect', restrict, function(req, res) {
-	res.render('connect/index');
+	var sql = `SELECT MIN(year) AS youngest 
+		FROM user_info; 
+		SELECT MAX(year) AS oldest 
+		FROM user_info;`
+	connection.query(sql, function(error, results, fields) {
+		if (error) throw error;
+		console.log(results);
+		res.render('connect/index', {"results": results});
+		return;
+	})
+	
 });
+
+
+/** LOGOUT FUNCTIONALITY **/
+app.get('/logout', function(req, res) {
+	req.session.destroy();
+	res.redirect('/welcome');
+})
 
 
 /** LOGIN AUTHENTICATION **/
@@ -214,17 +224,9 @@ app.post('/new-user-auth', function(req, res) {
 	// gather data from form
 	// required data
 
-	req.session.username = req.body.uname;
+	req.session.username = req.body.username;
 	var enteredPassword = req.body.pwd;
 	var confirmPassword = req.body.confirm;
-
-	// double check passwords match
-	if (enteredPassword !== confirmPassword) {
-		alert("Passwords much match!");
-		req.session.destroy();
-		res.redirect('back');
-		return;
-	}
 
 	// background information
 	var name = req.body.entry_name;
@@ -258,146 +260,127 @@ app.post('/new-user-auth', function(req, res) {
 		interests = req.body.entry_interests;
 	}
 
-	// check if terms and conditions read
-	// BACKUP - should not need this if front end js works
-	if (req.body.read_terms_conditions != "read") {
-		console.log('TODO: IMPLEMENT THIS THINGY');
-		res.redirect('back');
-		return;
+	// insert information into database
+	var sql = `INSERT INTO user_info 
+		(
+			username, password, name, pronouns, email, year, instagram, country, state, language
+		)
+		VALUES
+		(
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		)`;
+	// perform first sql insertion into user_info
+	// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE
+	// TO PREVENT CALLBACK HELL
+	// hash password
+	bcrypt.genSalt(saltRounds, function(err, salt) {
+		if (err) {
+			throw err;
+		} else {
+			bcrypt.hash(enteredPassword, salt, function(err, hash) {
+				if (err) {
+					throw err;
 
-	} else {
-		// insert information into database
-		var sql = `INSERT INTO user_info 
-			(
-				username, password, name, pronouns, email, year, instagram, country, state
-			)
-			VALUES
-			(
-				?, ?, ?, ?, ?, ?, ?, ?, ?
-			)`;
+				} else {
+					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, language];
+					console.log(insertVals);
 
-		// perform first sql insertion into user_info
-		// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE
-		// TO PREVENT CALLBACK HELL
+					connection.query(sql, insertVals, function(err, result, fields) {
+						if (err) {
+							console.log(err);
+							req.session.destroy();
+							res.redirect('/signup');
+							return;
 
-		// hash password
-		bcrypt.genSalt(saltRounds, function(err, salt) {
-			if (err) {
-				throw err;
-			} else {
-				bcrypt.hash(enteredPassword, salt, function(err, hash) {
-					if (err) {
-						throw err;
-					} else {
-						var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state];
-						console.log(insertVals);
+						} else {
+							req.session.loggedin = true;
+							console.log('inserted ID: ' + result.insertId);
 
-						connection.query(sql, insertVals, function(err, result, fields) {
-							if (err) {
-								console.log(err);
-								req.session.destroy();
-								res.redirect('/signup');
-								return;
-							} else {
-								req.session.loggedin = true;
-								console.log('inserted ID: ' + result.insertId);
+							//result should be last inserted id
+							// begin nested query
+							var nestedSql = '';
+							var nestedAdd = [];
+							req.session.user_id = result.insertId;
+							var sID = result.insertId.toString();
 
-								//result should be last inserted id
-								// begin nested query
-								var nestedSql = '; ';
-								var nestedAdd = [];
-								req.session.user_id = result.insertId;
-								var sID = result.insertId.toString();
-
-								// ADD LANGUAGE THING HERE ONCE IM NOT TOO LAZY TO MAKE THEM CHECKBOXES
-
-								if (gender.length > 0) {
-									nestedSql += 'INSERT INTO user_gender (user_id, gender) VALUES ';
-
-									for (var i = 0; i < gender.length - 1; i++) {
-										nestedSql += '(?, ?), ';
-										nestedAdd.push(sID);
-										nestedAdd.push(gender[i]);
-									}
-									nestedSql += '(?, ?); '
+							// ADD LANGUAGE THING HERE ONCE IM NOT TOO LAZY TO MAKE THEM CHECKBOXES
+							if (gender.length > 0) {
+								nestedSql += 'INSERT INTO user_gender (user_id, gender) VALUES ';
+								for (var i = 0; i < gender.length - 1; i++) {
+									nestedSql += '(?, ?), ';
 									nestedAdd.push(sID);
-									nestedAdd.push(gender[gender.length - 1]);
+									nestedAdd.push(gender[i]);
 								}
-
-								if (sexuality.length > 0) {
-									nestedSql += 'INSERT INTO user_sexuality (user_id, sexuality) VALUES ';
-
-									for (var i = 0; i < sexuality.length - 1; i++) {
-										nestedSql += '(?, ?), ';
-										nestedAdd.push(sID);
-										nestedAdd.push(sexuality[i]);
-									}
-									nestedSql += '(?, ?); '
-									nestedAdd.push(sID);
-									nestedAdd.push(sexuality[sexuality.length - 1]);
-								}
-
-								if (race_ethnicity.length > 0) {
-									nestedSql += 'INSERT INTO user_race_ethnicity (user_id, race_ethnicity) VALUES ';
-
-									for (var i = 0; i < race_ethnicity.length - 1; i++) {
-										nestedSql += '(?, ?), ';
-										nestedAdd.push(sID);
-										nestedAdd.push(race_ethnicity[i]);
-									}
-									nestedSql += '(?, ?); '
-									nestedAdd.push(sID);
-									nestedAdd.push(race_ethnicity[race_ethnicity.length - 1]);
-								}
-
-								if (religion.length > 0) {
-									nestedSql += 'INSERT INTO user_religion (user_id, religion) VALUES ';
-
-									for (var i = 0; i < religion.length - 1; i++) {
-										nestedSql += '(?, ?), ';
-										nestedAdd.push(sID);
-										nestedAdd.push(religion[i]);
-									}
-									nestedSql += '(?, ?); '
-									nestedAdd.push(sID);
-									nestedAdd.push(religion[religion.length - 1]);
-								}
-
-								if (interests.length > 0) {
-									nestedSql += `INSERT INTO user_interests (user_id, interest) VALUES `;
-
-									for (var i = 0; i < interests.length - 1; i++) {
-										nestedSql += '(?, ?), ';
-										nestedAdd.push(sID);
-										nestedAdd.push(interests[i]);
-									}
-									nestedSql += '(?, ?);'
-									nestedAdd.push(sID);
-									nestedAdd.push(interests[interests.length - 1]);
-								}
-
-								connection.query(nestedSql, nestedAdd, function(err, nestResult, fields) {
-									if (err) {
-										console.log(err);
-									} else {
-										// console.log(nestResult);
-										res.redirect('/');
-										return
-									}
-								});
+								nestedSql += '(?, ?); '
+								nestedAdd.push(sID);
+								nestedAdd.push(gender[gender.length - 1]);
 							}
-							
-						});
-					}
-				});
-			}
-		});
-	}
+							if (sexuality.length > 0) {
+								nestedSql += 'INSERT INTO user_sexuality (user_id, sexuality) VALUES ';
+								for (var i = 0; i < sexuality.length - 1; i++) {
+									nestedSql += '(?, ?), ';
+									nestedAdd.push(sID);
+									nestedAdd.push(sexuality[i]);
+								}
+								nestedSql += '(?, ?); '
+								nestedAdd.push(sID);
+								nestedAdd.push(sexuality[sexuality.length - 1]);
+							}
+							if (race_ethnicity.length > 0) {
+								nestedSql += 'INSERT INTO user_race_ethnicity (user_id, race_ethnicity) VALUES ';
+								for (var i = 0; i < race_ethnicity.length - 1; i++) {
+									nestedSql += '(?, ?), ';
+									nestedAdd.push(sID);
+									nestedAdd.push(race_ethnicity[i]);
+								}
+								nestedSql += '(?, ?); '
+								nestedAdd.push(sID);
+								nestedAdd.push(race_ethnicity[race_ethnicity.length - 1]);
+							}
+							if (religion.length > 0) {
+								nestedSql += 'INSERT INTO user_religion (user_id, religion) VALUES ';
+								for (var i = 0; i < religion.length - 1; i++) {
+									nestedSql += '(?, ?), ';
+									nestedAdd.push(sID);
+									nestedAdd.push(religion[i]);
+								}
+								nestedSql += '(?, ?); '
+								nestedAdd.push(sID);
+								nestedAdd.push(religion[religion.length - 1]);
+							}
+							if (interests.length > 0) {
+								nestedSql += `INSERT INTO user_interests (user_id, interest) VALUES `;
+								for (var i = 0; i < interests.length - 1; i++) {
+									nestedSql += '(?, ?), ';
+									nestedAdd.push(sID);
+									nestedAdd.push(interests[i]);
+								}
+								nestedSql += '(?, ?);'
+								nestedAdd.push(sID);
+								nestedAdd.push(interests[interests.length - 1]);
+							}
+
+							connection.query(nestedSql, nestedAdd, function(err, nestResult, fields) {
+								if (err) {
+									console.log(err);
+								} else {
+									// console.log(nestResult);
+									res.redirect('/');
+									return
+								}
+							});
+						}
+						
+					});
+				}
+			});
+		}
+	});
 });
 
 
 /** SOCKET.IO LISTEN AND EMIT FUNCTIONS **/
-io.socket.on('connection', function(socket) {
+io.sockets.on('connection', function(socket) {
 	console.log('socket connected...');
 
 	socket.on('search', function(vals) {
@@ -417,185 +400,201 @@ io.socket.on('connection', function(socket) {
 			interests.user_id = info.id 
 			LEFT JOIN connections conn ON
 			conn.user_id = info.id WHERE 
-			info.id <> ? AND conn.connection_id <> ? AND `;
+			(info.id != ?) AND (conn.connection_id != ?) AND `;
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id];
-		if (vals["location"] !== '') {
+		if (vals["location"] != '') {
 			sql += '(info.country = ?) OR ';
 			insertVals.push(vals["location"]);
 		}
-		if (vals["ageRange"] !== []) {
+		if (vals["ageRange"][0] != null && vals["ageRange"][1] != null) {
 			sql += '(info.year BETWEEN ? AND ?) OR ';
 			insertVals.push(vals["ageRange"][0]);
 			insertVals.push(vals["ageRange"][1]);
 		}
-		if (vals["gender"] !== []) {
+		if (vals["gender"].length > 0) {
 			sql += '(gender.gender IN (';
 			for (var i = 0; i < vals["gender"].length; i++) {
 				sql += '?,';
 				insertVals.push(vals["gender"][i]);
 			}
-			sql -= ',';
+			sql = sql.substring(0, sql.length-1);
 			sql += ')) OR ';
 		}
-		if (vals["sexuality"] !== []) {
+		if (vals["sexuality"].length > 0) {
 			sql += '(sexuality.sexuality IN (';
 			for (var i = 0; i < vals["sexuality"].length; i++) {
 				sql += '?,';
 				insertVals.push(vals["sexuality"][i]);
 			}
-			sql -= ',';
+			sql = sql.substring(0, sql.length-1);
 			sql += ')) OR ';
 		}
-		if (vals["race"] !== []) {
+		if (vals["race"].length > 0) {
 			sql += '(race.race_ethnicity IN (';
 			for (var i = 0; i < vals["race"].length; i++) {
 				sql += '?,';
 				insertVals.push(vals["race"][i]);
 			}
-			sql -= ',';
+			sql = sql.substring(0, sql.length-1);
 			sql += ')) OR ';
 		}
-		if (vals["religion"] !== []) {
+		if (vals["religion"].length > 0) {
 			sql += '(religion.religion IN (';
 			for (var i = 0; i < vals["religion"].length; i++) {
 				sql += '?,';
 				insertVals.push(vals["religion"][i]);
 			}
-			sql -= ',';
+			sql = sql.substring(0, sql.length-1);
 			sql += ')) OR ';
 		}
-		if (vals["interests"] !== []) {
+		if (vals["interests"].length > 0) {
 			sql += '(interests.interest IN (';
 			for (var i = 0; i < vals["interests"].length; i++) {
 				sql += '?,';
 				insertVals.push(vals["interests"][i]);
 			}
-			sql -= ',';
+			sql = sql.substring(0, sql.length-1);
 			sql += ')) OR ';
 		}
 
 		// remove tailing OR
-		sql = sql.substring(0, sql.length - 2);
+		if (insertVals.length > 0) {
+			sql = sql.substring(0, sql.length - 3);
+		// remove tailing AND
+		} else {
+			sql = sql.substring(0, sql.length - 4);
+		}
 		sql += 'GROUP BY info.id;';
 
+		console.log(sql);
+		console.log(insertVals);
+
 		// query database
-		connection.query(sql, function(error, results, fields) {
+		connection.query(sql, insertVals, function(error, results, fields) {
+			if (error) throw error;
+
 			console.log(results);
 
-			var ids = results[0]; // TEST TO SEE IF THIS IS RIGHT
-			var insertIds = '(';
+			if (results.length > 0) {
 
-			for (var i = 0; i < ids.length; i++) {
-				insertIds += ids[i] + ',';
-			}
-			insertIds = insertIds.substring(0, insertIds.length - 1);
-			insertIds += '); ';
-			
-			// info sql
-			var sqlTemp = `SELECT id, name, pronouns, country, year FROM user_info
-				WHERE user_info.id IN `;
-			sqlTemp += insertIds;
+				var ids = results[0]; // TEST TO SEE IF THIS IS RIGHT
+				var insertIds = '(';
 
-			// gender sql
-			sqlTemp += `SELECT user_id gender FROM user_gender
-				WHERE user_id IN `;
-			sqlTemp += insertIds;
-
-			// sexuality sql
-			sqlTemp += `SELECT user_id, sexuality FROM user_sexuality
-				WHERE user_id IN `;
-			sqlTemp += insertIds;
-
-			// race sql
-			sqlTemp += `SELECT user_id, race_ethnicity FROM user_race_ethnicity
-				WHERE user_id IN `;
-			sqlTemp += insertIds;
-
-			// religion sql
-			sqlTemp += `SELECT user_id, religion FROM user_religion
-				WHERE user_id IN `;
-			sqlTemp += insertIds;
-
-			// interests sql
-			sqlTemp += `SELECT user_id, interest FROM user_interests
-				WHERE user_id IN `;
-			sqlTemp += insertIds;
-
-			// pass on results to inner query
-			connection.query(sqlTemp, function(error, results, fields) {
-				console.log(results);
-				// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
-				/* structure of results:
-					0: name, pronouns, country, year
-					1: gender
-					2: sexuality
-					3: race_ethnicity
-					4: religion
-					5: interest
-				*/
-				// goal: organize by id, nested array
-				var orgVals = [];
-				for (var i = 0; i < results[0]; i++) {
-					var tempVals = [
-						results[0][i].id, 
-						results[0][i].name, 
-						results[0][i].pronouns,
-						results[0][i].country,
-						results[0][i].year
-					];
-
-					// gender
-					var genderStr = [];
-					for (var j = 0; j < results[1].length; j++) {
-						if (results[1][j].user_id === results[0][j]) {
-							genderStr.push(results[1][j].gender);
-						}
-					}
-					tempVals.push(genderStr);
-
-					// sexuality
-					var sexualityStr = [];
-					for (var j = 0; j < results[2].length; j++) {
-						if (results[2][j].user_id === results[0][i]) {
-							genderStr.push(results[2][j].sexuality);
-						}
-					}
-					tempVals.push(sexualityStr);
-
-					// race_ethnicity
-					var race_ethnicityStr = [];
-					for (var j = 0; j < results[3].length; j++) {
-						if (results[3][j].user_id === results[0][j]) {
-							race_ethnicityStr.push(results[3][j].race_ethnicity);
-						}
-					}
-					tempVals.push(race_ethnicityStr);
-
-					// religion
-					var religionStr = [];
-					for (var j = 0; j < results[4].length; j++) {
-						if (results[4][j].user_id === results[0][j]) {
-							religionStr.push(results[4][j].religion);
-						}
-					}
-					tempVals.push(religionStr);
-
-					// interests
-					var interestsStr = [];
-					for (var j = 0; j < results[5].length; j++) {
-						if (results[5][j].user_id === results[0][j]) {
-							interestsStr.push(results[5][j].interest);
-						}
-					}
-					tempVals.push(interestsStr);
-
-					// add profile array to organized values
-					orgVals.push(tempVals);
+				for (var i = 0; i < ids.length; i++) {
+					insertIds += ids[i] + ',';
 				}
+				insertIds = insertIds.substring(0, insertIds.length - 1);
+				insertIds += '); ';
+				
+				// info sql
+				var sqlTemp = `SELECT id, name, pronouns, country, year FROM user_info
+					WHERE user_info.id IN `;
+				sqlTemp += insertIds;
 
-				socket.emit('searchResults', {"data": orgVals});
-			});
+				// gender sql
+				sqlTemp += `SELECT user_id gender FROM user_gender
+					WHERE user_id IN `;
+				sqlTemp += insertIds;
+
+				// sexuality sql
+				sqlTemp += `SELECT user_id, sexuality FROM user_sexuality
+					WHERE user_id IN `;
+				sqlTemp += insertIds;
+
+				// race sql
+				sqlTemp += `SELECT user_id, race_ethnicity FROM user_race_ethnicity
+					WHERE user_id IN `;
+				sqlTemp += insertIds;
+
+				// religion sql
+				sqlTemp += `SELECT user_id, religion FROM user_religion
+					WHERE user_id IN `;
+				sqlTemp += insertIds;
+
+				// interests sql
+				sqlTemp += `SELECT user_id, interest FROM user_interests
+					WHERE user_id IN `;
+				sqlTemp += insertIds;
+
+				// pass on results to inner query
+				connection.query(sqlTemp, function(error, results, fields) {
+					console.log(results);
+					// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
+					/* structure of results:
+						0: name, pronouns, country, year
+						1: gender
+						2: sexuality
+						3: race_ethnicity
+						4: religion
+						5: interest
+					*/
+					// goal: organize by id, nested array
+					var orgVals = [];
+					for (var i = 0; i < results[0]; i++) {
+						var tempVals = [
+							results[0][i].id, 
+							results[0][i].name, 
+							results[0][i].pronouns,
+							results[0][i].country,
+							results[0][i].year
+						];
+
+						// gender
+						var genderStr = [];
+						for (var j = 0; j < results[1].length; j++) {
+							if (results[1][j].user_id === results[0][j]) {
+								genderStr.push(results[1][j].gender);
+							}
+						}
+						tempVals.push(genderStr);
+
+						// sexuality
+						var sexualityStr = [];
+						for (var j = 0; j < results[2].length; j++) {
+							if (results[2][j].user_id === results[0][i]) {
+								genderStr.push(results[2][j].sexuality);
+							}
+						}
+						tempVals.push(sexualityStr);
+
+						// race_ethnicity
+						var race_ethnicityStr = [];
+						for (var j = 0; j < results[3].length; j++) {
+							if (results[3][j].user_id === results[0][j]) {
+								race_ethnicityStr.push(results[3][j].race_ethnicity);
+							}
+						}
+						tempVals.push(race_ethnicityStr);
+
+						// religion
+						var religionStr = [];
+						for (var j = 0; j < results[4].length; j++) {
+							if (results[4][j].user_id === results[0][j]) {
+								religionStr.push(results[4][j].religion);
+							}
+						}
+						tempVals.push(religionStr);
+
+						// interests
+						var interestsStr = [];
+						for (var j = 0; j < results[5].length; j++) {
+							if (results[5][j].user_id === results[0][j]) {
+								interestsStr.push(results[5][j].interest);
+							}
+						}
+						tempVals.push(interestsStr);
+
+						// add profile array to organized values
+						orgVals.push(tempVals);
+					}
+
+					socket.emit('searchResults', {"data": orgVals});
+
+				});
+			} else {
+				socket.emit('searchResults', {"data": []});
+			}
 		});
 	});
 });

@@ -8,7 +8,10 @@ $(document).ready(function() {
 	showTab(currentTab);
 
 	function showTab(n) {
-		$(".tab")[n].css("display", "block");
+		$(".tab").hide();
+
+		$(".tab:eq("+ n +")").show();
+		$(".tab:eq("+ n +")").css("display", "block");
 
 		if (n === 0) {
 			$("#prevBtn").hide();
@@ -29,7 +32,7 @@ $(document).ready(function() {
 	function nextPrev(n) {
 		if (n===1 && !validateForm()) return false;
 
-		$(".tab")[currentTab].hide();
+		$(".tab:eq("+currentTab+")").hide();
 		currentTab += n;
 		if (currentTab >= $(".tab").length) {
 			$("#main").submit();
@@ -41,23 +44,46 @@ $(document).ready(function() {
 
 	function validateForm() {
 		var valid = true;
-		var reqInputs = $(".tab")[currentTab].find(".required");
-		for (var i = 0; i < reqInputs.length; i++) {
-			if (reqInputs[i].val() === "") {
+		//var reqInputs = $(".tab:eq("+currentTab+")").find(".required");
+
+		$('#pwd-notMatched').remove();
+		$('#notRead').remove();
+
+		$(".tab:eq("+currentTab+")").find(".required").each(function(idx) {
+			if ($(this).is(':checkbox')) {
+				if (!($(this).is(':checked'))){
+					valid = false;
+					$(".tab:eq("+currentTab+")").append('<p id="notRead">Please agree to terms and conditions!</p>');
+					$('#notRead').css('color', 'red');
+				}
+
+			} else if ($(this).val() === "") {
 				valid = false;
-				reqInputs[i].css("border-color", "red");
+				$(this).css('border-color', 'red');
 			} else {
-				reqInputs[i].css("border-color", "inherit");
+				$(this).css('border-color', 'inherit');
+			}
+		});
+
+		// validate password equality on second tab
+		if (currentTab === 1) {
+			if ($('#pwd').val() !== $('#confirm').val()) {
+				valid = false;
+				$('#pwd').css('border-color', 'red');
+				$('#confirm').css('border-color','red');
+				$(".tab:eq("+currentTab+")").append('<p id="pwd-notMatched">Passwords do not match!</p>');
+				$('#pwd-notMatched').css('color', 'red');
 			}
 		}
+
 		return valid;
 	}
 
 	function fixStepIndicator(n) {
 		for (var i = 0; i < $(".step").length; i++) {
-			$(".step")[i].attr("class", "step");
+			$(".step:eq("+i+")").attr("class", "step");
 		}
-		$(".step")[n].attr("class", "step active");
+		$(".step:eq("+i+")").attr("class", "step active");
 	}
 
 	$("#prevBtn").click(function() {
@@ -142,7 +168,7 @@ $(document).ready(function() {
 					$("#interests_list").append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					$("#interests_list").after('<input type="hidden" id="entry_interest" name="entry_interest[] value="' + interest + '">');
+					$("#interests_list").after('<input type="hidden" id="entry_interest" name="entry_interests[]" value="' + interest + '">');
 
 				// otherwise, show message
 				} else {

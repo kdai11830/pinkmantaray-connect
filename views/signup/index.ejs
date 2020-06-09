@@ -43,6 +43,9 @@ body {
 		<label for="entry_pronouns">Pronouns: </label>
 		<input type="text" name="entry_pronouns" class="required">
 
+		<label for="username">Username: </label>
+		<input type="text" name="username" id="username" class="required">
+
 		<label for="pwd">Password: </label>
 		<input type="password" name="pwd" id="pwd" class="required">
 
@@ -315,7 +318,7 @@ body {
 
 		<div id="state_div">
 			<label for="entry_state">State: </label>
-			<select name="entry_state" id="select_state" data-placeholder="--Select state--" class="required">
+			<select name="entry_state" id="select_state" data-placeholder="--Select state--">
 				<option value="">Prefer not to answer</option>
 				<option value="AL">Alabama</option>
 				<option value="AK">Alaska</option>
@@ -373,86 +376,86 @@ body {
 
 		<label for="entry_language">Language: </label>
 		<select name="entry_language" data-placeholder="Choose a Language...">
-		  <option value="Afrikaans">Afrikaans</option>
-		  <option value="">Prefer not to answer</option>
-		  <option value="Albanian">Albanian</option>
-		  <option value="Arabic">Arabic</option>
-		  <option value="Armenian">Armenian</option>
-		  <option value="Basque">Basque</option>
-		  <option value="Bengali">Bengali</option>
-		  <option value="Bulgarian">Bulgarian</option>
-		  <option value="Catalan">Catalan</option>
-		  <option value="Cambodian">Cambodian</option>
-		  <option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
-		  <option value="Croatian">Croatian</option>
-		  <option value="Czech">Czech</option>
-		  <option value="Danish">Danish</option>
-		  <option value="Dutch">Dutch</option>
-		  <option value="English">English</option>
-		  <option value="Estonian">Estonian</option>
-		  <option value="Fiji">Fiji</option>
-		  <option value="Finnish">Finnish</option>
-		  <option value="French">French</option>
-		  <option value="Georgian">Georgian</option>
-		  <option value="German">German</option>
-		  <option value="Greek">Greek</option>
-		  <option value="Gujarati">Gujarati</option>
-		  <option value="Hebrew">Hebrew</option>
-		  <option value="Hindi">Hindi</option>
-		  <option value="Hungarian">Hungarian</option>
-		  <option value="Icelandic">Icelandic</option>
-		  <option value="Indonesian">Indonesian</option>
-		  <option value="Irish">Irish</option>
-		  <option value="Italian">Italian</option>
-		  <option value="Japanese">Japanese</option>
-		  <option value="Javanese">Javanese</option>
-		  <option value="Korean">Korean</option>
-		  <option value="Latin">Latin</option>
-		  <option value="Latvian">Latvian</option>
-		  <option value="Lithuanian">Lithuanian</option>
-		  <option value="Macedonian">Macedonian</option>
-		  <option value="Malay">Malay</option>
-		  <option value="Malayalam">Malayalam</option>
-		  <option value="Maltese">Maltese</option>
-		  <option value="Maori">Maori</option>
-		  <option value="Marathi">Marathi</option>
-		  <option value="Mongolian">Mongolian</option>
-		  <option value="Nepali">Nepali</option>
-		  <option value="Norwegian">Norwegian</option>
-		  <option value="Persian">Persian</option>
-		  <option value="Polish">Polish</option>
-		  <option value="Portuguese">Portuguese</option>
-		  <option value="Punjabi">Punjabi</option>
-		  <option value="Quechua">Quechua</option>
-		  <option value="Romanian">Romanian</option>
-		  <option value="Russian">Russian</option>
-		  <option value="Samoan">Samoan</option>
-		  <option value="Serbian">Serbian</option>
-		  <option value="Slovak">Slovak</option>
-		  <option value="Slovenian">Slovenian</option>
-		  <option value="Spanish">Spanish</option>
-		  <option value="Swahili">Swahili</option>
-		  <option value="Swedish ">Swedish </option>
-		  <option value="Tamil">Tamil</option>
-		  <option value="Tatar">Tatar</option>
-		  <option value="Telugu">Telugu</option>
-		  <option value="Thai">Thai</option>
-		  <option value="Tibetan">Tibetan</option>
-		  <option value="Tonga">Tonga</option>
-		  <option value="Turkish">Turkish</option>
-		  <option value="Ukrainian">Ukrainian</option>
-		  <option value="Urdu">Urdu</option>
-		  <option value="Uzbek">Uzbek</option>
-		  <option value="Vietnamese">Vietnamese</option>
-		  <option value="Welsh">Welsh</option>
-		  <option value="Xhosa">Xhosa</option>
+			<option value="">Prefer not to answer</option>
+			<option value="Afrikaans">Afrikaans</option>
+			<option value="Albanian">Albanian</option>
+			<option value="Arabic">Arabic</option>
+			<option value="Armenian">Armenian</option>
+			<option value="Basque">Basque</option>
+			<option value="Bengali">Bengali</option>
+			<option value="Bulgarian">Bulgarian</option>
+			<option value="Catalan">Catalan</option>
+			<option value="Cambodian">Cambodian</option>
+			<option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
+			<option value="Croatian">Croatian</option>
+			<option value="Czech">Czech</option>
+			<option value="Danish">Danish</option>
+			<option value="Dutch">Dutch</option>
+			<option value="English">English</option>
+			<option value="Estonian">Estonian</option>
+			<option value="Fiji">Fiji</option>
+			<option value="Finnish">Finnish</option>
+			<option value="French">French</option>
+			<option value="Georgian">Georgian</option>
+			<option value="German">German</option>
+			<option value="Greek">Greek</option>
+			<option value="Gujarati">Gujarati</option>
+			<option value="Hebrew">Hebrew</option>
+			<option value="Hindi">Hindi</option>
+			<option value="Hungarian">Hungarian</option>
+			<option value="Icelandic">Icelandic</option>
+			<option value="Indonesian">Indonesian</option>
+			<option value="Irish">Irish</option>
+			<option value="Italian">Italian</option>
+			<option value="Japanese">Japanese</option>
+			<option value="Javanese">Javanese</option>
+			<option value="Korean">Korean</option>
+			<option value="Latin">Latin</option>
+			<option value="Latvian">Latvian</option>
+			<option value="Lithuanian">Lithuanian</option>
+			<option value="Macedonian">Macedonian</option>
+			<option value="Malay">Malay</option>
+			<option value="Malayalam">Malayalam</option>
+			<option value="Maltese">Maltese</option>
+			<option value="Maori">Maori</option>
+			<option value="Marathi">Marathi</option>
+			<option value="Mongolian">Mongolian</option>
+			<option value="Nepali">Nepali</option>
+			<option value="Norwegian">Norwegian</option>
+			<option value="Persian">Persian</option>
+			<option value="Polish">Polish</option>
+			<option value="Portuguese">Portuguese</option>
+			<option value="Punjabi">Punjabi</option>
+			<option value="Quechua">Quechua</option>
+			<option value="Romanian">Romanian</option>
+			<option value="Russian">Russian</option>
+			<option value="Samoan">Samoan</option>
+			<option value="Serbian">Serbian</option>
+			<option value="Slovak">Slovak</option>
+			<option value="Slovenian">Slovenian</option>
+			<option value="Spanish">Spanish</option>
+			<option value="Swahili">Swahili</option>
+			<option value="Swedish ">Swedish </option>
+			<option value="Tamil">Tamil</option>
+			<option value="Tatar">Tatar</option>
+			<option value="Telugu">Telugu</option>
+			<option value="Thai">Thai</option>
+			<option value="Tibetan">Tibetan</option>
+			<option value="Tonga">Tonga</option>
+			<option value="Turkish">Turkish</option>
+			<option value="Ukrainian">Ukrainian</option>
+			<option value="Urdu">Urdu</option>
+			<option value="Uzbek">Uzbek</option>
+			<option value="Vietnamese">Vietnamese</option>
+			<option value="Welsh">Welsh</option>
+			<option value="Xhosa">Xhosa</option>
 		</select>
 	</div>
 
 	<!-- IDENTITY INFORMATION -->
 	<div class="tab">
 		<div id="gender_div">
-			<label for="entry_gender_div">Gender (select all that apply): </label>
+			<label for="entry_gender_div"><h3>Gender (select all that apply): </h3></label>
 			<div id="entry_gender_div">
 				<label>
 					<input type="checkbox" name="entry_gender[]" value="transgender"> Transgender
@@ -488,7 +491,7 @@ body {
 		</div>
 
 		<div id="sexuality_div">
-			<label for="entry_sexuality_div">Sexuality (select all that apply): </label>
+			<label for="entry_sexuality_div"><h3>Sexuality (select all that apply): </h3></label>
 			<div id="entry_sexuality_div">
 				<label>
 					<input type="checkbox" name="entry_sexuality[]" value="straight"> Straight
@@ -518,7 +521,7 @@ body {
 		</div>
 
 		<div id="race_div">
-			<label for="entry_race_div">Race and ethnicity (select all that apply): </label>
+			<label for="entry_race_div"><h3>Race and ethnicity (select all that apply): </h3></label>
 			<div id="entry_race_div">
 				<label>
 					<input type="checkbox" name="entry_race[]" value="white"> White
@@ -542,7 +545,7 @@ body {
 		</div>
 
 		<div id="religion_div">
-			<label for="entry_religion_div">Religion (select all that apply): </label>
+			<label for="entry_religion_div"><h3>Religion (select all that apply): </h3></label>
 			<div id="entry_religion_div">
 				<label>
 					<input type="checkbox" name="entry_religion[]" value="christian"> Christian
@@ -569,7 +572,7 @@ body {
 		</div>
 
 		<div id="interests_div">
-			<label for="entry_interests">Interests: </label>
+			<label for="entry_interests"><h3>Interests: </h3></label>
 			<input list="interests_datalist" name="interests" id="interests" placeholder="Add interests by typing and pressing enter.">
 			<datalist id="interests_datalist">
 				<option value="watermelon"/>
@@ -581,7 +584,7 @@ body {
 			<!-- add hidden inputs here for list of interests dynamically -->
 		</div>
 
-		<input type="checkbox" name="consent" class="required">
+		<input type="checkbox" name="consent" value="read" class="required">
 		<label for="consent">I have read and agree to the <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</label>
 	</div>
 

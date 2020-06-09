@@ -2,6 +2,8 @@
 
 $(document).ready(function() {
 
+	console.log("connect script begins...");
+
 	var socket = io();
 
 	$("#connectForm").submit(function () {
@@ -27,10 +29,16 @@ $(document).ready(function() {
 			interests.push($(this).val());
 		})
 
+		var ageArray = [parseInt($('[name=option_age1]').val()), parseInt($('[name=option_age2]').val())];
+		console.log(ageArray);
+		var age1 = Math.min.apply(null,ageArray);
+		var age2 = Math.max.apply(null,ageArray);
+		console.log([age1, age2]);
+
 		// get the information from form and add to dict to pass to socket
 		var emitVals = {
 			"location": $('[name=option_location]').val(),
-			"ageRange": [$('[name=option_age1]').val(), $('[name=option_age2]').val()],
+			"ageRange": [age1, age2],
 			"gender": gender,
 			"sexuality": sexuality,
 			"race": race,
@@ -49,46 +57,50 @@ $(document).ready(function() {
 	socket.on('searchResults', function(d) {
 		var data = d["data"];
 
-		/* data: 
-			0: id
-			1: name
-			2: pronouns
-			3: country
-			4: year
-			5: gender
-			6: sexuality
-			7: race_ethnicity
-			8: religion
-			9: interests
-		*/
+		if (data.length > 0 ) {
+			/* data: 
+				0: id
+				1: name
+				2: pronouns
+				3: country
+				4: year
+				5: gender
+				6: sexuality
+				7: race_ethnicity
+				8: religion
+				9: interests
+			*/
 
-		// create table headers
-		$('#resultsDisplay').append('<tr id="tableHeaders></tr>');
-		var headers = `<th></th>
-			<th>Pronouns</th>
-			<th>Country</th>
-			<th>Age</th>
-			<th>Gender</th>
-			<th>Sexuality</th>
-			<th>Race/Ethnicity</th>
-			<th>Religion</th>
-			<th>Interests</th>`;
-		$('#tableHeaders').append(headers);
+			// create table headers
+			$('#resultsDisplay').append('<tr id="tableHeaders></tr>');
+			var headers = `<th></th>
+				<th>Pronouns</th>
+				<th>Country</th>
+				<th>Age</th>
+				<th>Gender</th>
+				<th>Sexuality</th>
+				<th>Race/Ethnicity</th>
+				<th>Religion</th>
+				<th>Interests</th>`;
+			$('#tableHeaders').append(headers);
 
-		for (var i = 0; i < data.length; i++) {
-			var curRow = 'entry' + i;
-			$("#resultsDisplay").append('<tr id="' + curRow + '"></tr>');
+			for (var i = 0; i < data.length; i++) {
+				var curRow = 'entry' + i;
+				$("#resultsDisplay").append('<tr id="' + curRow + '"></tr>');
 
-			var connectBtn = '<td><button class="connectBtn">Connect</button></td>;'
-			$("#" + curRow).append(connectBtn);
-			$("#" + curRow).append('<td>' + data[i][2] + '</td>') // pronouns
-			$("#" + curRow).append('<td>' + data[i][3] + '</td>') // country
-			$("#" + curRow).append('<td>' + (new Date().getFullYear() - parseInt(data[i][4])) + '</td>') // age
-			$("#" + curRow).append('<td>' + data[i][5].join(', ') + '</td>');
-			$('#' + curRow).append('<td>' + data[i][6].join(', ') + '</td>');
-			$('#' + curRow).append('<td>' + data[i][7].join(', ') + '</td>');
-			$('#' + curRow).append('<td>' + data[i][8].join(', ') + '</td>');
-			$('#' + curRow).append('<td>' + data[i][9].join(', ') + '</td>');
+				var connectBtn = '<td><button class="connectBtn">Connect</button></td>;'
+				$("#" + curRow).append(connectBtn);
+				$("#" + curRow).append('<td>' + data[i][2] + '</td>') // pronouns
+				$("#" + curRow).append('<td>' + data[i][3] + '</td>') // country
+				$("#" + curRow).append('<td>' + (new Date().getFullYear() - parseInt(data[i][4])) + '</td>') // age
+				$("#" + curRow).append('<td>' + data[i][5].join(', ') + '</td>');
+				$('#' + curRow).append('<td>' + data[i][6].join(', ') + '</td>');
+				$('#' + curRow).append('<td>' + data[i][7].join(', ') + '</td>');
+				$('#' + curRow).append('<td>' + data[i][8].join(', ') + '</td>');
+				$('#' + curRow).append('<td>' + data[i][9].join(', ') + '</td>');
+			}
+		} else {
+			$('#resultsDiv').append('<h3 id="noResults">No results found!</h3>');
 		}
 	});
 
@@ -144,5 +156,13 @@ $(document).ready(function() {
 		}
 	});
 
+	// allow for x "buttons" to close the parent element
+	$("#interests_list").delegate(".close", "click", function() {
+		// remove hidden input with corresponding value
+		var liTxt = $(this).parent().clone().children().remove().end().text();
+		$('#entry_interest[value="' + liTxt + '"]').remove();
+		// remove li item
+		$(this).parent().remove();
+	});
 
 })

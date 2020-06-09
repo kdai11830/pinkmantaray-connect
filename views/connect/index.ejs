@@ -17,12 +17,14 @@ body {
 </head>
 <body>
 	
+<%- include("partials/header") %>
+	
 <div>
 	<p>Use the following areas to refine your search:</p>
 </div>
 
 <div id="searchDiv">
-	<form id="connectForm" method="POST">
+	<form id="connectForm">
 
 	<div id="div_location">
 	<label for="option_location">Location:</label> <!-- just use country for now, refine later -->
@@ -283,7 +285,17 @@ body {
 
 	<div id="div_age">
 	<label for="option_age1">Age range:</label> <!-- TODO: add values based on minimum and maximum ages (inclusive) -->
-	<select name="option_age1"></select> <p> to </p> <select name="option_age2"></select>
+	<select name="option_age1">
+		<option value=""></option>
+		<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
+			<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
+		<% } %>
+	</select> to <select name="option_age2">
+		<option value=""></option>
+		<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
+			<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
+		<% } %>
+	</select>
 	</div>
 
 	<div id="div_gender">
