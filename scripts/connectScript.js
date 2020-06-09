@@ -55,7 +55,13 @@ $(document).ready(function() {
 
 	// when receiving data back from backend display in table
 	socket.on('searchResults', function(d) {
-		var data = d["data"];
+		var data = [];
+		for (var key in d["data"]) {
+			console.log(key);
+			console.log(d["data"][key]);
+			data.push(d["data"][key]);
+		}
+		console.log(data);
 
 		if (data.length > 0 ) {
 			/* data: 
@@ -87,6 +93,7 @@ $(document).ready(function() {
 			for (var i = 0; i < data.length; i++) {
 				var curRow = 'entry' + i;
 				$("#resultsDisplay").append('<tr id="' + curRow + '"></tr>');
+				console.log(data[i]);
 
 				var connectBtn = '<td><button class="connectBtn">Connect</button></td>;'
 				$("#" + curRow).append(connectBtn);

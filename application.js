@@ -400,7 +400,8 @@ io.sockets.on('connection', function(socket) {
 			interests.user_id = info.id 
 			LEFT JOIN connections conn ON
 			conn.user_id = info.id WHERE 
-			(info.id != ?) AND (conn.connection_id != ?) AND `;
+			(info.id != ?) AND (conn.connection_id != ? OR 
+			info.id NOT IN (SELECT conn.user_id FROM connections conn)) AND `;
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] != '') {
@@ -478,11 +479,11 @@ io.sockets.on('connection', function(socket) {
 
 			if (results.length > 0) {
 
-				var ids = results[0]; // TEST TO SEE IF THIS IS RIGHT
+				// TEST TO SEE IF THIS IS RIGHT
 				var insertIds = '(';
 
-				for (var i = 0; i < ids.length; i++) {
-					insertIds += ids[i] + ',';
+				for (var i = 0; i < results.length; i++) {
+					insertIds += results[i].id + ',';
 				}
 				insertIds = insertIds.substring(0, insertIds.length - 1);
 				insertIds += '); ';
@@ -493,7 +494,7 @@ io.sockets.on('connection', function(socket) {
 				sqlTemp += insertIds;
 
 				// gender sql
-				sqlTemp += `SELECT user_id gender FROM user_gender
+				sqlTemp += `SELECT user_id, gender FROM user_gender
 					WHERE user_id IN `;
 				sqlTemp += insertIds;
 
@@ -517,12 +518,14 @@ io.sockets.on('connection', function(socket) {
 					WHERE user_id IN `;
 				sqlTemp += insertIds;
 
+				console.log(sqlTemp);
+
 				// pass on results to inner query
 				connection.query(sqlTemp, function(error, results, fields) {
 					console.log(results);
 					// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
 					/* structure of results:
-						0: name, pronouns, country, year
+						0: info (name, pronouns, country, year) 
 						1: gender
 						2: sexuality
 						3: race_ethnicity
@@ -530,66 +533,82 @@ io.sockets.on('connection', function(socket) {
 						5: interest
 					*/
 					// goal: organize by id, nested array
-					var orgVals = [];
-					for (var i = 0; i < results[0]; i++) {
-						var tempVals = [
-							results[0][i].id, 
-							results[0][i].name, 
-							results[0][i].pronouns,
-							results[0][i].country,
-							results[0][i].year
-						];
 
-						// gender
-						var genderStr = [];
-						for (var j = 0; j < results[1].length; j++) {
-							if (results[1][j].user_id === results[0][j]) {
-								genderStr.push(results[1][j].gender);
-							}
-						}
-						tempVals.push(genderStr);
-
-						// sexuality
-						var sexualityStr = [];
-						for (var j = 0; j < results[2].length; j++) {
-							if (results[2][j].user_id === results[0][i]) {
-								genderStr.push(results[2][j].sexuality);
-							}
-						}
-						tempVals.push(sexualityStr);
-
-						// race_ethnicity
-						var race_ethnicityStr = [];
-						for (var j = 0; j < results[3].length; j++) {
-							if (results[3][j].user_id === results[0][j]) {
-								race_ethnicityStr.push(results[3][j].race_ethnicity);
-							}
-						}
-						tempVals.push(race_ethnicityStr);
-
-						// religion
-						var religionStr = [];
-						for (var j = 0; j < results[4].length; j++) {
-							if (results[4][j].user_id === results[0][j]) {
-								religionStr.push(results[4][j].religion);
-							}
-						}
-						tempVals.push(religionStr);
-
-						// interests
-						var interestsStr = [];
-						for (var j = 0; j < results[5].length; j++) {
-							if (results[5][j].user_id === results[0][j]) {
-								interestsStr.push(results[5][j].interest);
-							}
-						}
-						tempVals.push(interestsStr);
-
-						// add profile array to organized values
-						orgVals.push(tempVals);
+					var genderVals = {};
+					for (var i = 0; i < results[1].length; i++) {
+						var tempGender = results[1][i];
+						if (!(tempGender.user_id in genderVals)) 
+							genderVals[tempGender.user_id] = [];
+						genderVals[tempGender.user_id].push(tempGender.gender);
 					}
 
-					socket.emit('searchResults', {"data": orgVals});
+					var sexualityVals = {};
+					for (var i = 0; i < results[2].length; i++) {
+						var tempSexuality = results[2][i];
+						if (!(tempSexuality.user_id in sexualityVals)) 
+							sexualityVals[tempSexuality.user_id] = [];
+						sexualityVals[tempSexuality.user_id].push(tempSexuality.sexuality);
+					}
+
+					var race_ethnicityVals = {};
+					for (var i = 0; i < results[3].length; i++) {
+						var tempRace_ethnicity = results[3][i];
+						if (!(tempRace_ethnicity.user_id in race_ethnicityVals)) 
+							race_ethnicityVals[tempRace_ethnicity.user_id] = [];
+						race_ethnicityVals[tempRace_ethnicity.user_id].push(tempRace_ethnicity.race_ethnicity);
+					}
+
+					var religionVals = {};
+					for (var i = 0; i < results[4].length; i++) {
+						var tempReligion = results[4][i];
+						if (!(tempReligion.user_id in religionVals)) 
+							religionVals[tempReligion.user_id] = [];
+						religionVals[tempReligion.user_id].push(tempReligion.religion);
+					}
+
+					var interestVals = {};
+					for (var i = 0; i < results[5].length; i++) {
+						var tempInterest = results[5][i];
+						if (!(tempInterest.user_id in interestVals)) 
+							interestVals[tempInterest.user_id] = [];
+						interestVals[tempInterest.user_id].push(tempInterest.interest);
+					}
+
+					// all information container
+					var infoVals = {};
+					for (var i = 0; i < results[0].length; i++) {
+						var tempInfo = results[0][i];
+						infoVals[tempInfo.id] = [];
+						infoVals[tempInfo.id].push(tempInfo.id);
+						infoVals[tempInfo.id].push(tempInfo.name);
+						infoVals[tempInfo.id].push(tempInfo.pronouns);
+						infoVals[tempInfo.id].push(tempInfo.country);
+						infoVals[tempInfo.id].push(tempInfo.year);
+						if (tempInfo.id in genderVals) 
+							infoVals[tempInfo.id].push(genderVals[tempInfo.id]);
+						else
+							infoVals[tempInfo.id].push([]);
+						if (tempInfo.id in sexualityVals) 
+							infoVals[tempInfo.id].push(sexualityVals[tempInfo.id]);
+						else
+							infoVals[tempInfo.id].push([]);
+						if (tempInfo.id in race_ethnicityVals)
+							infoVals[tempInfo.id].push(race_ethnicityVals[tempInfo.id]);
+						else
+							infoVals[tempInfo.id].push([]);
+						if (tempInfo.id in religionVals)
+							infoVals[tempInfo.id].push(religionVals[tempInfo.id]);
+						else
+							infoVals[tempInfo.id].push([]);
+						if (tempInfo.id in interestVals)
+							infoVals[tempInfo.id].push(interestVals[tempInfo.id]);
+						else
+							infoVals[tempInfo.id].push([]);
+					}
+
+					console.log(infoVals);
+
+					socket.emit('searchResults', {"data": infoVals});
 
 				});
 			} else {
