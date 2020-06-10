@@ -460,7 +460,7 @@ io.sockets.on('connection', function(socket) {
 		}
 
 		// remove tailing OR
-		if (insertVals.length > 0) {
+		if (insertVals.length > 2) {
 			sql = sql.substring(0, sql.length - 3);
 		// remove tailing AND
 		} else {
@@ -615,5 +615,20 @@ io.sockets.on('connection', function(socket) {
 				socket.emit('searchResults', {"data": []});
 			}
 		});
+	});
+
+	socket.on('connect', function(vals) {
+		console.log(vals);
+
+		var userId = socket.request.session.user_id;
+		var sql = `INSERT INTO connections (user_id, connection_id, pending)
+			VALUES (?, ?, 1);`;
+		var insertIds = [userId, vals["id"]];
+
+		connection.query(sql, insertIds, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+			return;
+		})
 	});
 });

@@ -30,10 +30,8 @@ $(document).ready(function() {
 		})
 
 		var ageArray = [parseInt($('[name=option_age1]').val()), parseInt($('[name=option_age2]').val())];
-		console.log(ageArray);
 		var age1 = Math.min.apply(null,ageArray);
 		var age2 = Math.max.apply(null,ageArray);
-		console.log([age1, age2]);
 
 		// get the information from form and add to dict to pass to socket
 		var emitVals = {
@@ -49,6 +47,7 @@ $(document).ready(function() {
 		// emit values to application.js with socket
 		socket.emit('search', emitVals);
 		$("#resultsDisplay").empty();
+		$("#noResults").remove();
 		return false;
 	});
 
@@ -57,8 +56,6 @@ $(document).ready(function() {
 	socket.on('searchResults', function(d) {
 		var data = [];
 		for (var key in d["data"]) {
-			console.log(key);
-			console.log(d["data"][key]);
 			data.push(d["data"][key]);
 		}
 		console.log(data);
@@ -78,8 +75,7 @@ $(document).ready(function() {
 			*/
 
 			// create table headers
-			$('#resultsDisplay').append('<tr id="tableHeaders></tr>');
-			var headers = `<th></th>
+			var headers = `<tr><th></th>
 				<th>Pronouns</th>
 				<th>Country</th>
 				<th>Age</th>
@@ -87,40 +83,70 @@ $(document).ready(function() {
 				<th>Sexuality</th>
 				<th>Race/Ethnicity</th>
 				<th>Religion</th>
-				<th>Interests</th>`;
-			$('#tableHeaders').append(headers);
+				<th>Interests</th></tr>`;
+			$('#resultsDisplay').append(headers);
 
 			for (var i = 0; i < data.length; i++) {
 				var curRow = 'entry' + i;
 				$("#resultsDisplay").append('<tr id="' + curRow + '"></tr>');
-				console.log(data[i]);
 
 				var connectBtn = '<td><button class="connectBtn">Connect</button></td>;'
 				$("#" + curRow).append(connectBtn);
-				$("#" + curRow).append('<td>' + data[i][2] + '</td>') // pronouns
-				$("#" + curRow).append('<td>' + data[i][3] + '</td>') // country
-				$("#" + curRow).append('<td>' + (new Date().getFullYear() - parseInt(data[i][4])) + '</td>') // age
+				$("#" + curRow).append('<td>' + data[i][2] + '</td>'); // pronouns
+				$("#" + curRow).append('<td>' + data[i][3] + '</td>'); // country
+				$("#" + curRow).append('<td>' + (new Date().getFullYear() - parseInt(data[i][4])) + '</td>'); // age
 				$("#" + curRow).append('<td>' + data[i][5].join(', ') + '</td>');
 				$('#' + curRow).append('<td>' + data[i][6].join(', ') + '</td>');
 				$('#' + curRow).append('<td>' + data[i][7].join(', ') + '</td>');
 				$('#' + curRow).append('<td>' + data[i][8].join(', ') + '</td>');
 				$('#' + curRow).append('<td>' + data[i][9].join(', ') + '</td>');
+				$("#" + curRow).append('<td id="userId">' + data[i][0] + '</td>'); // id (HIDE THIS)
+				$('#' + curRow).find('#userId').hide();
 			}
 		} else {
 			$('#resultsDiv').append('<h3 id="noResults">No results found!</h3>');
 		}
 	});
 
+	// dialog css stuff, can be replaced in future css styles file
+	$('#confirmationDialog').css('position', 'absolute');
+	$("#confirmationDialog").css('z-index', 9999);
+	$('#confirmationDialog').css('background-color', 'white');
+	$('#confirmationDialog').css('border-style', 'outset');
 
-	$('.connectBtn').click(function() {
-		var confirmMsg = `Are you sure you want to connect? When you select CONNECT, 
-			a request with your (unidentifiable) information will be shared with 
-			[this person] so that they can either accept or reject your request. 
-			You can view your pending under NOTIFICATIONS tab.`
-		if (confirm(confirmMsg)) {
-			// replace button with text
-			$(this).replaceWith('Invitation pending!');
-		}
+	$("#confirmationDialog").dialog({
+		autoOpen: false,
+		modal: true,
+		resizable: false,
+		show: false,
+		draggable: false,
+		open: function(event, ui) {
+        	$(".ui-dialog-titlebar-close", ui.dialog || ui).hide();
+    	}
+	});
+
+	var clickedConnectBtn = ''; // row id
+
+	$('#resultsDisplay').on('click', '.connectBtn', function() {
+		// show custom popup since I'm too lazy to turn off and reset my chrome
+		clickedConnectBtn = $(this).closest('tr').attr('id');
+		$("#confirmationDialog").dialog('open');
+
+	});
+
+
+	$('#closeBtn').click(function() {
+		$('#confirmationDialog').dialog('close');
+	});
+
+	$('#confirmBtn').click(function() {
+		// send information to mysql
+		// get user id from the table
+		var id = parseInt($('#' + clickedConnectBtn).find('#userId').html());
+		console.log(id);
+		socket.emit('connect', {"id": id});
+		$('#' + clickedConnectBtn + ' .connectBtn').replaceWith("Invitation pending!");
+		$("#confirmationDialog").dialog('close');
 	});
 
 

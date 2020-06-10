@@ -12,6 +12,7 @@ body {
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script> 
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/scripts/connectScript.js"></script>
 
 </head>
@@ -421,6 +422,16 @@ body {
 </div>
 
 <div id="resultsDiv">
+
+	<div id="confirmationDialog">
+		<p>Are you sure you want to connect? When you select CONNECT, 
+			a request with your (unidentifiable) information will be shared with 
+			[this person] so that they can either accept or reject your request. 
+			You can view your pending under NOTIFICATIONS tab.</p>
+		<button id="closeBtn">Close</button>
+		<button id="confirmBtn">Confirm</button>
+	</div>
+
 	<table id="resultsDisplay">
 		
 	</table>
