@@ -150,7 +150,41 @@ app.get('/connect', restrict, function(req, res) {
 		res.render('connect/index', {"results": results});
 		return;
 	})
-	
+
+	var sql = `SELECT info.id, info.pronouns, info.country, info.year,
+		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest 
+		FROM user_info info
+		LEFT JOIN user_gender gender ON gender.user_id = info.id
+		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+		LEFT JOIN user_religion religion ON religion.user_id = info.id
+		LEFT JOIN user_interests interests ON interests.user_id = info.id
+		LEFT JOIN connections conn ON conn.user_id = info.id 
+		WHERE conn.connection_id = ? AND conn.pending = 1; 
+		SELECT info.id, info.pronouns, info.country, info.year,
+		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest 
+		FROM user_info info
+		LEFT JOIN user_gender gender ON gender.user_id = info.id
+		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+		LEFT JOIN user_religion religion ON religion.user_id = info.id
+		LEFT JOIN user_interests interests ON interests.user_id = info.id
+		LEFT JOIN connections conn ON conn.user_id = info.id 
+		WHERE conn.user_id = ? AND conn.pending = 1;`;
+
+	var insertIds = [req.session.user_id, req.session.user_id];
+	connection.query(sql, insertIds, function(error, results, fields) {
+		console.log(results);
+		var invitations = results[0];
+		var pending = results[1];
+		res.render('notifications/index', {"invitations": invitations, "pending": pending});
+	});
+});
+
+
+/** NOTIFICATIONS PAGE **/
+app.get('/notifications', restrict, function(req, res) {
+
 });
 
 
@@ -630,5 +664,47 @@ io.sockets.on('connection', function(socket) {
 			console.log(results);
 			return;
 		})
+	});
+
+	socket.on('acceptInvitation', function(vals) {
+		var conn_id = vals["id"];
+		// update pending for inwards connection and insert outwards connection
+		var sql = `UPDATE connections
+			SET pending = 0
+			WHERE connection.connection_id = ? AND connection.user_id = ?;
+			INSERT INTO connections (user_id, connection_id, pending)
+			VALUES (?, ?, 0)`;
+
+		var insertIds = [socket.request.session.user_id, conn_id, socket.request.session.user_id, conn_id];
+		connection.query(sql, insertIds, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+		});
+	});
+
+	socket.on('ignoreInvitation' function(vals) {
+		var conn_id = vals["id"];
+		// remove inwards connection entry in db
+		var sql = `DELETE FROM connections
+			WHERE (user_id = ?) and (connection_id = ?);`;
+
+		var insertIds = [conn_id, socket.request.session.user_id];
+		connection.query(sql, insertIds, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+		});
+	});
+
+	socket.on('cancelPending', function(vals) {
+		var conn_id = vals["id"];
+		// delete outwards connection entry in db
+		var sql = `DELETE FROM connections
+			WHERE (user_id = ?) and (connection_id = ?);`;
+
+		var insertIds = [socket.request.session.user_id, conn_id];
+		connection.query(sql, insertIds, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+		});
 	});
 });

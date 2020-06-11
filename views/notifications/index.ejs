@@ -18,7 +18,41 @@ body {
 
 <%- include("partials/header") %>
 	
+<table id="invitationsTable">
+	<% for (var i = 0; i < invitations.length; i++ { %>
+		<tr id="<%= i %>">
+			<td><%= invitations[i].pronouns %></td>
+			<td><%= invitations[i].country %></td>
+			<td><%= new Date().getFullYear() - invitations[i].year %></td>
+			<td><%= invitations[i].gender.join(', ') %></td>
+			<td><%= invitations[i].sexuality.join(', ') %></td>
+			<td><%= invitations[i].race_ethnicity.join(', ') %></td>
+			<td><%= invitations[i].religion.join(', ') %></td>
+			<td><%= invitations[i].interest.join(', ') %></td>
+			<td id="userId<%= i %>"><%= invitations[i].id %></td>
+		</tr>
+		<button class="acceptBtn" id="accept<%= i %>">Accept</button>
+		<button class="ignoreBtn" id="ignore<%= i %>">Ignore</button>
+	<% } %>
+</table>
 
+<table id="pendingTable">
+	<% for (var i = 0; i < pending.length; i++) { %>
+		<tr id="<%= i %>">
+			<td><%= pending[i].pronouns %></td>
+			<td><%= pending[i].country %></td>
+			<td><%= new Date().getFullYear() - pending[i].year %></td>
+			<td><%= pending[i].gender.join(', ') %></td>
+			<td><%= pending[i].sexuality.join(', ') %></td>
+			<td><%= pending[i].race_ethnicity.join(', ') %></td>
+			<td><%= pending[i].religion.join(', ') %></td>
+			<td><%= pending[i].interest.join(', ')</td>
+			<td id="userId<%= i %>"><%= invitations[i].id %></td>
+		</tr>
+		<button class="cancelBtn" id="cancel<%= i %>">Cancel</button>
+	<% } %>
+	
+</table>
 
 
 </body>
