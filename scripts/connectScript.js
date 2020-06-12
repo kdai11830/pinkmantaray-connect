@@ -9,23 +9,23 @@ $(document).ready(function() {
 	$("#connectForm").submit(function () {
 		// put all grouped info in arrays
 		var gender = [];
-		$('input[name=option_gender]').each(function() {
+		$('input[name="option_gender[]"]:checked').each(function() {
 			gender.push($(this).val());
 		});
 		var sexuality = [];
-		$('input[name=option_sexuality]').each(function() {
+		$('input[name="option_sexuality[]"]:checked').each(function() {
 			sexuality.push($(this).val());
 		});
 		var race = [];
-		$('input[name=option_race]').each(function() {
+		$('input[name="option_race[]"]:checked').each(function() {
 			race.push($(this).val());
 		});
 		var religion = [];
-		$('input[name=option_religion]').each(function() {
+		$('input[name="option_religion[]"]:checked').each(function() {
 			religion.push($(this).val());
 		});
 		var interests = [];
-		$('input[name=option_interest').each(function() {
+		$('input[name="option_interest"]').each(function() {
 			interests.push($(this).val());
 		})
 
@@ -144,7 +144,7 @@ $(document).ready(function() {
 		// get user id from the table
 		var id = parseInt($('#' + clickedConnectBtn).find('#userId').html());
 		console.log(id);
-		socket.emit('connect', {"id": id});
+		socket.emit('connectSend', {"id": id});	
 		$('#' + clickedConnectBtn + ' .connectBtn').replaceWith("Invitation pending!");
 		$("#confirmationDialog").dialog('close');
 	});
@@ -176,7 +176,7 @@ $(document).ready(function() {
 					$("#interests_list").append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					$("#interests_list").after('<input type="hidden" id="option_interest" name="option_interest[] value="' + interest + '">');
+					$("#interests_list").after('<input type="hidden" id="option_interest" name="option_interest" value="' + interest + '">');
 
 				// otherwise, show message
 				} else {
@@ -193,9 +193,12 @@ $(document).ready(function() {
 	$("#interests_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
-		$('#entry_interest[value="' + liTxt + '"]').remove();
+		liTxt = liTxt.substring(0, liTxt.length-1);
+		console.log(liTxt);
+		$('#option_interest[value="' + liTxt + '"]').remove();
 		// remove li item
 		$(this).parent().remove();
+		console.log($(this).parent().length);
 	});
 
 })

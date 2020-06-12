@@ -16,10 +16,11 @@ body {
 
 <body>
 
-<%- include("partials/header") %>
-	
+<%- include("../partials/header") %>
+
+<h2>Invitations</h2>
 <table id="invitationsTable">
-	<% for (var i = 0; i < invitations.length; i++ { %>
+	<% for (var i = 0; i < invitations.length; i++) { %>
 		<tr id="<%= i %>">
 			<td><%= invitations[i].pronouns %></td>
 			<td><%= invitations[i].country %></td>
@@ -36,6 +37,7 @@ body {
 	<% } %>
 </table>
 
+<h2>Pending</h2>
 <table id="pendingTable">
 	<% for (var i = 0; i < pending.length; i++) { %>
 		<tr id="<%= i %>">
@@ -46,7 +48,7 @@ body {
 			<td><%= pending[i].sexuality.join(', ') %></td>
 			<td><%= pending[i].race_ethnicity.join(', ') %></td>
 			<td><%= pending[i].religion.join(', ') %></td>
-			<td><%= pending[i].interest.join(', ')</td>
+			<td><%= pending[i].interest.join(', ') %></td>
 			<td id="userId<%= i %>"><%= invitations[i].id %></td>
 		</tr>
 		<button class="cancelBtn" id="cancel<%= i %>">Cancel</button>

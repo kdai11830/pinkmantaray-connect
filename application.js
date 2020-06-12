@@ -149,42 +149,44 @@ app.get('/connect', restrict, function(req, res) {
 		console.log(results);
 		res.render('connect/index', {"results": results});
 		return;
-	})
-
-	var sql = `SELECT info.id, info.pronouns, info.country, info.year,
-		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest 
-		FROM user_info info
-		LEFT JOIN user_gender gender ON gender.user_id = info.id
-		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
-		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
-		LEFT JOIN user_religion religion ON religion.user_id = info.id
-		LEFT JOIN user_interests interests ON interests.user_id = info.id
-		LEFT JOIN connections conn ON conn.user_id = info.id 
-		WHERE conn.connection_id = ? AND conn.pending = 1; 
-		SELECT info.id, info.pronouns, info.country, info.year,
-		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest 
-		FROM user_info info
-		LEFT JOIN user_gender gender ON gender.user_id = info.id
-		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
-		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
-		LEFT JOIN user_religion religion ON religion.user_id = info.id
-		LEFT JOIN user_interests interests ON interests.user_id = info.id
-		LEFT JOIN connections conn ON conn.user_id = info.id 
-		WHERE conn.user_id = ? AND conn.pending = 1;`;
-
-	var insertIds = [req.session.user_id, req.session.user_id];
-	connection.query(sql, insertIds, function(error, results, fields) {
-		console.log(results);
-		var invitations = results[0];
-		var pending = results[1];
-		res.render('notifications/index', {"invitations": invitations, "pending": pending});
 	});
 });
 
 
 /** NOTIFICATIONS PAGE **/
 app.get('/notifications', restrict, function(req, res) {
+	var sql = `SELECT info.id, info.pronouns, info.country, info.year,
+		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
+		FROM user_info info
+		LEFT JOIN user_gender gender ON gender.user_id = info.id
+		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+		LEFT JOIN user_religion religion ON religion.user_id = info.id
+		LEFT JOIN user_interests interests ON interests.user_id = info.id
+		LEFT JOIN connections conn ON conn.user_id = info.id
+		WHERE (conn.connection_id = ?) AND (conn.pending = 1);
+		SELECT info.id, info.pronouns, info.country, info.year,
+		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
+		FROM user_info info
+		LEFT JOIN user_gender gender ON gender.user_id = info.id
+		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+		LEFT JOIN user_religion religion ON religion.user_id = info.id
+		LEFT JOIN user_interests interests ON interests.user_id = info.id
+		LEFT JOIN connections conn ON conn.user_id = info.id
+		WHERE (conn.user_id = ?) AND (conn.pending = 1);`;
 
+	var insertIds = [req.session.user_id, req.session.user_id];
+	connection.query(sql, insertIds, function(error, results, fields) {
+		if (error) throw error;
+		console.log(results);
+
+		// preprocess results to group info together
+		
+
+		res.render("notifications/index", {"invitations": results[0], "pending": results[1]});
+		return;
+	});
 });
 
 
@@ -434,16 +436,15 @@ io.sockets.on('connection', function(socket) {
 			interests.user_id = info.id 
 			LEFT JOIN connections conn ON
 			conn.user_id = info.id WHERE 
-			(info.id != ?) AND (conn.connection_id != ? OR 
-			info.id NOT IN (SELECT conn.user_id FROM connections conn)) AND `;
+			(info.id != ?) AND (conn.connection_id != ?) AND (conn.user_id != ?) AND `;
 
-		var insertVals = [socket.request.session.user_id, socket.request.session.user_id];
+		var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] != '') {
-			sql += '(info.country = ?) OR ';
+			sql += '(info.country = ?) AND ';
 			insertVals.push(vals["location"]);
 		}
 		if (vals["ageRange"][0] != null && vals["ageRange"][1] != null) {
-			sql += '(info.year BETWEEN ? AND ?) OR ';
+			sql += '(info.year BETWEEN ? AND ?) AND ';
 			insertVals.push(vals["ageRange"][0]);
 			insertVals.push(vals["ageRange"][1]);
 		}
@@ -454,7 +455,7 @@ io.sockets.on('connection', function(socket) {
 				insertVals.push(vals["gender"][i]);
 			}
 			sql = sql.substring(0, sql.length-1);
-			sql += ')) OR ';
+			sql += ')) AND ';
 		}
 		if (vals["sexuality"].length > 0) {
 			sql += '(sexuality.sexuality IN (';
@@ -463,7 +464,7 @@ io.sockets.on('connection', function(socket) {
 				insertVals.push(vals["sexuality"][i]);
 			}
 			sql = sql.substring(0, sql.length-1);
-			sql += ')) OR ';
+			sql += ')) AND ';
 		}
 		if (vals["race"].length > 0) {
 			sql += '(race.race_ethnicity IN (';
@@ -472,7 +473,7 @@ io.sockets.on('connection', function(socket) {
 				insertVals.push(vals["race"][i]);
 			}
 			sql = sql.substring(0, sql.length-1);
-			sql += ')) OR ';
+			sql += ')) AND ';
 		}
 		if (vals["religion"].length > 0) {
 			sql += '(religion.religion IN (';
@@ -481,7 +482,7 @@ io.sockets.on('connection', function(socket) {
 				insertVals.push(vals["religion"][i]);
 			}
 			sql = sql.substring(0, sql.length-1);
-			sql += ')) OR ';
+			sql += ')) AND ';
 		}
 		if (vals["interests"].length > 0) {
 			sql += '(interests.interest IN (';
@@ -490,16 +491,11 @@ io.sockets.on('connection', function(socket) {
 				insertVals.push(vals["interests"][i]);
 			}
 			sql = sql.substring(0, sql.length-1);
-			sql += ')) OR ';
+			sql += ')) AND ';
 		}
 
-		// remove tailing OR
-		if (insertVals.length > 2) {
-			sql = sql.substring(0, sql.length - 3);
 		// remove tailing AND
-		} else {
-			sql = sql.substring(0, sql.length - 4);
-		}
+		sql = sql.substring(0, sql.length - 4);
 		sql += 'GROUP BY info.id;';
 
 		console.log(sql);
@@ -651,7 +647,7 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('connect', function(vals) {
+	socket.on('connectSend', function(vals) {
 		console.log(vals);
 
 		var userId = socket.request.session.user_id;
@@ -682,7 +678,7 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('ignoreInvitation' function(vals) {
+	socket.on('ignoreInvitation', function(vals) {
 		var conn_id = vals["id"];
 		// remove inwards connection entry in db
 		var sql = `DELETE FROM connections
