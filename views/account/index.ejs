@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title><%= data.name %>'s Profile | Pinkmantaray Connect</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+	
+	<%- include("../partials/header") %>
+
+	<form action="/report" method="GET">
+
+	<div id="profileInfoDiv">
+		<table id="profileInfo">
+			<tr>
+				<td><%= data.name %></td>
+				<td><%= new Date().getFullYear() - data.year %></td>
+				<td><%= data.pronouns %></td>
+				<td><a href="https://instagram.com/<%= data.instagram %>">
+					<img border="0" alt="https://instagram.com/<%= data.instagram %>" 
+					src="/views/imgs/instagram_logo.png" width="20" height="20"></a></td>
+				<td><a href=""><img border="0" alt="email" 
+					src="/views/imgs/email_icon.png" width="20" height="20"></a></td> <!-- TODO -->
+			</tr>
+			<tr>
+				<td><%= data.gender.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.country %></td>
+			</tr>
+			<tr>
+				<td><%= data.language %></td>
+			</tr>
+			<tr>
+				<td><%= data.sexuality.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.race_ethnicity.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.religion.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.interest.join(', ') %></td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="reportDiv">
+		<input type="hidden" name="id" val="<%= data.id %>">
+		<input type="submit" name="reportBtn" val="Report">
+	</div>
+
+	</form>
+
+</body>

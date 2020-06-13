@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Report <%= data.name %> | Pinkmantaray Connect</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script> 
+<script type="text/javascript" src="/scripts/reportScript.js"></script> 
+
+</head>
+
+<body>
+	<%- include("../partials/header") %>
+
+
+	<div id="reportDiv">
+		<form id="reportForm">
+		<p>You are reporting <%= data.name %></p>
+
+		<label for="reason">Why:</label>
+		<textarea name="reason" form="reportForm">Enter reason here...</textarea>
+
+		<div>
+			<p>Reporting <%= data.name %> will remove them from your connections and send a report to admin for review. 
+				This will also place <%= data.name %> under immediate review by admin, removing <%= data.name %> from the 
+				Pinkmantaray Connect network during the review.</p>
+		</div>
+
+		<input type="hidden" name="id" id="userId" val="<%= data.id %>">
+		<button type="submit" id="submitBtn">Report</button>
+
+		</form>
+	</div>
+
+</body>

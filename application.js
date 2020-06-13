@@ -100,7 +100,7 @@ function restrict(req, res, next) {
 app.get('/', restrict, function(req, res) {
 
 	// double sql query
-	var sql = `SELECT id, name, pronouns, email, instagram FROM user_info 
+	var sql = `SELECT user_info.id, name, pronouns, email, instagram FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
 		WHERE connections.user_id = ? AND connections.pending = 0; `
 
@@ -115,7 +115,6 @@ app.get('/', restrict, function(req, res) {
 		res.render('index', {"results": results});
 		return;
 	});
-
 });
 
 
@@ -181,20 +180,135 @@ app.get('/notifications', restrict, function(req, res) {
 		if (error) throw error;
 		console.log(results);
 
-		// preprocess results to group info together
-		
+		// preprocess results to group info together, list of dict of dicts
+		var send = [];
+		for (var i = 0; i < results.length; i++) {
+			var infoVals = {};
+			for (var j = 0; j < results[i].length; j++) {
+				var curId = results[i][j].id;
+				// if user already exists in dict
+				if (!(curId in infoVals)) {
+					infoVals[curId] = {};
+					infoVals[curId]["id"] = results[i][j].id;
+					infoVals[curId]["pronouns"] = results[i][j].pronouns;
+					infoVals[curId]["country"] = results[i][j].country;
+					infoVals[curId]["year"] = results[i][j].year;
+					infoVals[curId]["gender"] = [results[i][j].gender];
+					infoVals[curId]["sexuality"] = [results[i][j].sexuality];
+					infoVals[curId]["race_ethnicity"] = [results[i][j].race_ethnicity];
+					infoVals[curId]["religion"] = [results[i][j].religion];
+					infoVals[curId]["interest"] = [results[i][j].interest];
+				// else add to existing entry
+				} else {
+					if (!(infoVals[curId]["gender"].includes(results[i][j].gender)))
+						infoVals[curId]["gender"].push(results[i][j].gender);
+					if (!(infoVals[curId]["sexuality"].includes(results[i][j].sexuality)))
+						infoVals[curId]["sexuality"].push(results[i][j].sexuality);
+					if (!(infoVals[curId]["race_ethnicity"].includes(results[i][j].race_ethnicity)))
+						infoVals[curId]["race_ethnicity"].push(results[i][j].race_ethnicity);
+					if (!(infoVals[curId]["religion"].includes(results[i][j].religion)))
+						infoVals[curId]["religion"].push(results[i][j].religion);
+					if (!(infoVals[curId]["interest"].includes(results[i][j].interest)))
+						infoVals[curId]["interest"].push(results[i][j].interest);
+				}
+			}
+			send.push(infoVals);
+		}
 
-		res.render("notifications/index", {"invitations": results[0], "pending": results[1]});
+		console.log(send);
+
+		res.render("notifications/index", {"invitations": send[0], "pending": send[1]});
 		return;
 	});
 });
+
+
+/** PAGES FOR INDIVIDUAL PROFILES **/
+app.get('/profile', restrict, function(req, res) {
+	// get id from query parameters
+	var userId = req.query.id;
+
+	var sql = `SELECT info.id, info.name, info.pronouns, info.year, info.country, info.language, info.instagram, info.email,
+		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
+		FROM user_info info
+		LEFT JOIN user_gender gender ON gender.user_id = info.id
+		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+		LEFT JOIN user_religion religion ON religion.user_id = info.id
+		LEFT JOIN user_interests interests ON interests.user_id = info.id
+		WHERE info.id = ?;`;
+
+	connection.query(sql, userId, function(error, results, fields) {
+		if (error) throw error;
+		console.log(results);
+
+		var infoVals = {};
+		for (var i = 0; i < results.length; i++) {
+			// if user already exists in dict
+			infoVals["id"] = results[i].id;
+			infoVals["pronouns"] = results[i].pronouns;
+			infoVals["country"] = results[i].country;
+			infoVals["year"] = results[i].year;
+			infoVals["language"] = results[i].language;
+			infoVals["instagram"] = results[i].instagram;
+			infoVals["email"] = results[i].email;
+
+			if (("gender" in infoVals) && !(infoVals["gender"].includes(results[i].gender)))
+				infoVals["gender"].push(results[i].gender);
+			else if ("gender" in infoVals)
+				infoVals["gender"] = [results[i].gender];
+
+			if (("sexuality" in infoVals) && !(infoVals["sexuality"].includes(results[i].sexuality)))
+				infoVals["sexuality"].push(results[i].sexuality);
+			else if ("sexuality" in infoVals)
+				infoVals["sexuality"] = [results[i].sexuality];
+
+			if (("race_ethnicity" in infoVals) && !(infoVals["race_ethnicity"].includes(results[i].race_ethnicity)))
+				infoVals["race_ethnicity"].push(results[i].race_ethnicity);
+			else if ("race_ethnicity" in infoVals)
+				infoVals["race_ethnicity"] = [results[i].race_ethnicity];
+
+			if (("religion" in infoVals) && !(infoVals["religion"].includes(results[i].religion)))
+				infoVals["religion"].push(results[i].religion);
+			else if ("religion" in infoVals)
+				infoVals["religion"] = [results[i].religion];
+
+			if (("interest" in infoVals) && !(infoVals["interest"].includes(results[i].interest)))
+				infoVals["interest"].push(results[i].interest);
+			else if ("interest" in infoVals)
+				infoVals["interest"] = [results[i].interest];
+		}
+
+		res.render('accounts/index', {"info": infoVals});
+		return;
+	});
+});
+
+
+/** REPORT PAGE **/
+app.get('/report', function(req, res) {
+	var userId = req.body.id;
+	var sql = `SELECT info.name FROM user_info info
+		WHERE info.id = ?`;
+
+	connection.query(sql, userId, function(error, results, fields) {
+		if (error) throw error;
+		console.log(results);
+
+		var vals = {"id": userId, "name": results[0].name};
+
+		res.render('account/report', {"data": vals});
+		return;
+	});	
+});
+
 
 
 /** LOGOUT FUNCTIONALITY **/
 app.get('/logout', function(req, res) {
 	req.session.destroy();
 	res.redirect('/welcome');
-})
+});
 
 
 /** LOGIN AUTHENTICATION **/
@@ -436,7 +550,9 @@ io.sockets.on('connection', function(socket) {
 			interests.user_id = info.id 
 			LEFT JOIN connections conn ON
 			conn.user_id = info.id WHERE 
-			(info.id != ?) AND (conn.connection_id != ?) AND (conn.user_id != ?) AND `;
+			(info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
+			OR ((info.id NOT IN (SELECT conn.connection_id FROM connections conn)) AND (info.id NOT IN (SELECT conn.user_id FROM connections conn)))) 
+			AND (info.reported != 1) AND `;
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] != '') {
@@ -664,11 +780,12 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('acceptInvitation', function(vals) {
 		var conn_id = vals["id"];
+		console.log(conn_id);
 		// update pending for inwards connection and insert outwards connection
 		var sql = `UPDATE connections
 			SET pending = 0
-			WHERE connection.connection_id = ? AND connection.user_id = ?;
-			INSERT INTO connections (user_id, connection_id, pending)
+			WHERE connections.connection_id = ? AND connections.user_id = ?;
+			INSERT INTO connections (connections.user_id, connections.connection_id, connections.pending)
 			VALUES (?, ?, 0)`;
 
 		var insertIds = [socket.request.session.user_id, conn_id, socket.request.session.user_id, conn_id];
@@ -682,7 +799,7 @@ io.sockets.on('connection', function(socket) {
 		var conn_id = vals["id"];
 		// remove inwards connection entry in db
 		var sql = `DELETE FROM connections
-			WHERE (user_id = ?) and (connection_id = ?);`;
+			WHERE (connections.user_id = ?) and (connections.connection_id = ?);`;
 
 		var insertIds = [conn_id, socket.request.session.user_id];
 		connection.query(sql, insertIds, function(error, results, fields) {
@@ -702,5 +819,20 @@ io.sockets.on('connection', function(socket) {
 			if (error) throw error;
 			console.log(results);
 		});
+	});
+
+	socket.on('report', function(vals) {
+		var sql = `UPDATE user_info info SET
+			info.reported = 1 WHERE info.id = ?`;
+		connection.query(sql, vals["id"], function(error, results, fields) {
+			if (error) throw error;
+
+			if (results.affectedRows === 1) {
+				socket.emit('reportResult', {"success": true});
+			} else {
+				socket.emit('reportResult', {"success": false});
+			}
+			return;
+		})
 	});
 });
