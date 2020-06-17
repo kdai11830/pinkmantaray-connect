@@ -28,6 +28,10 @@ $(document).ready(function() {
 		$('input[name="option_interest"]').each(function() {
 			interests.push($(this).val());
 		})
+		var language = [];
+		$('input[name="option_language"]').each(function() {
+			interests.push($(this).val());
+		})
 
 		var ageArray = [parseInt($('[name=option_age1]').val()), parseInt($('[name=option_age2]').val())];
 		var age1 = Math.min.apply(null,ageArray);
@@ -41,7 +45,8 @@ $(document).ready(function() {
 			"sexuality": sexuality,
 			"race": race,
 			"religion": religion,
-			"interests": interests
+			"interests": interests,
+			"language": language
 		}
 
 		// emit values to application.js with socket
@@ -72,6 +77,7 @@ $(document).ready(function() {
 				7: race_ethnicity
 				8: religion
 				9: interests
+				10: language
 			*/
 
 			// create table headers
@@ -83,7 +89,8 @@ $(document).ready(function() {
 				<th>Sexuality</th>
 				<th>Race/Ethnicity</th>
 				<th>Religion</th>
-				<th>Interests</th></tr>`;
+				<th>Interests</th>
+				<th>Language</th></tr>`;
 			$('#resultsDisplay').append(headers);
 
 			for (var i = 0; i < data.length; i++) {
@@ -100,6 +107,7 @@ $(document).ready(function() {
 				$('#' + curRow).append('<td>' + data[i][7].join(', ') + '</td>');
 				$('#' + curRow).append('<td>' + data[i][8].join(', ') + '</td>');
 				$('#' + curRow).append('<td>' + data[i][9].join(', ') + '</td>');
+				$('#' + curRow).append('<td>' + data[i][10].join(', ') + '</td>');
 				$("#" + curRow).append('<td id="userId">' + data[i][0] + '</td>'); // id (HIDE THIS)
 				$('#' + curRow).find('#userId').hide();
 			}
@@ -189,8 +197,30 @@ $(document).ready(function() {
 		}
 	});
 
+	// add language to list when user selects language
+	$("#select_language").change(function() {
+		var language = $(this).val();
+		var exists = false;
+		for (let li of $("#language_list li")) {
+			var liTxt = $(li).clone().children().remove().end().text();
+			if (language + ' ' === liTxt) {
+				exists = true;
+			}
+		}
+
+		if (!exists) {
+			var li = $('<li>' + language + ' <span class="close">[X]</span></li>');
+			$('#language_list').append(li);
+			$(this).val('');
+
+			$('#language_list').after('<input type="hidden" id="option_language" name="option_language" value="' + language + '">');
+		} else {
+			$(this).val('');
+		}
+	});
+
 	// allow for x "buttons" to close the parent element
-	$("#interests_list").delegate(".close", "click", function() {
+	$(".variable_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
 		liTxt = liTxt.substring(0, liTxt.length-1);

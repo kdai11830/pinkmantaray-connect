@@ -374,9 +374,9 @@ body {
 			</select>
 		</div>
 
-		<label for="entry_language">Language: </label>
-		<select name="entry_language" data-placeholder="Choose a Language...">
-			<option value="">Prefer not to answer</option>
+		<label for="select_language">Language: </label>
+		<select name="select_language" data-placeholder="Choose a Language...">
+			<option value=""></option>
 			<option value="Afrikaans">Afrikaans</option>
 			<option value="Albanian">Albanian</option>
 			<option value="Arabic">Arabic</option>
@@ -450,6 +450,9 @@ body {
 			<option value="Welsh">Welsh</option>
 			<option value="Xhosa">Xhosa</option>
 		</select>
+		<ul class="variable_list" id="language_list">
+			<!-- to be populated when user selects languages -->
+		</ul>
 	</div>
 
 	<!-- IDENTITY INFORMATION -->
@@ -580,8 +583,18 @@ body {
 				<option value="refrigerator"/>
 				<option value="Valentine's Day"/>
 			</datalist>
-			<ul id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
+			<ul class="variable_list" id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
 			<!-- add hidden inputs here for list of interests dynamically -->
+		</div>
+
+		<div id="resource_div">
+			<label for="entry_friend_resource">I'm looking for: </label>
+			<input type="radio" name="entry_friend_resource" id="entry_friend" value="friend" checked>
+			<label for="entry_friend">Friend</label>
+			<input type="radio" name="entry_friend_resource" id="entry_resource" value="resource">
+			<label for="entry_resource">Resource</label>
+			<input type="radio" name="entry_friend_resource" id="entry_both" value="friend,resource">
+			<label for="entry_both">Both</label>
 		</div>
 
 		<input type="checkbox" name="consent" value="read" class="required">

@@ -299,6 +299,14 @@ body {
 	</select>
 	</div>
 
+	<label for="select_language">Language: </label>
+	<select name="select_language" data-placeholder="Choose a Language...">
+
+	</select>
+	<ul class="variable_list" id="language_list">
+		<!-- to be populated when user selects languages -->
+	</ul>
+
 	<div id="div_gender">
 	<label for="option_gender_div">Gender:</label>
 	<div id="option_gender_div">
@@ -413,7 +421,7 @@ body {
 		<option value="refrigerator"/>
 		<option value="Valentine's Day"/>
 	</datalist>
-	<ul id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
+	<ul id="interests_list" class="variable_list"></ul> <!-- will fill this with entries using jQuery -->
 	<!-- add interests to hidden input with name "entry_interests" -->
 	</div>
 

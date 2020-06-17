@@ -101,6 +101,25 @@ function adminRestrict(req, res, next) {
 	}
 }
 
+/** WELCOME PAGE **/
+app.get('/welcome', function(req, res) {
+	req.session.destroy();
+	res.render('welcome');
+})
+
+/** LOGIN PAGE **/
+app.get('/login', function(req, res) {
+	// clear current session
+	req.session.destroy();
+	res.render('login/index');
+});
+
+
+/** SIGN UP PAGE **/
+app.get('/signup', function(req, res) {
+	res.render('signup/index');
+});
+
 
 /** HOME PAGE **/
 app.get('/', restrict, function(req, res) {
@@ -123,25 +142,6 @@ app.get('/', restrict, function(req, res) {
 	});
 });
 
-
-/** WELCOME PAGE **/
-app.get('/welcome', function(req, res) {
-	req.session.destroy();
-	res.render('welcome');
-})
-
-/** LOGIN PAGE **/
-app.get('/login', function(req, res) {
-	// clear current session
-	req.session.destroy();
-	res.render('login/index');
-});
-
-
-/** SIGN UP PAGE **/
-app.get('/signup', function(req, res) {
-	res.render('signup/index');
-});
 
 /** CONNECT PAGE **/
 app.get('/connect', restrict, function(req, res) {
@@ -234,9 +234,10 @@ app.get('/profile', restrict, function(req, res) {
 	// get id from query parameters
 	var username = req.query.username;
 
-	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.language, info.instagram, info.email,
-		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
+	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.instagram, info.email,
+		language.language, gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
 		FROM user_info info
+		LEFT JOIN user_language language ON language.user_id = info.id
 		LEFT JOIN user_gender gender ON gender.user_id = info.id
 		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
 		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
@@ -262,7 +263,6 @@ app.get('/profile', restrict, function(req, res) {
 			infoVals["pronouns"] = results[i].pronouns;
 			infoVals["country"] = results[i].country;
 			infoVals["year"] = results[i].year;
-			infoVals["language"] = results[i].language;
 			infoVals["instagram"] = results[i].instagram;
 			infoVals["email"] = results[i].email;
 
@@ -290,6 +290,11 @@ app.get('/profile', restrict, function(req, res) {
 				infoVals["interest"].push(results[i].interest);
 			else if ("interest" in infoVals)
 				infoVals["interest"] = [results[i].interest];
+
+			if (("language" in infoVals) && !(infoVals["language"].includes(results[i].language)))
+				infoVals["language"].push(results[i].language);
+			else if ("language" in infoVals)
+				infoVals["language"] = [results[i].language];
 		}
 
 		res.render('accounts/index', {"data": infoVals});
@@ -429,14 +434,19 @@ app.post('/new-user-auth', function(req, res) {
 	// background information
 	var name = req.body.entry_name;
 	var pronouns = req.body.entry_pronouns;
-	var language = req.body.entry_language; // THIS WILL BE CHECKBOXES MOST LIKELY
+	// var language = req.body.entry_language; // THIS WILL BE CHECKBOXES MOST LIKELY
 	var email = req.body.entry_email;
 	var year = req.body.entry_year;
 	var instagram = req.body.entry_instagram;
 	var country = req.body.entry_country;
 	var state = req.body.entry_state;
+	var looking_for = req.body.entry_friend_resource;
 
 	// optional data
+	var language = [];
+	if (req.body.entry_language) {
+		language = req.body.entry_language;
+	}
 	var gender = [];
 	if (req.body.entry_gender) {
 		gender = req.body.entry_gender;
@@ -461,7 +471,7 @@ app.post('/new-user-auth', function(req, res) {
 	// insert information into database
 	var sql = `INSERT INTO user_info 
 		(
-			username, password, name, pronouns, email, year, instagram, country, state, language
+			username, password, name, pronouns, email, year, instagram, country, state, looking_for
 		)
 		VALUES
 		(
@@ -480,7 +490,7 @@ app.post('/new-user-auth', function(req, res) {
 					throw err;
 
 				} else {
-					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, language];
+					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, looking_for];
 					console.log(insertVals);
 
 					connection.query(sql, insertVals, function(err, result, fields) {
@@ -502,6 +512,17 @@ app.post('/new-user-auth', function(req, res) {
 							var sID = result.insertId.toString();
 
 							// ADD LANGUAGE THING HERE ONCE IM NOT TOO LAZY TO MAKE THEM CHECKBOXES
+							if (language.length > 0) {
+								nestedSql += 'INSERT INTO user_language (user_id, language) VALUES ';
+								for (var i = 0; i < language.length - 1; i++) {
+									nestedSql += '(?, ?), ';
+									nestedAdd.push(sID);
+									nestedAdd.push(language[i]);
+								}
+								nestedSql += '(?, ?); '
+								nestedAdd.push(sID);
+								nestedAdd.push(language[language.length - 1]);
+							}
 							if (gender.length > 0) {
 								nestedSql += 'INSERT INTO user_gender (user_id, gender) VALUES ';
 								for (var i = 0; i < gender.length - 1; i++) {
@@ -596,6 +617,8 @@ io.sockets.on('connection', function(socket) {
 			religion.user_id = info.id
 			LEFT JOIN user_interests interests ON
 			interests.user_id = info.id 
+			LEFT JOIN user_language language ON
+			language.user_id = info.id
 			LEFT JOIN connections conn ON
 			conn.user_id = info.id WHERE 
 			(info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
@@ -657,6 +680,15 @@ io.sockets.on('connection', function(socket) {
 			sql = sql.substring(0, sql.length-1);
 			sql += ')) AND ';
 		}
+		if (vals["language"].length > 0) {
+			sql += '(language.language IN (';
+			for (var i = 0; i < vals["language"].length; i++) {
+				sql += '?,';
+				insertVals.push(vals["language"][i]);
+			}
+			sql = sql.substring(0, sql.length-1);
+			sql += ')) AND ';
+		}
 
 		// remove tailing AND
 		sql = sql.substring(0, sql.length - 4);
@@ -712,6 +744,11 @@ io.sockets.on('connection', function(socket) {
 					WHERE user_id IN `;
 				sqlTemp += insertIds;
 
+				// language sql
+				sqlTemp += `SELECT user_id, language FROM user_language
+					WHERE user_id IN `;
+				sqlTemp += insertIds;
+
 				console.log(sqlTemp);
 
 				// pass on results to inner query
@@ -725,6 +762,7 @@ io.sockets.on('connection', function(socket) {
 						3: race_ethnicity
 						4: religion
 						5: interest
+						6: language
 					*/
 					// goal: organize by id, nested array
 
@@ -768,6 +806,14 @@ io.sockets.on('connection', function(socket) {
 						interestVals[tempInterest.user_id].push(tempInterest.interest);
 					}
 
+					var languageVals = {};
+					for (var i = 0; i < results[6].length; i++) {
+						var tempLanguage = results[6][i];
+						if (!(tempLanguage.user_id in languageVals)) 
+							languageVals[tempLanguage.user_id] = [];
+						languageVals[tempLanguage.user_id].push(tempLanguage.language);
+					}
+
 					// all information container
 					var infoVals = {};
 					for (var i = 0; i < results[0].length; i++) {
@@ -796,6 +842,10 @@ io.sockets.on('connection', function(socket) {
 							infoVals[tempInfo.id].push([]);
 						if (tempInfo.id in interestVals)
 							infoVals[tempInfo.id].push(interestVals[tempInfo.id]);
+						else
+							infoVals[tempInfo.id].push([]);
+						if (tempInfo.id in languageVals)
+							infoVals[tempInfo.id].push(languageVals[tempInfo.id]);
 						else
 							infoVals[tempInfo.id].push([]);
 					}

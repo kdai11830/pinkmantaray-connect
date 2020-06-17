@@ -23,7 +23,7 @@ body {
 		<h2>Profile not found!</h2>
 		<input type="submit" name="returnHome" value="Return to Home">
 		</form>
-		
+
 	<% } else { %>	
 
 		<form action="/report?username=<%= data.username %>" method="GET">
@@ -47,7 +47,7 @@ body {
 					<td><%= data.country %></td>
 				</tr>
 				<tr>
-					<td><%= data.language %></td>
+					<td><%= data.language.join(', ') %></td>
 				</tr>
 				<tr>
 					<td><%= data.sexuality.join(', ') %></td>

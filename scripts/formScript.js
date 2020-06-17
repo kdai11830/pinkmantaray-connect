@@ -181,13 +181,38 @@ $(document).ready(function() {
 		}
 	});
 
+	// add language to list when user selects language
+	$("#select_language").change(function() {
+		var language = $(this).val();
+		var exists = false;
+		for (let li of $("#language_list li")) {
+			var liTxt = $(li).clone().children().remove().end().text();
+			if (language + ' ' === liTxt) {
+				exists = true;
+			}
+		}
+
+		if (!exists) {
+			var li = $('<li>' + language + ' <span class="close">[X]</span></li>');
+			$('#language_list').append(li);
+			$(this).val('');
+
+			$('#language_list').after('<input type="hidden" id="entry_language" name="entry_lanuage[]" value="' + language + '">');
+		} else {
+			$(this).val('');
+		}
+	});
+
 	// allow for x "buttons" to close the parent element
-	$("#interests_list").delegate(".close", "click", function() {
+	$(".variable_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
 		$('#entry_interest[value="' + liTxt + '"]').remove();
 		// remove li item
 		$(this).parent().remove();
 	});
+
+
+	
 
 });
