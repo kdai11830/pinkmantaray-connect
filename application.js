@@ -14,13 +14,10 @@ var http = require('http');
 var app = new express();
 const port = 3000;
 
-// var server = http.createServer(app);
 var server = app.listen(port, function() {
 	console.log(new Date().toISOString() + ": server started on port " + port)
 })
 var io = require('socket.io').listen(server);
-
-// server.listen(port);
 
 
 const saltRounds = 10;
@@ -61,7 +58,7 @@ var sessionMiddleware = session(sess);
 
 io.use(function(socket, next) {
 	sessionMiddleware(socket.request, socket.request.res || {}, next);
-})
+});
 
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
@@ -95,6 +92,15 @@ function restrict(req, res, next) {
 	}
 }
 
+/** ADMIN AUTHENTICATION MIDDLEWARE **/
+function adminRestrict(req, res, next) {
+	if (req.session.loggedin && req.session.username == 'kdai') {
+		next();
+	} else {
+		// TODO: idk maybe like just don't do anything or reload page?
+	}
+}
+
 
 /** HOME PAGE **/
 app.get('/', restrict, function(req, res) {
@@ -102,7 +108,7 @@ app.get('/', restrict, function(req, res) {
 	// double sql query
 	var sql = `SELECT user_info.id, name, pronouns, email, instagram FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
-		WHERE connections.user_id = ? AND connections.pending = 0; `
+		WHERE connections.user_id = ? AND connections.pending = 0 AND user_info.reported != 1; `
 
 	connection.query(sql, req.session.user_id, function(err, results, fields) {
 		if (err) {
@@ -163,7 +169,7 @@ app.get('/notifications', restrict, function(req, res) {
 		LEFT JOIN user_religion religion ON religion.user_id = info.id
 		LEFT JOIN user_interests interests ON interests.user_id = info.id
 		LEFT JOIN connections conn ON conn.user_id = info.id
-		WHERE (conn.connection_id = ?) AND (conn.pending = 1);
+		WHERE (conn.connection_id = ?) AND (conn.pending = 1) AND (info.reported != 1);
 		SELECT info.id, info.pronouns, info.country, info.year,
 		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
 		FROM user_info info
@@ -173,7 +179,7 @@ app.get('/notifications', restrict, function(req, res) {
 		LEFT JOIN user_religion religion ON religion.user_id = info.id
 		LEFT JOIN user_interests interests ON interests.user_id = info.id
 		LEFT JOIN connections conn ON conn.user_id = info.id
-		WHERE (conn.user_id = ?) AND (conn.pending = 1);`;
+		WHERE (conn.user_id = ?) AND (conn.pending = 1) AND (info.reported != 1);`;
 
 	var insertIds = [req.session.user_id, req.session.user_id];
 	connection.query(sql, insertIds, function(error, results, fields) {
@@ -226,9 +232,9 @@ app.get('/notifications', restrict, function(req, res) {
 /** PAGES FOR INDIVIDUAL PROFILES **/
 app.get('/profile', restrict, function(req, res) {
 	// get id from query parameters
-	var userId = req.query.id;
+	var username = req.query.username;
 
-	var sql = `SELECT info.id, info.name, info.pronouns, info.year, info.country, info.language, info.instagram, info.email,
+	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.language, info.instagram, info.email,
 		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
 		FROM user_info info
 		LEFT JOIN user_gender gender ON gender.user_id = info.id
@@ -236,16 +242,23 @@ app.get('/profile', restrict, function(req, res) {
 		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
 		LEFT JOIN user_religion religion ON religion.user_id = info.id
 		LEFT JOIN user_interests interests ON interests.user_id = info.id
-		WHERE info.id = ?;`;
+		WHERE info.username = ?;`;
 
-	connection.query(sql, userId, function(error, results, fields) {
+	connection.query(sql, username, function(error, results, fields) {
 		if (error) throw error;
 		console.log(results);
+
+		// if profile doesn't exist, send blank info
+		if (results.length == 0) {
+			res.render('accounts/index', {"data": {}});
+			return;
+		}
 
 		var infoVals = {};
 		for (var i = 0; i < results.length; i++) {
 			// if user already exists in dict
 			infoVals["id"] = results[i].id;
+			infoVals["username"] = results[i].username;
 			infoVals["pronouns"] = results[i].pronouns;
 			infoVals["country"] = results[i].country;
 			infoVals["year"] = results[i].year;
@@ -279,15 +292,16 @@ app.get('/profile', restrict, function(req, res) {
 				infoVals["interest"] = [results[i].interest];
 		}
 
-		res.render('accounts/index', {"info": infoVals});
+		res.render('accounts/index', {"data": infoVals});
 		return;
 	});
 });
 
 
 /** REPORT PAGE **/
-app.get('/report', function(req, res) {
-	var userId = req.body.id;
+app.get('/report', restrict, function(req, res) {
+	var userId = req.query.id;
+	console.log(userId);
 	var sql = `SELECT info.name FROM user_info info
 		WHERE info.id = ?`;
 
@@ -296,6 +310,7 @@ app.get('/report', function(req, res) {
 		console.log(results);
 
 		var vals = {"id": userId, "name": results[0].name};
+		console.log(vals);
 
 		res.render('account/report', {"data": vals});
 		return;
@@ -303,12 +318,45 @@ app.get('/report', function(req, res) {
 });
 
 
+/** REPORTED SUCCESS OR FAILURE **/
+app.get('/reported', restrict, function(req, res) {
+	var success = (req.query.success == 'true');
+	res.render('account/reported', {"success": success});
+	return;
+})
+
 
 /** LOGOUT FUNCTIONALITY **/
 app.get('/logout', function(req, res) {
 	req.session.destroy();
 	res.redirect('/welcome');
 });
+
+
+app.post('/reported', function(req, res) {
+	var reportedId = req.body.id;
+	var reason = req.body.reason;
+
+	console.log(req.body);
+
+	var sql = `UPDATE user_info info SET
+		info.reported = 1 WHERE info.id = ?;
+		INSERT INTO report_logs (user_id, reported_id, reason)
+		VALUES (?, ?, ?);`;
+	var insertVals = [reportedId, req.session.user_id, reportedId, reason];
+	console.log(insertVals);
+
+	connection.query(sql, insertVals, function(error, results, fields) {
+		if (error) console.log(error);
+		console.log(results);
+		var success = false;
+		if (results[0].affectedRows === 1) {
+			success = true;
+		}
+		res.redirect('/reported?success='+success);
+		return;
+	})
+})
 
 
 /** LOGIN AUTHENTICATION **/
@@ -821,18 +869,4 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('report', function(vals) {
-		var sql = `UPDATE user_info info SET
-			info.reported = 1 WHERE info.id = ?`;
-		connection.query(sql, vals["id"], function(error, results, fields) {
-			if (error) throw error;
-
-			if (results.affectedRows === 1) {
-				socket.emit('reportResult', {"success": true});
-			} else {
-				socket.emit('reportResult', {"success": false});
-			}
-			return;
-		})
-	});
 });

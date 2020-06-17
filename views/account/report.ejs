@@ -11,8 +11,6 @@ body {
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="/socket.io/socket.io.js"></script> 
-<script type="text/javascript" src="/scripts/reportScript.js"></script> 
 
 </head>
 
@@ -21,11 +19,11 @@ body {
 
 
 	<div id="reportDiv">
-		<form id="reportForm">
+		<form id="reportForm" action="/reported" method="POST">
 		<p>You are reporting <%= data.name %></p>
 
 		<label for="reason">Why:</label>
-		<textarea name="reason" form="reportForm">Enter reason here...</textarea>
+		<textarea name="reason" form="reportForm" placeholder="Enter reason here..."></textarea>
 
 		<div>
 			<p>Reporting <%= data.name %> will remove them from your connections and send a report to admin for review. 
@@ -33,7 +31,7 @@ body {
 				Pinkmantaray Connect network during the review.</p>
 		</div>
 
-		<input type="hidden" name="id" id="userId" val="<%= data.id %>">
+		<input type="hidden" name="id" id="userId" value="<%= data.id %>">
 		<button type="submit" id="submitBtn">Report</button>
 
 		</form>

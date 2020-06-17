@@ -18,49 +18,58 @@ body {
 	
 	<%- include("../partials/header") %>
 
-	<form action="/report" method="GET">
+	<% if (Object.keys(data).length === 0) { %>
+		<form action="/" method="GET">
+		<h2>Profile not found!</h2>
+		<input type="submit" name="returnHome" value="Return to Home">
+		</form>
+		
+	<% } else { %>	
 
-	<div id="profileInfoDiv">
-		<table id="profileInfo">
-			<tr>
-				<td><%= data.name %></td>
-				<td><%= new Date().getFullYear() - data.year %></td>
-				<td><%= data.pronouns %></td>
-				<td><a href="https://instagram.com/<%= data.instagram %>">
-					<img border="0" alt="https://instagram.com/<%= data.instagram %>" 
-					src="/views/imgs/instagram_logo.png" width="20" height="20"></a></td>
-				<td><a href=""><img border="0" alt="email" 
-					src="/views/imgs/email_icon.png" width="20" height="20"></a></td> <!-- TODO -->
-			</tr>
-			<tr>
-				<td><%= data.gender.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.country %></td>
-			</tr>
-			<tr>
-				<td><%= data.language %></td>
-			</tr>
-			<tr>
-				<td><%= data.sexuality.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.race_ethnicity.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.religion.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.interest.join(', ') %></td>
-			</tr>
-		</table>
-	</div>
+		<form action="/report?username=<%= data.username %>" method="GET">
 
-	<div id="reportDiv">
-		<input type="hidden" name="id" val="<%= data.id %>">
-		<input type="submit" name="reportBtn" val="Report">
-	</div>
+		<div id="profileInfoDiv">
+			<table id="profileInfo">
+				<tr>
+					<td><%= data.name %></td>
+					<td><%= new Date().getFullYear() - data.year %></td>
+					<td><%= data.pronouns %></td>
+					<td><a href="https://instagram.com/<%= data.instagram %>">
+						<img border="0" alt="https://instagram.com/<%= data.instagram %>" 
+						src="/views/imgs/instagram_logo.png" width="20" height="20"></a></td>
+					<td><a href=""><img border="0" alt="email" 
+						src="/views/imgs/email_icon.png" width="20" height="20"></a></td> <!-- TODO -->
+				</tr>
+				<tr>
+					<td><%= data.gender.join(', ') %></td>
+				</tr>
+				<tr>
+					<td><%= data.country %></td>
+				</tr>
+				<tr>
+					<td><%= data.language %></td>
+				</tr>
+				<tr>
+					<td><%= data.sexuality.join(', ') %></td>
+				</tr>
+				<tr>
+					<td><%= data.race_ethnicity.join(', ') %></td>
+				</tr>
+				<tr>
+					<td><%= data.religion.join(', ') %></td>
+				</tr>
+				<tr>
+					<td><%= data.interest.join(', ') %></td>
+				</tr>
+			</table>
+		</div>
 
-	</form>
+		<div id="reportDiv">
+			<input type="submit" name="reportBtn" val="Report">
+		</div>
+
+		</form>
+
+	<% } %>
 
 </body>
