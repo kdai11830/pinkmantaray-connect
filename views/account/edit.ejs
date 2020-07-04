@@ -11,31 +11,91 @@ body {
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/scripts/profileScript.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		for (var i = new Date().getFullYear(); i > 1900; i--) {
+			$("#option_year").append($("<option></option>").attr("value",i).text(i.toString()));
+		}
+
+		var userData = <%- JSON.stringify(data) %>;
+
+		$('#option_year').val(userData["year"]);
+
+		$('#select_location').val(userData["country"]);
+
+		$('[name="option_gender[]"]').each(function() {
+			console.log($(this).val());
+			if (userData["gender"].includes($(this).val())) {
+				$(this).prop('checked', true);
+			}
+		});
+
+		$("[name='option_sexuality[]']").each(function() {
+			if (userData["sexuality"].includes($(this).val())) {
+				$(this).prop('checked', true);
+			}
+		});
+
+		$("[name='option_race[]']").each(function() {
+			if (userData["race_ethnicity"].includes($(this).val())) {
+				$(this).prop('checked', true);
+			}
+		});
+
+		$("[name='option_religion[]']").each(function() {
+			if (userData["religion"].includes($(this).val())) {
+				$(this).prop('checked', true);
+			}
+		});
+
+		for (var i = 0; i < userData["interest"].length; i++) {
+			if (userData["interest"][i] != null) {
+				var li = $('<li>' + userData["interest"][i] + ' <span class="close">[X]</span></li>');
+				$("#interests_list").after('<input type="hidden" id="option_interest" name="option_interest[]" value="' + userData["interest"][i] + '">');
+				$("#interests_list").append(li);
+			}
+		}
+
+		for (var i = 0; i < userData["language"].length; i++) {
+			if (userData["language"][i] != null) {
+				var li = $('<li>' + userData["language"][i] + ' <span class="close">[X]</span></li>');
+				$("#language_list").after('<input type="hidden" id="option_language" name="option_language[]" value="' + userData["language"][i] + '">');
+				$("#language_list").append(li);
+			}
+		}
+	});
+</script>
 
 </head>
 
 <body>
+
+	<%- include("../partials/header") %>
+
 	<form id="editForm" action="/edited" method="POST">
 
 		<div id="div_info">
 			<label for="option_name">Name: </label>
-			<input type="text" name="option_name">
-			<label for="option_age">Age: </label>
-			<select name="option_age" id="option_age"></select>
+			<input type="text" name="option_name" value="<%= data.name %>">
+			<label for="option_year">Birth Year: </label>
+			<select name="option_year" id="option_year"></select>
 			<label for="option_pronouns">Pronouns: </label>
-			<input type="text" name="option_pronouns">
+			<input type="text" name="option_pronouns" value="<%= data.pronouns %>">
 		</div>
 
 		<div id="div_media">
 			<label for="option_instagram">Instagram Handle: </label>
-			<input type="text" name="option_instagram">
+			<input type="text" name="option_instagram"  value="<%= data.instagram %>">
 			<label for="option_email">Email Address: </label>
-			<input type="email" name="option_email">
+			<input type="email" name="option_email" value="<%= data.email %>">
 		</div>
 
 		<div id="div_location">
 			<label for="option_location">Location:</label> <!-- just use country for now, refine later -->
-			<select name="option_location" id="select_location">
+			<select name="option_location" id="select_location" value="<%= data.country %>">
 				<option value="">No Preference</option>
 				<option value="CURRENT LOC">Current Location</option>
 			    <option value="AFG">Afghanistan</option>
@@ -292,7 +352,7 @@ body {
 
 		<div id="div_language">
 			<label for="select_language">Language: </label>
-			<select name="select_language" data-placeholder="Choose a Language...">
+			<select name="select_language" id="select_language" data-placeholder="Choose a Language...">
 				<option value=""></option>
 				<option value="Afrikaans">Afrikaans</option>
 				<option value="Albanian">Albanian</option>
@@ -485,11 +545,19 @@ body {
 				<option value="refrigerator"/>
 				<option value="Valentine's Day"/>
 			</datalist>
-			<ul id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
+			<ul class="variable_list" id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
 			<!-- add interests to hidden input with name "entry_interests" -->
 		</div>
 
-		<button type="submit" id="submitButton">Search</button>
+		<div id="confirmationDialog">
+			<p>Are you sure you want to cancel? All your changes will be lost.</p>
+			<button id="closeBtn">Go Back</button>
+			<button id="confirmBtn">Discard Changes</button>
+		</div>
+
+		<button id="cancelButton">Cancel</button>
+
+		<button type="submit" id="submitButton">Update</button>
 
 	</form>
 

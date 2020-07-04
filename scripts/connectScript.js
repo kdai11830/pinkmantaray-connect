@@ -200,6 +200,7 @@ $(document).ready(function() {
 	// add language to list when user selects language
 	$("#select_language").change(function() {
 		var language = $(this).val();
+		console.log(language);
 		var exists = false;
 		for (let li of $("#language_list li")) {
 			var liTxt = $(li).clone().children().remove().end().text();
@@ -225,7 +226,11 @@ $(document).ready(function() {
 		var liTxt = $(this).parent().clone().children().remove().end().text();
 		liTxt = liTxt.substring(0, liTxt.length-1);
 		console.log(liTxt);
-		$('#option_interest[value="' + liTxt + '"]').remove();
+		if (this.id == "language_list") {
+			$('#option_language[value="' + liTxt + '"]').remove();	
+		} else { // this is interest list
+			$('#option_interest[value="' + liTxt + '"]').remove();
+		}
 		// remove li item
 		$(this).parent().remove();
 		console.log($(this).parent().length);

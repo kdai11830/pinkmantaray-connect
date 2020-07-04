@@ -179,7 +179,9 @@ app.get('/notifications', restrict, function(req, res) {
 		LEFT JOIN user_religion religion ON religion.user_id = info.id
 		LEFT JOIN user_interests interests ON interests.user_id = info.id
 		LEFT JOIN connections conn ON conn.user_id = info.id
-		WHERE (conn.user_id = ?) AND (conn.pending = 1) AND (info.reported != 1);`;
+		WHERE (info.id IN 
+		(SELECT conn.connection_id FROM connections conn WHERE conn.user_id = ?)) 
+		AND (conn.pending = 1) AND (info.reported != 1);`;
 
 	var insertIds = [req.session.user_id, req.session.user_id];
 	connection.query(sql, insertIds, function(error, results, fields) {
@@ -232,7 +234,18 @@ app.get('/notifications', restrict, function(req, res) {
 /** PAGES FOR INDIVIDUAL PROFILES **/
 app.get('/profile', restrict, function(req, res) {
 	// get id from query parameters
-	var username = req.query.username;
+	var username = ""
+	if ("username" in req.query) {
+		username = req.query.username;
+	} else {
+		username = req.session.username;
+	}
+
+	// only allow edit if it is your own profile
+	var edit = ("edit" in req.query);
+	if (edit && (username !== req.session.username)) {
+		edit = false
+	}
 
 	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.instagram, info.email,
 		language.language, gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
@@ -243,7 +256,7 @@ app.get('/profile', restrict, function(req, res) {
 		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
 		LEFT JOIN user_religion religion ON religion.user_id = info.id
 		LEFT JOIN user_interests interests ON interests.user_id = info.id
-		WHERE info.username = ?;`;
+		WHERE info.username = ?`;
 
 	connection.query(sql, username, function(error, results, fields) {
 		if (error) throw error;
@@ -259,6 +272,7 @@ app.get('/profile', restrict, function(req, res) {
 		for (var i = 0; i < results.length; i++) {
 			// if user already exists in dict
 			infoVals["id"] = results[i].id;
+			infoVals["name"] = results[i].name
 			infoVals["username"] = results[i].username;
 			infoVals["pronouns"] = results[i].pronouns;
 			infoVals["country"] = results[i].country;
@@ -268,37 +282,50 @@ app.get('/profile', restrict, function(req, res) {
 
 			if (("gender" in infoVals) && !(infoVals["gender"].includes(results[i].gender)))
 				infoVals["gender"].push(results[i].gender);
-			else if ("gender" in infoVals)
+			else if (!("gender" in infoVals))
 				infoVals["gender"] = [results[i].gender];
 
 			if (("sexuality" in infoVals) && !(infoVals["sexuality"].includes(results[i].sexuality)))
 				infoVals["sexuality"].push(results[i].sexuality);
-			else if ("sexuality" in infoVals)
+			else if (!("sexuality" in infoVals))
 				infoVals["sexuality"] = [results[i].sexuality];
 
 			if (("race_ethnicity" in infoVals) && !(infoVals["race_ethnicity"].includes(results[i].race_ethnicity)))
 				infoVals["race_ethnicity"].push(results[i].race_ethnicity);
-			else if ("race_ethnicity" in infoVals)
+			else if (!("race_ethnicity" in infoVals))
 				infoVals["race_ethnicity"] = [results[i].race_ethnicity];
 
 			if (("religion" in infoVals) && !(infoVals["religion"].includes(results[i].religion)))
 				infoVals["religion"].push(results[i].religion);
-			else if ("religion" in infoVals)
+			else if (!("religion" in infoVals))
 				infoVals["religion"] = [results[i].religion];
 
 			if (("interest" in infoVals) && !(infoVals["interest"].includes(results[i].interest)))
 				infoVals["interest"].push(results[i].interest);
-			else if ("interest" in infoVals)
+			else if (!("interest" in infoVals))
 				infoVals["interest"] = [results[i].interest];
 
 			if (("language" in infoVals) && !(infoVals["language"].includes(results[i].language)))
 				infoVals["language"].push(results[i].language);
-			else if ("language" in infoVals)
+			else if (!("language" in infoVals))
 				infoVals["language"] = [results[i].language];
 		}
 
-		res.render('accounts/index', {"data": infoVals});
-		return;
+		if (username == req.session.username) {
+			infoVals["myProfile"] = true;
+		} else {
+			infoVals["myProfile"] = false;
+		}
+
+		// edit mode
+		if (edit) {
+			res.render('account/edit', {"data": infoVals});
+			return;
+		// view mode (default)
+		} else {
+			res.render('account/index', {"data": infoVals});
+			return;
+		}		
 	});
 });
 
@@ -328,7 +355,16 @@ app.get('/reported', restrict, function(req, res) {
 	var success = (req.query.success == 'true');
 	res.render('account/reported', {"success": success});
 	return;
-})
+});
+
+
+/** PRIVACY AND SECURITY SETTINGS PAGE **/
+app.get('/settings', restrict, function(req, res) {
+	var userId = req.session.user_id;
+	var sql = `SELECT `
+	res.render('account/settings');
+});
+
 
 
 /** LOGOUT FUNCTIONALITY **/
@@ -338,7 +374,8 @@ app.get('/logout', function(req, res) {
 });
 
 
-app.post('/reported', function(req, res) {
+/** REPORT UPDATES **/
+app.post('/reported', restrict, function(req, res) {
 	var reportedId = req.body.id;
 	var reason = req.body.reason;
 
@@ -361,7 +398,129 @@ app.post('/reported', function(req, res) {
 		res.redirect('/reported?success='+success);
 		return;
 	})
-})
+});
+
+
+/** PROFILE EDIT UPDATES **/
+app.post('/edited', restrict, function(req, res) {
+	var sID = req.session.user_id;
+	var insertVals = [req.body.option_name, req.body.option_year, req.body.option_pronouns, 
+		req.body.option_instagram, req.body.option_email, req.body.option_location, sID];
+
+	var language = [];
+	if (req.body.option_language) { 
+		language = req.body.option_language;
+	}
+	var gender = [];
+	if (req.body.option_gender) {
+		gender = req.body.option_gender;
+	}	
+	var sexuality = [];
+	if (req.body.option_sexuality) {
+		sexuality = req.body.option_sexuality;
+	}
+	var race_ethnicity = [];
+	if (req.body.option_race) {
+		race_ethnicity = req.body.option_race;
+	}
+	var religion = [];
+	if (req.body.option_religion) {
+		religion = req.body.option_religion;
+	}
+	var interests = [];
+	if (req.body.option_interest) {
+		interests = req.body.option_interest;
+	}
+
+	console.log(insertVals);
+
+	var sql = `UPDATE user_info
+		SET name = ?, year = ?, pronouns = ?, instagram = ?, email = ?, country = ?
+		WHERE id = ?;
+		DELETE FROM user_language WHERE user_id = ?;
+		DELETE FROM user_gender WHERE user_id = ?;
+		DELETE FROM user_sexuality WHERE user_id = ?;
+		DELETE FROM user_race_ethnicity WHERE user_id = ?;
+		DELETE FROM user_religion WHERE user_id = ?;
+		DELETE FROM user_interests WHERE user_id = ?; `;
+
+	for (var i = 0; i < 6; i++) {
+		insertVals.push(sID);
+	}
+
+	if (language.length > 0) {
+		sql += 'INSERT INTO user_language (user_id, language) VALUES ';
+		for (var i = 0; i < language.length - 1; i++) {
+			sql += '(?, ?), ';
+			insertVals.push(sID);
+			insertVals.push(language[i]);
+		}
+		sql += '(?, ?); '
+		insertVals.push(sID);
+		insertVals.push(language[language.length - 1]);
+	}
+	if (gender.length > 0) {
+		sql += 'INSERT INTO user_gender (user_id, gender) VALUES ';
+		for (var i = 0; i < gender.length - 1; i++) {
+			sql += '(?, ?), ';
+			insertVals.push(sID);
+			insertVals.push(gender[i]);
+		}
+		sql += '(?, ?); '
+		insertVals.push(sID);
+		insertVals.push(gender[gender.length - 1]);
+	}
+	if (sexuality.length > 0) {
+		sql += 'INSERT INTO user_sexuality (user_id, sexuality) VALUES ';
+		for (var i = 0; i < sexuality.length - 1; i++) {
+			sql += '(?, ?), ';
+			insertVals.push(sID);
+			insertVals.push(sexuality[i]);
+		}
+		sql += '(?, ?); '
+		insertVals.push(sID);
+		insertVals.push(sexuality[sexuality.length - 1]);
+	}
+	if (race_ethnicity.length > 0) {
+		sql += 'INSERT INTO user_race_ethnicity (user_id, race_ethnicity) VALUES ';
+		for (var i = 0; i < race_ethnicity.length - 1; i++) {
+			sql += '(?, ?), ';
+			insertVals.push(sID);
+			insertVals.push(race_ethnicity[i]);
+		}
+		sql += '(?, ?); '
+		insertVals.push(sID);
+		insertVals.push(race_ethnicity[race_ethnicity.length - 1]);
+	}
+	if (religion.length > 0) {
+		sql += 'INSERT INTO user_religion (user_id, religion) VALUES ';
+		for (var i = 0; i < religion.length - 1; i++) {
+			sql += '(?, ?), ';
+			insertVals.push(sID);
+			insertVals.push(religion[i]);
+		}
+		sql += '(?, ?); '
+		insertVals.push(sID);
+		insertVals.push(religion[religion.length - 1]);
+	}
+	if (interests.length > 0) {
+		sql += `INSERT INTO user_interests (user_id, interest) VALUES `;
+		for (var i = 0; i < interests.length - 1; i++) {
+			sql += '(?, ?), ';
+			insertVals.push(sID);
+			insertVals.push(interests[i]);
+		}
+		sql += '(?, ?);'
+		insertVals.push(sID);
+		insertVals.push(interests[interests.length - 1]);
+	}
+
+	connection.query(sql, insertVals, function(err, results, fields) {
+		if (err) throw err;
+		console.log(results);
+		res.redirect("/profile");
+	});
+});
 
 
 /** LOGIN AUTHENTICATION **/
