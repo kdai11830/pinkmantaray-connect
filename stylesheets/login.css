@@ -1,0 +1,174 @@
+:root {
+  --primary-light: #8abdff;
+  --primary: #6d5dfc;
+  --primary-dark: #5b0eeb;
+  
+  --white: #FFFFFF;
+  --greyLight-1: #E4EBF5;
+  --greyLight-2: #c8d0e7;
+  --greyLight-3: #bec8e4;
+  --greyDark: #9baacf;
+  --pink: rgb(244, 156, 224);
+}
+
+body {
+    margin: 0px;
+}
+
+#login-body {
+    height: 100vh;
+    background-color: #edf2f5;
+}
+
+/* the postcard */
+#login-page {
+    display: flex;
+    justify-content: center;
+
+    font-family: 'Roboto', sans-serif;
+    
+    width: 100vh;
+    height: 60vh;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+
+    border-radius: 1vh;
+    background: #f4f7f9;
+    box-shadow:  7px 7px 14px #b9bcbe, 
+                -7px -7px 14px #f2f4f5;
+}
+
+#login-page div {
+    display: flex;
+    flex-direction: column;
+    padding: 2vh;
+}
+
+/* postcard left */
+#login-page > div:first-child {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5vh;
+    font-weight: 600;
+    color: var(--pink);
+    width: 50%;
+    padding: 0 2vh 0 4vh;
+    display: flex;
+    justify-content: center;
+}
+
+/* "connect" */
+#login-page > div:first-child span{
+   color: white;
+   text-shadow: rgba(179, 176, 176, 0.418) 0px 0px 10px;
+   font-size: 8vh;
+   /* text-shadow: 
+   -8px -8px 12px rgba(201, 199, 199, 0.543),
+   8px 8px 12px rgba(0,0,0,0.08);
+   caret-color:#262626;
+   outline: none; */
+}
+
+/* middle line */
+#login-page > div:first-child:after {
+    content: "";
+    background-color: #e1e4e6;
+    position: absolute;
+    width: 0.3vh;
+    height: 49vh;
+    top: 5vh;
+    left: 50%;
+    display: block;
+}
+
+/* postcard right */
+#login-page > div:nth-child(2) {
+    /* display: flex;
+    flex-direction: column; */
+    align-items: center;
+    padding: 4vh;
+    width: 50%;
+}
+
+/* "welcome back" */
+#login-page > div:nth-child(2) > div:first-child{
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 4vh;
+    word-spacing: 0.3vh;
+    color: rgba(2, 2, 2, 0.632);
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 57vh;
+}
+
+/* input fields */
+#login-form > input {
+    /* font-family: 'Century Gothic', sans-serif; */
+    width: 34vh;
+    height: 7vh;
+    border: none;
+    border-radius: 1rem;
+    font-size: 2.5vh;
+    padding-left: 1.4rem;
+    box-shadow: inset .2rem .2rem .5rem #d7e4f0, 
+                inset -.2rem -.2rem .5rem var(--white);
+    background: none;
+    color: var(--greyDark);
+}
+
+#login-form input::placeholder { 
+    color: var(--greyLight-3); 
+}
+
+#login-form input:focus { 
+    outline: none; 
+    box-shadow: .3rem .3rem .6rem var(--greyLight-2), 
+                -.2rem -.2rem .5rem var(--white);
+}
+
+/* login button  */
+#login-form button {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+}
+
+/* login button active */
+#login-form button:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+/* "remember me" */
+#login-form label{
+    font-family: 'Century Gothic', sans-serif;
+    text-align: center;
+    font-size: small;
+    font-weight: 300;
+    color: gray;
+}
