@@ -11,7 +11,7 @@ $(document).ready(function() {
 		$(".tab").hide();
 
 		$(".tab:eq("+ n +")").show();
-		$(".tab:eq("+ n +")").css("display", "block");
+		// $(".tab:eq("+ n +")").css("display", "block");
 
 		if (n === 0) {
 			$("#prevBtn").hide();

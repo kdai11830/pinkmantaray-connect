@@ -17,7 +17,7 @@ body {
 
 #login-body {
     height: 100vh;
-    background-color: #edf2f5;
+    background-color: #eff3f5;
 }
 
 /* the postcard */
@@ -114,7 +114,6 @@ body {
 
 /* input fields */
 #login-form > input {
-    /* font-family: 'Century Gothic', sans-serif; */
     width: 34vh;
     height: 7vh;
     border: none;
