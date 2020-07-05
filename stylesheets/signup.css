@@ -1,3 +1,7 @@
+*:focus {
+    outline-color: rgb(244, 156, 224);
+}
+
 body {
     margin: 0px;
     background-color: #eff3f5;
@@ -109,11 +113,10 @@ body > form > h1:first-child {
     left: 50%;
 }
 
-/* .signup-info > div > input { */
-.required{
+.required, #select_state, #select_lang {
     width: 34vh;
     height: 7vh;
-    border: 0.1vh solid rgba(255, 255, 255, 0.068);
+    border: 0.1vh solid rgba(255, 255, 255, 0);
     border-radius: 1rem;
     font-size: 2.5vh;
     padding-left: 1.4rem;
@@ -121,6 +124,10 @@ body > form > h1:first-child {
                 inset -.2rem -.2rem .5rem white;
     background: none;
     color: rgb(80, 79, 79);
+}
+
+#select_state, #select_lang, #select_year, #select_country {
+    width: 38vh;
 }
 
 /* .signup-info input:focus {  */
@@ -151,11 +158,64 @@ body > form > h1:first-child {
     font-size: 2vh;
 }
 
-#further-signup-info {
+.further-signup-info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 66vh;
+    /* height: 66vh; */
     height: 61vh;
     padding-top: 22vh;
+} 
+
+#select_state:focus, #select_lang:focus {
+    border-color: rgb(244, 156, 224);
 }
+
+.signup-id-info {
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 16vh;
+    left: 5vh;
+    padding: 0 0vh 10vh 0;
+}
+
+.signup-id-info div label h3 span {
+    color: rgb(244, 156, 224);
+}
+
+.consent-checkbox {
+    border-radius: none;
+    width: 4vh;
+    height: 3vh;
+    box-shadow: none;
+}
+
+.consent-checkbox:focus {
+    box-shadow: none;
+}
+
+#interests_div > input {
+    width: 38vh;
+    height: 4vh;
+    font-family: 'Century Gothic', sans-serif;
+    padding-left: 1vh;
+}
+
+.signup-id-info div {
+    width: 56vh;
+    padding: 0 1vh 0vh 0;
+}
+
+.signup-id-info div div {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    width: 62vh;
+}
+
+#notRead {
+    position: absolute;
+    bottom: 26px;
+}
+

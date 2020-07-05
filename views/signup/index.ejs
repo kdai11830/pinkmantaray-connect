@@ -38,8 +38,7 @@ body {
 
 	<!-- BASIC INFORMATION -->
 	<div class="tab signup-info">
-		<div>
-			
+		<div>	
 			<label for="entry_name">Name: </label>
 			<input type="text" name="entry_name" class="required">
 		
@@ -325,7 +324,7 @@ body {
 		    <option value="ZWE">Zimbabwe</option>
 		</select>
 
-		<div id="state_div">
+		<!-- <div id="state_div"> -->
 			<label for="entry_state">State: </label>
 			<select name="entry_state" id="select_state" data-placeholder="--Select state--">
 				<option value="">Prefer not to answer</option>
@@ -381,10 +380,9 @@ body {
 				<option value="WI">Wisconsin</option>
 				<option value="WY">Wyoming</option>
 			</select>
-		</div>
-
+		<!-- </div> -->
 		<label for="select_language">Language: </label>
-		<select name="select_language" data-placeholder="Choose a Language...">
+		<select name="select_language" id="select_lang" data-placeholder="Choose a Language...">
 			<option value=""></option>
 			<option value="Afrikaans">Afrikaans</option>
 			<option value="Albanian">Albanian</option>
@@ -465,9 +463,9 @@ body {
 	</div>
 
 	<!-- IDENTITY INFORMATION -->
-	<div class="tab">
+	<div class="tab signup-id-info">
 		<div id="gender_div">
-			<label for="entry_gender_div"><h3>Gender (select all that apply): </h3></label>
+			<label for="entry_gender_div"><h3>Gender <span>(select all that apply)</span>: </h3></label>
 			<div id="entry_gender_div">
 				<label>
 					<input type="checkbox" name="entry_gender[]" value="transgender"> Transgender
@@ -494,7 +492,7 @@ body {
 					<input type="checkbox" name="entry_gender[]" value="bigender"> Bigender, pangender
 				</label>
 				<label>
-					<input type="checkbox" name="entry_gender[]" value="custom"> Other <input type="text" name="custom_gender">
+					<input type="checkbox" name="entry_gender[]" value="custom"> Other: <input type="text" name="custom_gender">
 				</label>
 				<label>
 					<input type="checkbox" name="entry_gender[]" value="noanswer"> Prefer not to say
@@ -503,7 +501,7 @@ body {
 		</div>
 
 		<div id="sexuality_div">
-			<label for="entry_sexuality_div"><h3>Sexuality (select all that apply): </h3></label>
+			<label for="entry_sexuality_div"><h3>Sexuality <span>(select all that apply)</span>: </h3></label>
 			<div id="entry_sexuality_div">
 				<label>
 					<input type="checkbox" name="entry_sexuality[]" value="straight"> Straight
@@ -533,7 +531,7 @@ body {
 		</div>
 
 		<div id="race_div">
-			<label for="entry_race_div"><h3>Race and ethnicity (select all that apply): </h3></label>
+			<label for="entry_race_div"><h3>Race & Ethnicity <span>(select all that apply)</span>: </h3></label>
 			<div id="entry_race_div">
 				<label>
 					<input type="checkbox" name="entry_race[]" value="white"> White
@@ -557,7 +555,7 @@ body {
 		</div>
 
 		<div id="religion_div">
-			<label for="entry_religion_div"><h3>Religion (select all that apply): </h3></label>
+			<label for="entry_religion_div"><h3>Religion <span>(select all that apply)</span>: </h3></label>
 			<div id="entry_religion_div">
 				<label>
 					<input type="checkbox" name="entry_religion[]" value="christian"> Christian
@@ -597,7 +595,7 @@ body {
 		</div>
 
 		<div id="resource_div">
-			<label for="entry_friend_resource">I'm looking for: </label>
+			<label for="entry_friend_resource"><h3>I'm looking for: </h3></label>
 			<input type="radio" name="entry_friend_resource" id="entry_friend" value="friend" checked>
 			<label for="entry_friend">Friend</label>
 			<input type="radio" name="entry_friend_resource" id="entry_resource" value="resource">
@@ -606,8 +604,8 @@ body {
 			<label for="entry_both">Both</label>
 		</div>
 
-		<input type="checkbox" name="consent" value="read" class="required">
 		<label for="consent">I have read and agree to the <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</label>
+		<input type="checkbox" name="consent" value="read" class="required consent-checkbox">
 	</div>
 
 	<div style="overflow:auto;" id="move-buttons">
