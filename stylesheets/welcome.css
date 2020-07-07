@@ -75,6 +75,7 @@ body {
     justify-content: flex-end;
     padding: 5vh 0 0 0;
     z-index: 1;
+    transition-duration: 0.5s;
 }
 
 .signup{

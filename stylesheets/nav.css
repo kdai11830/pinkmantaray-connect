@@ -1,0 +1,93 @@
+body {
+  margin: 2vh 5vh;
+  background-color: #eff3f5;
+  color: black;
+  font-size: 2.5vh;
+  font-family: 'Century Gothic', sans-serif;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  transition-duration: 0.2s;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 178vh;
+  /* padding-right: 10vh; */
+}
+
+ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: block;
+  float: left;
+  padding: 4vh;
+  position: relative;
+  text-decoration: none;
+  transition-duration: 0.5s;
+}
+
+a:hover, li:hover,
+li:focus-within {
+  /* background: red; */
+  color: rgb(244, 156, 224);
+  cursor: pointer;
+}
+
+li:focus-within a {
+  outline: none;
+}
+
+ul li ul {
+  font-size: 2vh;
+  background: white;
+  visibility: hidden;
+  opacity: 0;
+  width: 30vh;
+  position: absolute;
+  transition: all 0.5s ease;
+  margin-top: 1vh;
+  /* left: 0; */
+  display: none;
+
+  border-radius: 1vh;
+    background: #f4f7f9;
+    box-shadow:  7px 7px 14px #b9bcbe, 
+                -7px -7px 14px #f2f4f5;
+}
+
+ul li:hover > ul,
+ul li:focus-within > ul,
+ul li ul:hover,
+ul li ul:focus {
+  visibility: visible;
+  opacity: 1;
+  display: block
+}
+
+ul li ul li {
+  clear: both;
+  /* width: 100%; */
+  width: 22.5vh;
+  /* border: 3px solid red; */
+  text-align: left;
+  padding: 2.5vh 2.5vh 2.5vh 5vh;
+}
+
+ul li ul li:hover {
+  /* width: 100%; */
+  background-color: #e5eaed; 
+  border-radius: 1vh;
+  color: rgb(244, 156, 224) !important;
+}
