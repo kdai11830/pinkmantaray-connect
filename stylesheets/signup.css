@@ -19,10 +19,10 @@ body > form {
     font-family: 'Century Gothic', sans-serif;
     font-size: 2.5vh;
     
-    width: 120vh;
-    height: 60vh;
-
+    width: 130vh;
+    /* height: 60vh; */
     height: 80vh;
+
     background-color: #f4f7f9;
 
     position: fixed;
@@ -40,6 +40,12 @@ body > form {
                 -7px -7px 14px #f2f4f5;
 
     overflow-y:auto;
+}
+
+.tab {
+    width: 115vh;
+    padding: 5vh 5vh;
+    /* height: 80vh; */
 }
 
 /* "Sign Up" */
@@ -86,7 +92,7 @@ body > form > h1:first-child {
 		inset rgb(208, 210, 211) -2px -2px 4px;
 }
 
-.signup-info {
+.signup-info, .further-signup-info {
     display: flex;
     justify-content: space-between;
     width: 101vh;
@@ -94,15 +100,28 @@ body > form > h1:first-child {
     padding-top: 9vh;
 }
 
+.further-signup-info {
+    margin-top: -4vh;
+}
+
 .signup-info > div {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     /* padding: 10vh; */
 }
 
+.further-signup-info > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.further-signup-info div label {
+    margin: 4vh 0 2vh 0;
+}
+
 /* middle line */
-.signup-info > div:first-child:after {
+.signup-info > div:first-child:after, .further-signup-info > div:first-child:after {
     display: block;
     content: "";
     background-color: #e1e4e6;
@@ -138,9 +157,9 @@ body > form > h1:first-child {
 }
 
 #move-buttons {
-    position: absolute;
+    /* position: fixed;
     right: 4vh;
-    bottom: 5vh;
+    bottom: 5vh; */
 }
 
 #pwd-notMatched {
@@ -158,14 +177,14 @@ body > form > h1:first-child {
     font-size: 2vh;
 }
 
-.further-signup-info {
+/* .further-signup-info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* height: 66vh; */
+    align-items: center;
     height: 61vh;
     padding-top: 22vh;
-} 
+}  */
 
 #select_state:focus, #select_lang:focus {
     border-color: rgb(244, 156, 224);
@@ -173,11 +192,13 @@ body > form > h1:first-child {
 
 .signup-id-info {
     display: flex;
-    flex-wrap: wrap;
-    position: absolute;
-    top: 16vh;
-    left: 5vh;
-    padding: 0 0vh 10vh 0;
+    flex-direction: column;
+    padding-top: 57vh;
+    /* padding: 0 0vh 10vh 0; */
+}
+
+.signup-row {
+    display: flex;
 }
 
 .signup-id-info div label h3 span {
@@ -202,15 +223,14 @@ body > form > h1:first-child {
     padding-left: 1vh;
 }
 
-.signup-id-info div {
+/* .signup-id-info div {
     width: 56vh;
     padding: 0 1vh 0vh 0;
-}
+} */
 
 .signup-id-info div div {
     display: flex;
     flex-direction: column;
-    flex: 2;
     width: 62vh;
 }
 
@@ -219,3 +239,8 @@ body > form > h1:first-child {
     bottom: 26px;
 }
 
+
+
+#resource_div {
+    display: inline-block;
+}
