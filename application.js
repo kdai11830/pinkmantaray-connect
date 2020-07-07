@@ -24,7 +24,7 @@ const saltRounds = 10;
 
 app.set('view engine', 'ejs'); 
 
-// establish mysql connection and promisify
+// establish mysql connection
 var connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'root',
@@ -361,8 +361,14 @@ app.get('/reported', restrict, function(req, res) {
 /** PRIVACY AND SECURITY SETTINGS PAGE **/
 app.get('/settings', restrict, function(req, res) {
 	var userId = req.session.user_id;
-	var sql = `SELECT `
-	res.render('account/settings');
+	var sql = `SELECT id, name, username, email, instagram FROM user_info
+		WHERE id = ?`;
+	connection.query(sql, [userId], function(error, results, fields) {
+		if (error) throw error;
+		console.log(results);
+		res.render('account/settings', {"data": results[0]});
+	})
+		
 });
 
 
