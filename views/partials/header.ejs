@@ -1,12 +1,9 @@
 <link rel="stylesheet" href="stylesheets/nav.css">
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;800;900&family=Open+Sans&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,500;0,900;1,900&display=swap"
-	rel="stylesheet">
 
 <nav>
 	<div>
 		<ul>
-			<li><a href="/"><img width=100vh id="logo" src="/images/pm-logo.png" alt="Logo" /></a></li>
+			<li><div href="/"><img width=100vh id="logo" src="/images/pm-logo.png" alt="Logo" /></div></li>
 			<li><a href="/" class="headerBtn">Home</a></li>
 		</ul>
 	</div>
@@ -14,28 +11,21 @@
 		<ul>
 			<li><a href="/connect" class="headerBtn">Connect</a></li>
 			<li><a href="/notifications" class="headerBtn">Notifications</a></li>
-			<li><div class="dropdownBtn">My Account ⌵</div>
+			<li><div class="dropdownBtn"> My Account <span class="arrow">⌵</span></div>
 				<ul class="dropdown">
 					<li><a href="/profile">Profile</a> <!-- TODO: add more to this --></li>
 					<li><a href="/settings">Settings</a></li>
 					<li><a href="/logout">Logout</a></li>
 				</ul>
 			</li>
-			<li><div class="dropdownBtn">Help ⌵</div>
+			<li><div class="dropdownBtn">Help <span class="arrow">⌵</span></div>
 				<ul class="dropdown">
 					<li><a href="/contact">Contact Admin</a> <!-- TODO: add more to this --></li>
 					<li><a href="/guidelines">Community Guidelines</a></li>
 					<li><a href="">Report a User</a></li>
 				</ul>
 			</li>
+			</li>
 		</ul>
-
-		<!-- <div class="dropdown_content">
-		
-		</div> -->
-
-		<!-- <div class="dropdown_content">
-		
-		</div> -->
 	</div>
 </nav>

@@ -4,11 +4,10 @@
 <title>Connect | Pinkmantaray Connect</title>
 <meta charset="UTF_8">
 <meta name="viewport" content="width=device_width, initial_scale=1">
-<style>
-body {
-  font_family: Arial, Helvetica, sans_serif;
-}
-</style>
+<link href="../stylesheets/connect.css" rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;800;900&family=Open+Sans&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,500;0,900;1,900&display=swap"
+	rel="stylesheet">
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script> 
@@ -19,9 +18,15 @@ body {
 <body>
 	
 <%- include("../partials/header") %>
+<div id="connect-header">
+	<div>
+		<span>CONNECT</span> with your community.
+	</div>
+	<img src="../../images/group.png" alt="Group from https://www.vecteezy.com/free-vector/people">
+</div>
 
 <div>
-	<p>Use the following areas to refine your search:</p>
+	Use the following areas to refine your search:
 </div>
 
 <div id="searchDiv">

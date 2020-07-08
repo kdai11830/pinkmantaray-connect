@@ -1,6 +1,6 @@
 body {
   margin: 2vh 5vh;
-  background-color: #eff3f5;
+  background-color: #faf9fad0;
   color: black;
   font-size: 2.5vh;
   font-family: 'Century Gothic', sans-serif;
@@ -10,14 +10,34 @@ body {
 a {
   text-decoration: none;
   color: black;
-  transition-duration: 0.2s;
+  position: relative;
+  /* transition-duration: 0.2s; */
+}
+
+
+a:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0.2vh;
+  bottom: -0.5vh;
+  left: 0;
+  background-color: rgb(6, 6, 6);
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover:before {
+  visibility: visible;
+  transform: scaleX(1);
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 178vh;
+  width: 172vh;
   /* padding-right: 10vh; */
 }
 
@@ -35,12 +55,11 @@ li {
   padding: 4vh;
   position: relative;
   text-decoration: none;
-  transition-duration: 0.5s;
+  /* transition-duration: 0.5s; */
 }
 
 a:hover, li:hover,
 li:focus-within {
-  /* background: red; */
   color: rgb(244, 156, 224);
   cursor: pointer;
 }
@@ -62,7 +81,7 @@ ul li ul {
   display: none;
 
   border-radius: 1vh;
-    background: #f4f7f9;
+    background: #fcfbfc;
     box-shadow:  7px 7px 14px #b9bcbe, 
                 -7px -7px 14px #f2f4f5;
 }
@@ -87,7 +106,7 @@ ul li ul li {
 
 ul li ul li:hover {
   /* width: 100%; */
-  background-color: #e5eaed; 
+  background-color: #e5eaed62; 
   border-radius: 1vh;
-  color: rgb(244, 156, 224) !important;
+  /* transition-duration: 0s; */
 }
