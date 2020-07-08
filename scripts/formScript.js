@@ -164,7 +164,9 @@ $(document).ready(function() {
 
 				// if new interest, add to list
 				if (!exists) {
-					var li = $('<li>' + interest + ' <span class="close">[X]</span></li>');
+					var li = $(
+            "<li>" + interest + ' <span class="close">[✘]</span></li>'
+          );
 					$("#interests_list").append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
@@ -193,7 +195,7 @@ $(document).ready(function() {
 		}
 
 		if (!exists) {
-			var li = $('<li>' + language + ' <span class="close">[X]</span></li>');
+			var li = $("<li>" + language + ' <span class="close">[✘]</span></li>');
 			$('#language_list').append(li);
 			$(this).val('');
 

@@ -7,7 +7,7 @@
   --greyLight-1: #E4EBF5;
   --greyLight-2: #c8d0e7;
   --greyLight-3: #bec8e4;
-  --greyDark: #9baacf;
+  --greyDark: #494f5e;
   --pink: rgb(244, 156, 224);
 }
 
@@ -40,7 +40,8 @@ body {
     -ms-transform: translate(-50%, -50%);
 
     border-radius: 1vh;
-    background: #f4f7f9;
+    /* background: #f4f7f9; */
+    background: #fefefe;
     box-shadow:  7px 7px 14px #b9bcbe, 
                 -7px -7px 14px #f2f4f5;
 }
@@ -56,6 +57,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 5vh;
     font-weight: 600;
+    color: black;
     color: var(--pink);
     width: 50%;
     padding: 0 2vh 0 4vh;
@@ -65,8 +67,9 @@ body {
 
 /* "connect" */
 #login-page > div:first-child span{
-   color: white;
-   text-shadow: rgba(179, 176, 176, 0.418) 0px 0px 10px;
+   color: var(--pink);
+   color: black;
+   text-shadow: rgba(218, 213, 213, 0.603) 0px 0px 10px;
    font-size: 8vh;
    /* text-shadow: 
    -8px -8px 12px rgba(201, 199, 199, 0.543),

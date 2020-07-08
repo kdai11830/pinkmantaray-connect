@@ -23,7 +23,7 @@ body > form {
     /* height: 60vh; */
     height: 80vh;
 
-    background-color: #f4f7f9;
+    /* background-color: #fefefe; */
 
     position: fixed;
     top: 50%;
@@ -35,7 +35,7 @@ body > form {
     -ms-transform: translate(-50%, -50%);
 
     border-radius: 1vh;
-    background: #f4f7f9;
+    background: #fefefe;
     box-shadow:  7px 7px 14px #b9bcbe, 
                 -7px -7px 14px #f2f4f5;
 

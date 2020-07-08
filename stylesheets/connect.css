@@ -1,0 +1,52 @@
+
+#connect-body {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8vh;
+}
+
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    width: 29vh;
+    margin: 0;
+    /* padding: 0 0 0 8vh; */
+    float: left;
+}
+
+.connect-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4vh;
+    font-weight: 700;
+    float: left;
+    text-align: left;
+    padding-bottom: 7vh;
+}
+
+#connectForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 56vh;
+}
+
+.search-row {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    /* width: 65vh; */
+}
+
+#language_list li {
+    padding-top: 0;
+    padding-bottom: 0;
+    color: black;
+    cursor: default;
+}
+
+.close {
+    cursor: pointer;
+    color: red;
+}

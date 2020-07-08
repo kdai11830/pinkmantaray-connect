@@ -1,87 +1,20 @@
 body {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
 
     padding-bottom: 4vh;
 }
 
-#home-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 12vh;
-    font-family: 'Poppins', sans-serif;
-    font-weight: bolder;
-    color: rgb(44, 42, 42);
-    text-align: left;
-
-    padding: 6vh 10vh 15vh 10vh;
-}
-
-#home-top span {
-    text-transform: uppercase;
-    color: rgb(244, 156, 224);
-}
-
-#home-top > img {
-    width: 72vh;
-}
-
-/* #home-instruct {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    width: 100%;
-    height: 30vh;
-    margin: 0;
-    padding: 0;
-
-    font-weight: bold;
-    font-family: "Open Sans", sans-serif;
-    color: rgba(0, 0, 0, 0.705);
-
-}
-
-#home-instruct > div {
-    width: 25%;
-}
-
-#home-instruct span {
-    color: rgb(139, 218, 247);
-    font-weight: bolder;
-} */
-
 h2 {
-    color: rgb(244, 156, 224);
     color: rgb(139, 218, 247);
+    color: rgb(244, 156, 224);
     font-family: 'Poppins', sans-serif;
     font-size: 8vh;
     margin: 0;
+    padding: 0 0 0 8vh;
+    float: left;
 }
 
 #my-connections {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: center; */
-
-    padding: 4vh;
-
-    font-family: 'Century Gothic', sans-serif;
-    font-size: 2.5vh;
-    
-    width: 170vh;
-    height: 80vh;
-
-    background-color: #f4f7f9;
-
-    border-radius: 1vh;
-    background: #f4f7f9;
-    box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
-
-    overflow-y:auto;
 }
