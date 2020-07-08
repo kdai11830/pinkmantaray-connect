@@ -1,10 +1,14 @@
 body {
-  margin: 2vh 5vh;
+  margin: 0 5vh 2vh 5vh;
   background-color: #faf9fad0;
   color: black;
   font-size: 2.5vh;
   font-family: 'Century Gothic', sans-serif;
   text-align: center;
+}
+
+#logo {
+  width: 18vh;
 }
 
 a {
@@ -37,7 +41,9 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 172vh;
+  width: 154vh;
+  font-weight: 600;
+  padding: 2vh 0 4vh 0;
   /* padding-right: 10vh; */
 }
 
