@@ -30,7 +30,7 @@
 	<div id="searchDiv">
 		<form id="connectForm">
 					<div id="div_location" class="search-row">
-						<label for="option_location">Location:</label> <!-- just use country for now, refine later -->
+						<label for="option_location">Location:  </label> <!-- just use country for now, refine later -->
 						<select name="option_location" id="select_location">
 							<option value="">No Preference</option>
 							<option value="CURRENT LOC">Current Location</option>
@@ -288,13 +288,15 @@
 	
 			
 				<div id="div_age" class="search-row">
-					<label for="option_age1">Age range:</label> <!-- TODO: add values based on minimum and maximum ages (inclusive) -->
+					<label for="option_age1">Age range:  </label> <!-- TODO: add values based on minimum and maximum ages (inclusive) -->
 					<select name="option_age1">
 						<option value=""></option>
 						<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
 							<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
 						<% } %>
-					</select> to <select name="option_age2">
+					</select>
+					<div>to</div>
+					 <select name="option_age2">
 						<option value=""></option>
 						<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
 							<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
@@ -387,7 +389,7 @@
 				</div>
 		
 				<div id="div_gender" class="search-row">
-					<label for="option_gender_div">Gender:</label>
+					<label for="option_gender_div">Gender:  </label>
 					<div id="option_gender_div">
 						<label>
 							<input type="checkbox" name="option_gender[]" value="transgender"> Transgender
@@ -421,7 +423,7 @@
 
 					
 				<div id="div_sexuality" class="search-row">	
-					<label for="option_sexuality_div">Sexuality:</label>
+					<label for="option_sexuality_div">Sexuality:  </label>
 					<div id="option_sexuality_div">
 						<label>
 							<input type="checkbox" name="option_sexuality[]" value="straight"> Straight
@@ -449,7 +451,7 @@
 
 		
 			<div id="div_race" class="search-row">
-				<label for="option_race_div">Race & ethnicity:</label>
+				<label for="option_race_div">Race & ethnicity:  </label>
 				<div id="option_race_div">
 					<label>
 						<input type="checkbox" name="option_race[]" value="white"> White
@@ -470,7 +472,7 @@
 			</div>
 
 				<div id="div_religion" class="search-row">
-					<label for="option_religion_div">Religion:</label>
+					<label for="option_religion_div">Religion:  </label>
 					<div id="option_religion_div">
 						<label>
 							<input type="checkbox" name="option_religion[]" value="christian"> Christian
@@ -494,6 +496,7 @@
 				</div>
 			
 				<div id="div_interests" class="search-row">
+					<label for="interests">Interests: </label>
 					<input type="list" name="interests" id="interests" placeholder="Add interests by typing and pressing enter.">
 					<datalist id="interests_datalist">
 						<option value="watermelon"/>
