@@ -30,7 +30,7 @@ h2 {
     flex-direction: column;
     justify-content: space-between;
     height: 56vh;
-    padding-bottom: 4vh;
+    padding-bottom: 2vh;
 }
 
 .search-row {
@@ -74,4 +74,31 @@ h2 {
 
 #interests {
     width: 37vh;
+}
+
+/* login button  */
+#submitButton {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+}
+
+/* login button active */
+#submitButton:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
 }

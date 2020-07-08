@@ -115,3 +115,8 @@ ul li ul li:hover {
   border-radius: 1vh;
   /* transition-duration: 0s; */
 }
+
+.img-li {
+  padding-bottom: 2.5vh;
+  padding-top: 1vh;
+}
