@@ -244,3 +244,7 @@ body > form > h1:first-child {
 #resource_div {
     display: inline-block;
 }
+
+.close {
+    color: red;
+}
