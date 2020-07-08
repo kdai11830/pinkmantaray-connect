@@ -110,8 +110,12 @@ app.get('/welcome', function(req, res) {
 /** LOGIN PAGE **/
 app.get('/login', function(req, res) {
 	// clear current session
+	auth = true;
+	if (req.query.auth == 'false') {
+		auth = false;
+	}
 	req.session.destroy();
-	res.render('login/index');
+	res.render('login/index', {'auth': auth});
 });
 
 
@@ -566,8 +570,8 @@ app.post('/auth', function(req, res) {
 
 						// bad password
 						console.log("FAILED");
-						res.send('Incorrect username and/or password!');
-						// res.redirect('/login');
+						// res.send('Incorrect username and/or password!');
+						res.redirect('/login?auth=false');
 						return;
 					}
 				}).catch((err)=>console.error(err));
