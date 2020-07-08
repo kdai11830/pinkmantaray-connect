@@ -1,0 +1,21 @@
+body > div {
+   display: flex; 
+}
+
+/* each section (notif / pending) */
+body > div > div {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+
+.notif-header {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+    font-weight: bolder;
+    margin: 0;
+    padding: 0 0 0 8vh;
+    float: left;
+}

@@ -108,3 +108,7 @@ h2 {
     width: 100%;
     padding-bottom: 3vh;
 }
+
+#confirmationDialog {
+    padding: 2vh;
+}
