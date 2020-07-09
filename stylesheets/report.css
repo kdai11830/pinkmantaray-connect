@@ -1,0 +1,70 @@
+#reportDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    color: rgb(139, 218, 247);
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+    margin: 0;
+    padding: 0 0 0 8vh;
+    float: left;
+    display: inherit;
+}
+
+#reportDiv  {  
+    position: absolute;
+    top: 30vh;
+    left: 43vh;
+
+    padding: 4vh;
+    font-size: 3vh;
+    width: 103vh;
+    height: 52vh;
+    border-radius: 1vh;
+
+    background: #fefefe;
+    box-shadow: 7px 7px 14px #b9bcbe, -7px -7px 14px #f2f4f5;
+    overflow-y: auto;
+}
+
+#reportForm {
+    display: flex;
+}
+
+#reportForm > div:first-child {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5vh;
+    font-weight: 600;
+    color: black;
+    color: var(--pink);
+    width: 50%;
+    /* padding: 0vh 0vh 0 0vh; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#reportForm > div:first-child span {
+    color: rgb(221, 42, 239);
+}
+
+/* middle line */
+#reportForm > div:first-child:after {
+    content: "";
+    background-color: #e1e4e6;
+    position: absolute;
+    width: 0.3vh;
+    height: 49vh;
+    top: 5vh;
+    left: 50%;
+    display: block;
+}
+
+#reportForm > div:nth-child(2) {
+    align-items: center;
+    padding: 4vh;
+    width: 50%;
+}

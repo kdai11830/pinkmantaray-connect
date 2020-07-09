@@ -1,8 +1,6 @@
 body {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
-
     padding-bottom: 4vh;
 }
 
@@ -17,4 +15,6 @@ h2 {
 }
 
 #my-connections {
+    /* display: flex;
+    flex-direction: column; */
 }

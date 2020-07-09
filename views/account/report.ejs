@@ -4,11 +4,10 @@
 <title>Report <%= data.name %> | Pinkmantaray Connect</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-</style>
+<link href="../stylesheets/report.css" rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;800;900&family=Open+Sans&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,500;0,900;1,900&display=swap"
+	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -17,22 +16,27 @@ body {
 <body>
 	<%- include("../partials/header") %>
 
-
+	
+	<h2>Report</h2>
 	<div id="reportDiv">
 		<form id="reportForm" action="/reported" method="POST">
-		<p>You are reporting <%= data.name %></p>
+			<div>
+				<div>You are reporting <br/> <span><%= data.name %></span>.</div>
+				<br />
+				<label for="reason">Why:</label>
+				<textarea name="reason" form="reportForm" placeholder="Enter reason here..."></textarea>
+			</div>
+			<div>
+				<div>
+					<p>Reporting <%= data.name %> will remove them from your connections and send a report to admin for review. 
+						This will also place <%= data.name %> under immediate review by admin, removing <%= data.name %> from the 
+						Pinkmantaray Connect network during the review.</p>
+				</div>
+		
+				<input type="hidden" name="id" id="userId" value="<%= data.id %>">
+				<button type="submit" id="submitBtn">Report</button>
+			</div>
 
-		<label for="reason">Why:</label>
-		<textarea name="reason" form="reportForm" placeholder="Enter reason here..."></textarea>
-
-		<div>
-			<p>Reporting <%= data.name %> will remove them from your connections and send a report to admin for review. 
-				This will also place <%= data.name %> under immediate review by admin, removing <%= data.name %> from the 
-				Pinkmantaray Connect network during the review.</p>
-		</div>
-
-		<input type="hidden" name="id" id="userId" value="<%= data.id %>">
-		<button type="submit" id="submitBtn">Report</button>
 
 		</form>
 	</div>
