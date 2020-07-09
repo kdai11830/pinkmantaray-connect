@@ -30,7 +30,7 @@ h2 {
     flex-direction: column;
     justify-content: space-between;
     height: 56vh;
-    padding-bottom: 2vh;
+    padding-bottom: 7vh;
 }
 
 .search-row {
@@ -107,8 +107,112 @@ h2 {
 #resultsDisplay {
     width: 100%;
     padding-bottom: 3vh;
+    text-transform: capitalize;
 }
 
 #confirmationDialog {
     padding: 2vh;
+}
+
+.connectBtn {
+    height: 3vh;
+    /* width: 7vh; */
+
+    color: rgb(139, 218, 247);
+    color: rgb(244, 156, 224);
+    background: none;
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    /* border: 0.1vh solid rgb(139, 218, 247); */
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+    margin-left: 3vh;
+    margin-right: 1vh;
+}
+
+.connectBtn:active {
+    /* background-color: rgb(147, 220, 247); */
+	/* box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px; */
+}
+
+.connectBtn:hover {
+    color: rgb(221, 42, 239);
+    /* border: 0.1vh solid rgb(112, 208, 243); */
+
+}
+
+#closeBtn, #confirmBtn {
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    width: 8vh;
+    text-align: center;
+    /* background-color: whitesmoke; */
+    border: none;
+}
+
+#confirmBtn {
+    color: rgb(130, 247, 130);
+}
+
+#closeBtn {
+    color: rgb(243, 98, 98);
+}
+
+#confirmBtn:hover {
+    color: rgb(8, 238, 8);
+}
+
+#closeBtn:hover {
+    color: red;
+}
+
+#confirmationDialog {
+    padding-bottom: 3vh;
+    border-radius: 1vh;
+    /* background: #fefefe; */
+    box-shadow:  7px 7px 14px #b9bcbe, 
+                -7px -7px 14px #f2f4f5;
+}
+
+#confirmationDialog p {
+    /* position: absolute;
+    background-color: white;
+    border-style: outset; */
+
+    
+
+    font-size: 2vh;
+    font-family: 'Open Sans', sans-serif;
+    padding: 0 1vh;
+    width: 37vh;
+}
+
+#confirmationDialog span a {
+    color: rgb(240, 128, 214);
+    font-weight: bolder;
+    font-family: "Century Gothic", sans-serif
+}
+
+#confirmationDialog span a:hover {
+    color: rgb(221, 42, 239);
+}
+
+#confirmationDialog span:first-child {
+    color: rgb(147, 220, 247);
+    /* font-weight: bolder; */
+    font-size: 4vh;
+    padding: 1vh;
+}
+
+.ui-dialog-titlebar {
+    display: none;
 }

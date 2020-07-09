@@ -153,7 +153,7 @@ $(document).ready(function() {
 		var id = parseInt($('#' + clickedConnectBtn).find('#userId').html());
 		console.log(id);
 		socket.emit('connectSend', {"id": id});	
-		$('#' + clickedConnectBtn + ' .connectBtn').replaceWith("Invitation pending!");
+		$('#' + clickedConnectBtn + ' .connectBtn').replaceWith("Pending!");
 		$("#confirmationDialog").dialog('close');
 	});
 

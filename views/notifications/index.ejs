@@ -20,25 +20,25 @@
 <%- include("../partials/header") %>
 <div>
 	<div>
-		<div class="notif-header">Invitations</div>
+		<div class="notif-header">Requests</div>
 		<table id="invitationsTable">
 			<% var counter = 0; %>
 			<% for (var i in invitations) { %>
 				<tr id="<%= counter %>">
-					<td><%= invitations[i].pronouns %></td>
-					<td><%= invitations[i].country %></td>
-					<td><%= new Date().getFullYear() - invitations[i].year %></td>
-					<td><%= invitations[i].gender.join(', ') %></td>
-					<td><%= invitations[i].sexuality.join(', ') %></td>
-					<td><%= invitations[i].race_ethnicity.join(', ') %></td>
-					<td><%= invitations[i].religion.join(', ') %></td>
-					<td><%= invitations[i].interest.join(', ') %></td>
-					<td id="userId<%= counter %>"><%= invitations[i].id %></td>
-				</tr>
-				<tr id="buttons<%= counter %>">
-					<td><button class="acceptBtn" id="accept<%= counter %>">✔</button></td>
-					<td><button class="ignoreBtn" id="ignore<%= counter %>">✘</button></td>
-				</tr>
+						<td id="buttons<%= counter %>" class="buttonParent">
+							<button class="acceptBtn" id="accept<%= counter %>">✔</button>
+							<button class="ignoreBtn" id="ignore<%= counter %>">✘</button>
+						</td>
+						<td><%= invitations[i].pronouns %></td>
+						<td><%= invitations[i].country %></td>
+						<td><%= new Date().getFullYear() - invitations[i].year %></td>
+						<td><%= invitations[i].gender.join(', ') %></td>
+						<td><%= invitations[i].sexuality.join(', ') %></td>
+						<td><%= invitations[i].race_ethnicity.join(', ') %></td>
+						<td><%= invitations[i].religion.join(', ') %></td>
+						<td><%= invitations[i].interest.join(', ') %></td>
+						<!-- <td id="userId<%= counter %>"><%= invitations[i].id %></td> -->
+					</tr>
 				<% counter++; %>
 			<% } %>
 		</table>
@@ -49,6 +49,12 @@
 			<% var counter = 0; %>
 			<% for (var i in pending) { %>
 				<tr id="<%= counter %>">
+					<!-- <td id="buttons<%= counter %>" class="buttonParent">
+						<td><button class="ignoreBtn cancelBtn" id=id="cancel<%= counter %>">✘</button></td>
+					</td> -->
+					<tr id="buttons<%= counter %>">
+						<td><button class="cancelBtn" id="cancel<%= counter %>">✘</button></td>
+					</tr>
 					<td><%= pending[i].pronouns %></td>
 					<td><%= pending[i].country %></td>
 					<td><%= new Date().getFullYear() - pending[i].year %></td>
@@ -57,11 +63,11 @@
 					<td><%= pending[i].race_ethnicity.join(', ') %></td>
 					<td><%= pending[i].religion.join(', ') %></td>
 					<td><%= pending[i].interest.join(', ') %></td>
-					<td id="userId<%= counter %>"><%= pending[i].id %></td>
+					<!-- <td id="userId<%= counter %>"><%= pending[i].id %></td> -->
 				</tr>
-				<tr id="buttons<%= counter %>">
+				<!-- <tr id="buttons<%= counter %>">
 					<td><button class="cancelBtn" id="cancel<%= counter %>">Cancel</button></td>
-				</tr>
+				</tr> -->
 				<% counter++; %>
 			<% } %>
 			

@@ -1,6 +1,7 @@
 body > div {
    display: flex; 
-   font-family: 'Open Sans', sans-serif
+   font-family: 'Open Sans', sans-serif;
+   /* font-family: 'Roboto', sans-serif */
 }
 
 /* each section (notif / pending) */
@@ -23,13 +24,19 @@ body > div > div {
     float: left;
 }
 
-.acceptBtn, .ignoreBtn {
+.buttonParent {
+    /* display: flex;
+    flex-direction: column;
+    width: 4vh; */
+}
+
+.acceptBtn, .ignoreBtn, .cancelBtn {
     padding: 0;
     outline: none;
     cursor: pointer;
     width: 4vh;
     text-align: center;
-    background-color: none;
+    /* background-color: whitesmoke; */
     border: none;
 }
 
@@ -37,7 +44,7 @@ body > div > div {
     color: rgb(141, 241, 141);
 }
 
-.ignoreBtn {
+.ignoreBtn, .cancelBtn {
     color: rgb(236, 165, 165);
 }
 
@@ -45,7 +52,7 @@ body > div > div {
     color: rgb(0, 250, 0);
 }
 
-.ignoreBtn:hover {
+.ignoreBtn:hover, .cancelBtn:hover {
     color: red;
 }
 
@@ -55,7 +62,7 @@ body > div > div {
     flex-direction: column;
     align-items: center;
 
-    padding: 4vh;
+    padding: 3vh 5.5vh 3vh 3vh;
     margin-top: 3vh;
 
     font-size: 2vh;
@@ -72,8 +79,19 @@ body > div > div {
     overflow-y:auto;
 }
 
-tbody > tr {
-    /* background-color: rgb(179, 224, 245); */
+tbody {
+    border-collapse: separate;
+    border-spacing:0 15px;
 }
 
+tbody tr {
+
+}
+
+tr {
+    margin-bottom: 3vh;
+}
+
+td {
+}
 
