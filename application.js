@@ -164,73 +164,116 @@ app.get('/connect', restrict, function(req, res) {
 
 /** NOTIFICATIONS PAGE **/
 app.get('/notifications', restrict, function(req, res) {
-	var sql = `SELECT info.id, info.pronouns, info.country, info.year,
-		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
-		FROM user_info info
-		LEFT JOIN user_gender gender ON gender.user_id = info.id
-		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
-		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
-		LEFT JOIN user_religion religion ON religion.user_id = info.id
-		LEFT JOIN user_interests interests ON interests.user_id = info.id
-		LEFT JOIN connections conn ON conn.user_id = info.id
-		WHERE (conn.connection_id = ?) AND (conn.pending = 1) AND (info.reported != 1);
-		SELECT info.id, info.pronouns, info.country, info.year,
-		gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
-		FROM user_info info
-		LEFT JOIN user_gender gender ON gender.user_id = info.id
-		LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
-		LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
-		LEFT JOIN user_religion religion ON religion.user_id = info.id
-		LEFT JOIN user_interests interests ON interests.user_id = info.id
-		LEFT JOIN connections conn ON conn.user_id = info.id
-		WHERE (info.id IN 
-		(SELECT conn.connection_id FROM connections conn WHERE conn.user_id = ?)) 
-		AND (conn.pending = 1) AND (info.reported != 1);`;
+	
+	var sql = `SELECT conn.user_id FROM connections conn
+		WHERE (conn.connection_id = ?) AND (conn.pending = 1);
+		SELECT conn.connection_id FROM connections conn
+		WHERE (conn.user_id = ?) AND (conn.pending = 1);`
 
 	var insertIds = [req.session.user_id, req.session.user_id];
 	connection.query(sql, insertIds, function(error, results, fields) {
 		if (error) throw error;
 		console.log(results);
 
-		// preprocess results to group info together, list of dict of dicts
-		var send = [];
-		for (var i = 0; i < results.length; i++) {
-			var infoVals = {};
-			for (var j = 0; j < results[i].length; j++) {
-				var curId = results[i][j].id;
-				// if user already exists in dict
-				if (!(curId in infoVals)) {
-					infoVals[curId] = {};
-					infoVals[curId]["id"] = results[i][j].id;
-					infoVals[curId]["pronouns"] = results[i][j].pronouns;
-					infoVals[curId]["country"] = results[i][j].country;
-					infoVals[curId]["year"] = results[i][j].year;
-					infoVals[curId]["gender"] = [results[i][j].gender];
-					infoVals[curId]["sexuality"] = [results[i][j].sexuality];
-					infoVals[curId]["race_ethnicity"] = [results[i][j].race_ethnicity];
-					infoVals[curId]["religion"] = [results[i][j].religion];
-					infoVals[curId]["interest"] = [results[i][j].interest];
-				// else add to existing entry
-				} else {
-					if (!(infoVals[curId]["gender"].includes(results[i][j].gender)))
-						infoVals[curId]["gender"].push(results[i][j].gender);
-					if (!(infoVals[curId]["sexuality"].includes(results[i][j].sexuality)))
-						infoVals[curId]["sexuality"].push(results[i][j].sexuality);
-					if (!(infoVals[curId]["race_ethnicity"].includes(results[i][j].race_ethnicity)))
-						infoVals[curId]["race_ethnicity"].push(results[i][j].race_ethnicity);
-					if (!(infoVals[curId]["religion"].includes(results[i][j].religion)))
-						infoVals[curId]["religion"].push(results[i][j].religion);
-					if (!(infoVals[curId]["interest"].includes(results[i][j].interest)))
-						infoVals[curId]["interest"].push(results[i][j].interest);
-				}
+		// begin nested sql query
+		var invitationsSql = `SELECT info.id, info.pronouns, info.country, info.year,
+			gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
+			FROM user_info info
+			LEFT JOIN user_gender gender ON gender.user_id = info.id
+			LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+			LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+			LEFT JOIN user_religion religion ON religion.user_id = info.id
+			LEFT JOIN user_interests interests ON interests.user_id = info.id
+			WHERE (info.id IN (`;
+
+		var pendingSql = `SELECT info.id, info.pronouns, info.country, info.year,
+			gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
+			FROM user_info info
+			LEFT JOIN user_gender gender ON gender.user_id = info.id
+			LEFT JOIN user_sexuality sexuality ON sexuality.user_id = info.id
+			LEFT JOIN user_race_ethnicity race ON race.user_id = info.id
+			LEFT JOIN user_religion religion ON religion.user_id = info.id
+			LEFT JOIN user_interests interests ON interests.user_id = info.id
+			WHERE (info.id IN (`;
+
+		// initial dummy query
+		var sql = 'SELECT info.id FROM user_info info WHERE info.id = ?; ';
+
+		var insertVals = [req.session.user_id]
+		var dataTypes = []
+
+		// there are invitations
+		if (results[0].length > 0) {
+			for (var i = 0; i < results[0].length; i++) {
+				insertVals.push(results[0][i].user_id);
+				invitationsSql += '?,'
 			}
-			send.push(infoVals);
+			invitationsSql = invitationsSql.substring(0, invitationsSql.length-1)
+			invitationsSql += ')); '
+			sql += invitationsSql;
+			dataTypes.push('invitations');
+		}
+		if (results[1].length > 0) {
+			for (var i = 0; i < results[1].length; i++) {
+				insertVals.push(results[1][i].connection_id);
+				pendingSql += '?,'
+			}
+			pendingSql = pendingSql.substring(0, pendingSql.length-1)
+			pendingSql += ')); '
+			sql += pendingSql;
+			dataTypes.push('pending');
 		}
 
-		console.log(send);
+		console.log(sql);
+		console.log(insertVals);
 
-		res.render("notifications/index", {"invitations": send[0], "pending": send[1]});
-		return;
+		connection.query(sql, insertVals, function(error, results, fields) {
+			if (error) throw error;
+			//console.log(results);
+			console.log(dataTypes);
+
+			// preprocess results to group info together, list of dict of dicts
+			var send = {};
+			for (var i = 1; i < results.length; i++) {
+				var infoVals = {};
+				for (var j = 0; j < results[i].length; j++) {
+					var curId = results[i][j].id;
+					// if user already exists in dict
+					if (!(curId in infoVals)) {
+						infoVals[curId] = {};
+						infoVals[curId]["id"] = results[i][j].id;
+						infoVals[curId]["pronouns"] = results[i][j].pronouns;
+						infoVals[curId]["country"] = results[i][j].country;
+						infoVals[curId]["year"] = results[i][j].year;
+						infoVals[curId]["gender"] = [results[i][j].gender];
+						infoVals[curId]["sexuality"] = [results[i][j].sexuality];
+						infoVals[curId]["race_ethnicity"] = [results[i][j].race_ethnicity];
+						infoVals[curId]["religion"] = [results[i][j].religion];
+						infoVals[curId]["interest"] = [results[i][j].interest];
+					// else add to existing entry
+					} else {
+						if (!(infoVals[curId]["gender"].includes(results[i][j].gender)))
+							infoVals[curId]["gender"].push(results[i][j].gender);
+						if (!(infoVals[curId]["sexuality"].includes(results[i][j].sexuality)))
+							infoVals[curId]["sexuality"].push(results[i][j].sexuality);
+						if (!(infoVals[curId]["race_ethnicity"].includes(results[i][j].race_ethnicity)))
+							infoVals[curId]["race_ethnicity"].push(results[i][j].race_ethnicity);
+						if (!(infoVals[curId]["religion"].includes(results[i][j].religion)))
+							infoVals[curId]["religion"].push(results[i][j].religion);
+						if (!(infoVals[curId]["interest"].includes(results[i][j].interest)))
+							infoVals[curId]["interest"].push(results[i][j].interest);
+					}
+				}
+				send[dataTypes[i-1]] = infoVals;
+			}
+
+			console.log(results.length);
+			console.log(send);
+
+			res.render("notifications/index", {"data": send});
+			return;
+		});
+
 	});
 });
 
