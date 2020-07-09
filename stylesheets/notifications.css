@@ -1,5 +1,6 @@
 body > div {
    display: flex; 
+   font-family: 'Open Sans', sans-serif
 }
 
 /* each section (notif / pending) */
@@ -7,6 +8,8 @@ body > div > div {
     display: flex;
     flex-direction: column;
     width: 50%;
+    text-transform: capitalize;
+    align-items: center;
 }
 
 
@@ -16,6 +19,61 @@ body > div > div {
     font-size: 8vh;
     font-weight: bolder;
     margin: 0;
-    padding: 0 0 0 8vh;
+    /* padding: 0 0 0 8vh; */
     float: left;
 }
+
+.acceptBtn, .ignoreBtn {
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    width: 4vh;
+    text-align: center;
+    background-color: none;
+    border: none;
+}
+
+.acceptBtn {
+    color: rgb(141, 241, 141);
+}
+
+.ignoreBtn {
+    color: rgb(236, 165, 165);
+}
+
+.acceptBtn:hover {
+    color: rgb(0, 250, 0);
+}
+
+.ignoreBtn:hover {
+    color: red;
+}
+
+/* invitations list  */
+#invitationsTable, #pendingTable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 4vh;
+    margin-top: 3vh;
+
+    font-size: 2vh;
+    
+    width: 91vh;
+    height: 60vh;
+
+
+    border-radius: 1vh;
+    background: #fefefe;
+    box-shadow:  7px 7px 14px #b9bcbe, 
+                -7px -7px 14px #f2f4f5;
+
+    overflow-y:auto;
+}
+
+tbody > tr {
+    /* background-color: rgb(179, 224, 245); */
+}
+
+
