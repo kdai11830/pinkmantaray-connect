@@ -21,8 +21,8 @@ h2 {
 
     padding: 4vh;
     font-size: 3vh;
-    width: 103vh;
-    height: 52vh;
+    width: 105vh;
+    height: 54vh;
     border-radius: 1vh;
 
     background: #fefefe;
@@ -35,20 +35,22 @@ h2 {
 }
 
 #reportForm > div:first-child {
-    font-family: 'Poppins', sans-serif;
-    font-size: 5vh;
-    font-weight: 600;
-    color: black;
-    color: var(--pink);
-    width: 50%;
-    /* padding: 0vh 0vh 0 0vh; */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 5vh;
+    font-weight: 600;
+
+    width: 56%;
+    height: 52vh;
 }
 
-#reportForm > div:first-child span {
+#reportForm span {
     color: rgb(221, 42, 239);
+    color: rgb(244, 156, 224);
 }
 
 /* middle line */
@@ -57,14 +59,53 @@ h2 {
     background-color: #e1e4e6;
     position: absolute;
     width: 0.3vh;
-    height: 49vh;
-    top: 5vh;
-    left: 50%;
+    height: 51vh;
+    top: 6vh;
+    left: 56%;
     display: block;
 }
 
 #reportForm > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 4vh;
-    width: 50%;
+
+    width: 36%;
+    height: 54vh;
+    padding: 0 0 0 6vh;
+}
+
+textarea {
+    width: 47vh;
+    height: 16vh;
+    margin-top: 3vh;
+}
+
+#submitBtn {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+
+    margin-top: 4vh;
+}
+
+/* button active */
+#submitBtn:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
 }

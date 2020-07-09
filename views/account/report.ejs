@@ -23,14 +23,14 @@
 			<div>
 				<div>You are reporting <br/> <span><%= data.name %></span>.</div>
 				<br />
-				<label for="reason">Why:</label>
+				<label for="reason">Why?</label>
 				<textarea name="reason" form="reportForm" placeholder="Enter reason here..."></textarea>
 			</div>
 			<div>
 				<div>
-					<p>Reporting <%= data.name %> will remove them from your connections and send a report to admin for review. 
-						This will also place <%= data.name %> under immediate review by admin, removing <%= data.name %> from the 
-						Pinkmantaray Connect network during the review.</p>
+					<div>Reporting <span><%= data.name %></span> will remove them from your connections and send a report to admin for review. 
+						This will also place <span><%= data.name %></span> under immediate review by admin, removing <%= data.name %> from the 
+						Pinkmantaray Connect network during the review.</div>
 				</div>
 		
 				<input type="hidden" name="id" id="userId" value="<%= data.id %>">
