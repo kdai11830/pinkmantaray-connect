@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 
 // establish mysql connection and promisify
 
-//kevin's mysql connection
+//kevin's (old?) mysql connection
 // var connection = mysql.createConnection({
 // 	host     : 'localhost',
 // 	user     : 'root',
@@ -34,15 +34,6 @@ app.set('view engine', 'ejs');
 // 	database : 'pinkmantaray_connect',
 // 	multipleStatements: 'true'
 // });
-
-//vic's mysql connection
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "bearbear",
-  database: "new_schema2",
-  multipleStatements: "true",
-});
 
 /*var pool = mysql.createPool({
 	connectionLimit : 10,
@@ -53,6 +44,16 @@ var connection = mysql.createConnection({
 })*/
 
 // const query = util.promisify(connection.query).bind(connection);
+
+//vic's mysql connection
+// establish mysql connection
+var connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "bearbear",
+  database: "new_schema2",
+  multipleStatements: "true",
+});
 
 // set session
 var sess = {
@@ -122,8 +123,12 @@ app.get('/welcome', function(req, res) {
 /** LOGIN PAGE **/
 app.get('/login', function(req, res) {
 	// clear current session
+	auth = true;
+	if (req.query.auth == 'false') {
+		auth = false;
+	}
 	req.session.destroy();
-	res.render('login/index');
+	res.render('login/index', {'auth': auth});
 });
 
 
@@ -373,8 +378,14 @@ app.get('/reported', restrict, function(req, res) {
 /** PRIVACY AND SECURITY SETTINGS PAGE **/
 app.get('/settings', restrict, function(req, res) {
 	var userId = req.session.user_id;
-	var sql = `SELECT `
-	res.render('account/settings');
+	var sql = `SELECT id, name, username, email, instagram FROM user_info
+		WHERE id = ?`;
+	connection.query(sql, [userId], function(error, results, fields) {
+		if (error) throw error;
+		console.log(results);
+		res.render('account/settings', {"data": results[0]});
+	})
+		
 });
 
 
@@ -572,8 +583,8 @@ app.post('/auth', function(req, res) {
 
 						// bad password
 						console.log("FAILED");
-						res.send('Incorrect username and/or password!');
-						// res.redirect('/login');
+						// res.send('Incorrect username and/or password!');
+						res.redirect('/login?auth=false');
 						return;
 					}
 				}).catch((err)=>console.error(err));

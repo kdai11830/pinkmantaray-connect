@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Account Settings | Pinkmantaray Connect</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+	
+	<div id="usernameDiv">
+		<p id="username">Username: <%= data.username %></p>
+		<button id="changeUsername">Change</button>
+	</div>
+
+	<div id="passwordDiv">
+		<p id="password">Change password</p>
+		<button id="changePassword">Change</button>
+	</div>
+
+	<div id="emailDiv">
+		<p id="email">Email: <%= data.email %></p>
+		<button id="changeEmail">Change</button>
+	</div>
+	<div id="passwordDiv">
+		<p id="instagram">Instagram handle: <%= data.instagram %></p>
+		<button id="changeInstagram">Change</button>
+	</div>
+
+
+</body>
