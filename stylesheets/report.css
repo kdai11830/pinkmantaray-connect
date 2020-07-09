@@ -19,7 +19,7 @@ h2 {
     top: 30vh;
     left: 43vh;
 
-    padding: 4vh;
+    padding: 4vh 4vh 4vh 0;
     font-size: 3vh;
     width: 105vh;
     height: 54vh;
@@ -61,7 +61,7 @@ h2 {
     width: 0.3vh;
     height: 51vh;
     top: 6vh;
-    left: 56%;
+    left: 54.5%;
     display: block;
 }
 
@@ -80,6 +80,7 @@ textarea {
     width: 47vh;
     height: 16vh;
     margin-top: 3vh;
+    padding: 2vh;
 }
 
 #submitBtn {
@@ -100,6 +101,7 @@ textarea {
     border-radius: 43px;
 
     margin-top: 4vh;
+    padding: 2vh;
 }
 
 /* button active */

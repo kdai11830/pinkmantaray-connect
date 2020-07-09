@@ -1,6 +1,6 @@
 body > div {
    display: flex; 
-   font-family: 'Open Sans', sans-serif;
+   /* font-family: 'Open Sans', sans-serif; */
    /* font-family: 'Roboto', sans-serif */
 }
 
@@ -25,19 +25,26 @@ body > div > div {
 }
 
 .buttonParent {
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    width: 4vh; */
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    font-size: 3vh;
+    /* width: 4vh; */
+    
 }
 
 .acceptBtn, .ignoreBtn, .cancelBtn {
-    padding: 0;
+    /* padding: 0; */
     outline: none;
     cursor: pointer;
     width: 4vh;
     text-align: center;
-    /* background-color: whitesmoke; */
+    background-color: inherit;
     border: none;
+    height: 50%;
+    font-size: 3.5vh;
 }
 
 .acceptBtn {
@@ -62,7 +69,7 @@ body > div > div {
     flex-direction: column;
     align-items: center;
 
-    padding: 3vh 5.5vh 3vh 3vh;
+    padding: 3vh 0;
     margin-top: 3vh;
 
     font-size: 2vh;
@@ -82,14 +89,22 @@ body > div > div {
 tbody {
     border-collapse: separate;
     border-spacing:0 15px;
+    padding: 2vh;
+    min-width: 80vh;
+    font-size: 1.7vh;
+    text-shadow: 0.3px 0.5px rgba(88, 87, 87, 0.521);
 }
 
-tbody tr {
-
+tbody tr:nth-child(even) {
+    background-color: rgb(225, 200, 240);
 }
 
 tr {
-    margin-bottom: 3vh;
+    /* margin-bottom: 3vh; */
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* text-align: center; */
+    height: 10vh;
 }
 
 td {
