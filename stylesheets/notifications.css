@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body > div {
    display: flex; 
    /* font-family: 'Open Sans', sans-serif; */
@@ -96,7 +100,7 @@ tbody {
 }
 
 tbody tr:nth-child(even) {
-    background-color: rgb(225, 200, 240);
+    background-color: rgb(235, 221, 243);
 }
 
 tr {

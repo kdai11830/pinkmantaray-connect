@@ -114,6 +114,13 @@ $(document).ready(function() {
 		} else {
 			$('#resultsDiv').append('<h3 id="noResults">No results found!</h3>');
 		}
+
+		$('html,body').animate({
+        scrollTop: $("#resultsDiv").offset().top},
+		1000);
+		$("#resultsDisplay").addClass("displayPadding")
+		
+
 	});
 
 	// dialog css stuff, can be replaced in future css styles file
