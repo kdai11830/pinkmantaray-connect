@@ -4,11 +4,11 @@
 <title><%= data.name %>'s Profile | Pinkmantaray Connect</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-</style>
+<script src="https://kit.fontawesome.com/07e3f56f33.js" crossorigin="anonymous"></script>
+<link href="../stylesheets/profile.css" rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;800;900&family=Open+Sans&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,500;0,900;1,900&display=swap"
+	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -27,16 +27,17 @@ body {
 	<% } else { %>	
 
 		<div id="profileInfoDiv">
+			<div>
+				<%= data.name[0] %>
+			</div>
 			<table id="profileInfo">
 				<tr>
 					<td><%= data.name %></td>
 					<td><%= new Date().getFullYear() - data.year %></td>
 					<td><%= data.pronouns %></td>
 					<td><a href="https://instagram.com/<%= data.instagram %>">
-						<img border="0" alt="https://instagram.com/<%= data.instagram %>" 
-						src="/views/imgs/instagram_logo.png" width="20" height="20"></a></td>
-					<td><a href=""><img border="0" alt="email" 
-						src="/views/imgs/email_icon.png" width="20" height="20"></a></td> <!-- TODO -->
+						<i class="fab fa-instagram fa-2x"></i></a></td>
+					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td> <!-- TODO -->
 				</tr>
 				<tr>
 					<td><%= data.gender.join(', ') %></td>

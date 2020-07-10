@@ -1,0 +1,65 @@
+#profileInfo{
+    width: 100%;
+    text-transform: capitalize;
+}
+
+#profileInfoDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+#profileInfoDiv div:first-child {
+    /* background-color: violet; */
+    width: 23vh;
+    height: 23vh;
+    border-radius: 12vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 13vh;
+    font-weight: 600;
+    color: rgb(242, 123, 214);
+
+    text-shadow: 
+    -8px -8px 12px rgba(245, 184, 218, 0.418),
+    8px 8px 12px rgba(0, 0, 0, 0.212);
+    caret-color:#262626;
+    outline: none;
+
+
+    /* text-shadow: 5px 4px #dfdbdb; */
+    border-radius: 128px;
+background: rgb(244, 156, 224);
+/* box-shadow:  22px 22px 46px #c1bdbd, 
+             -22px -22px 46px #ffffff; */
+}
+
+#reportDiv button {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+}
+
+#reportDiv button:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
