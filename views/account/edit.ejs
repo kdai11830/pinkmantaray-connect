@@ -22,34 +22,78 @@ body {
 
 		var userData = <%- JSON.stringify(data) %>;
 
+		console.log(userData);
+
 		$('#option_year').val(userData["year"]);
 
 		$('#select_location').val(userData["country"]);
 
-		$('[name="option_gender[]"]').each(function() {
-			console.log($(this).val());
-			if (userData["gender"].includes($(this).val())) {
-				$(this).prop('checked', true);
+		for (var i = 0; i < userData["gender"].length; i++) {
+			var inEls = false;
+			$('[name="option_gender[]"]').each(function() {
+				if ($(this).val() === userData["gender"][i]) {
+					$(this).prop('checked', true);
+					inEls = true;
+				}
+			});
+			if (!inEls) {
+				$("[name='option_gender[]'][class='custom']").prop('checked', true);
+				$("[name='custom_gender']").val(userData["gender"][i]);
 			}
-		});
+		}
 
-		$("[name='option_sexuality[]']").each(function() {
-			if (userData["sexuality"].includes($(this).val())) {
-				$(this).prop('checked', true);
+		for (var i = 0; i < userData["sexuality"].length; i++) {
+			var inEls = false;
+			$('[name="option_sexuality[]"]').each(function() {
+				if ($(this).val() === userData["sexuality"][i]) {
+					$(this).prop('checked', true);
+					inEls = true;
+				}
+			});
+			if (!inEls) {
+				$("[name='option_sexuality[]'][class='custom']").prop('checked', true);
+				$("[name='custom_sexuality']").val(userData["sexuality"][i]);
 			}
-		});
+		}
 
-		$("[name='option_race[]']").each(function() {
-			if (userData["race_ethnicity"].includes($(this).val())) {
-				$(this).prop('checked', true);
+		for (var i = 0; i < userData["race_ethnicity"].length; i++) {
+			var inEls = false;
+			$('[name="option_race[]"]').each(function() {
+				if ($(this).val() === userData["race_ethnicity"][i]) {
+					$(this).prop('checked', true);
+					inEls = true;
+				}
+			});
+			if (!inEls) {
+				$("[name='option_race[]'][class='custom']").prop('checked', true);
+				$("[name='custom_race']").val(userData["race_ethnicity"][i]);
 			}
-		});
+		}
 
-		$("[name='option_religion[]']").each(function() {
-			if (userData["religion"].includes($(this).val())) {
-				$(this).prop('checked', true);
+		/* $("[name='option_religion[]']").each(function() {
+			for (var i = 0; i < userData["religion"].length; i++) {
+				if (userData["religion"][i] === $(this).val()) {
+					$(this).prop('checked', true);
+				} else {
+					$("[name='option_religion[]'][class='custom']").prop('checked', true);
+					$("[name='custom_religion']").val(userData["religion"][i]);
+				}
 			}
-		});
+		}); */
+
+		for (var i = 0; i < userData["religion"].length; i++) {
+			var inEls = false;
+			$('[name="option_religion[]"]').each(function() {
+				if ($(this).val() === userData["religion"][i]) {
+					$(this).prop('checked', true);
+					inEls = true;
+				}
+			});
+			if (!inEls) {
+				$("[name='option_religion[]'][class='custom']").prop('checked', true);
+				$("[name='custom_religion']").val(userData["religion"][i]);
+			}
+		}
 
 		for (var i = 0; i < userData["interest"].length; i++) {
 			if (userData["interest"][i] != null) {
@@ -460,7 +504,7 @@ body {
 					<input type="checkbox" name="option_gender[]" value="bigender"> Bigender, pangender
 				</label>
 				<label>
-					<input type="checkbox" name="option_gender[]" value="custom"> Other <input type="text" name="custom_gender">
+					<input type="checkbox" name="option_gender[]" class="custom"> Other <input type="text" class="custom_text" name="custom_gender">
 				</label>
 			</div>
 		</div>
@@ -487,7 +531,7 @@ body {
 					<input type="checkbox" name="option_sexuality[]" value="asexual"> Asexual
 				</label>
 				<label>
-					<input type="checkbox" name="option_sexuality[]" value="custom"> Other: <input type="text" name='custom_sexuality'>
+					<input type="checkbox" name="option_sexuality[]" class="custom"> Other: <input type="text" class="custom_text" name='custom_sexuality'>
 				</label>
 			</div>
 		</div>
@@ -508,7 +552,7 @@ body {
 					<input type="checkbox" name="option_race[]" value="latinx"> Latinx
 				</label>
 				<label>
-					<input type="checkbox" name="option_race[]" value="custom"> Other: <input type="text" name='custom_race'>
+					<input type="checkbox" name="option_race[]" class="custom"> Other: <input type="text" class="custom_text" name='custom_race'>
 				</label>
 			</div>
 		</div>
@@ -532,7 +576,7 @@ body {
 					<input type="checkbox" name="option_religion[]" value="atheist"> Atheist
 				</label>
 				<label>
-					<input type="checkbox" name="option_religion[]" value="custom"> Other: <input type="text" name='custom_religion'>
+					<input type="checkbox" name="option_religion[]" class="custom"> Other: <input type="text" class="custom_text" name='custom_religion'>
 				</label>
 			</div>
 		</div>
@@ -555,9 +599,8 @@ body {
 			<button id="confirmBtn">Discard Changes</button>
 		</div>
 
-		<button id="cancelButton">Cancel</button>
-
 		<button type="submit" id="submitButton">Update</button>
+		<button id="cancelButton">Cancel</button>
 
 	</form>
 

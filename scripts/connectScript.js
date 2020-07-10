@@ -7,6 +7,14 @@ $(document).ready(function() {
 	var socket = io();
 
 	$("#connectForm").submit(function () {
+		// set all the custom values
+		$('.custom').each(function() {
+			if ($(this).is(':checked')) {
+				// console.log($(this));
+				$(this).val($(this).siblings('.custom_text').val());
+			}
+		});
+
 		// put all grouped info in arrays
 		var gender = [];
 		$('input[name="option_gender[]"]:checked').each(function() {

@@ -307,7 +307,7 @@ app.get('/profile', restrict, function(req, res) {
 
 	connection.query(sql, username, function(error, results, fields) {
 		if (error) throw error;
-		console.log(results);
+		// console.log(results);
 
 		// if profile doesn't exist, send blank info
 		if (results.length == 0) {
@@ -570,7 +570,6 @@ app.post('/edited', restrict, function(req, res) {
 
 	connection.query(sql, insertVals, function(err, results, fields) {
 		if (err) throw err;
-		console.log(results);
 		res.redirect("/profile");
 	});
 });

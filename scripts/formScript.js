@@ -35,9 +35,8 @@ $(document).ready(function() {
 		$(".tab:eq("+currentTab+")").hide();
 		currentTab += n;
 		if (currentTab >= $(".tab").length) {
-			var checkedCustoms = $('.custom:checked');
-			checkedCustoms.each(function() {
-				$(this).val($(this).closest('.custom_text').val());
+			$('.custom:checked').each(function() {
+				$(this).val($(this).siblings('.custom_text').val());
 			});
 			$("#main").submit();
 			return false;
