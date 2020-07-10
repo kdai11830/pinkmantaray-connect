@@ -10,7 +10,7 @@
 	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+<script src="https://kit.fontawesome.com/07e3f56f33.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -23,25 +23,31 @@
 	<div>Request to connect and wait to hear back!</div>
 </div> -->
 
+<h2>My Connections</h2>
 <div id="my-connections">
 
-	<h2>My Connections</h2>
 
 	<table>
 
 		<% if (results.length > 0) { %>
 			<% for(var i = 0; i < results.length; i++) { %>
 				<tr>
-					<td><%= results[i].name %>, </td>
+					<td><%= results[i].name %> </td>
 					<td><%= results[i].pronouns %> </td>
-					<td><a href="https://www.instagram.com/<%= results[i].instagram %>">
+					<!-- <td><a href="https://www.instagram.com/<%= results[i].instagram %>">
 						<img border="0" alt="www.instagram.com/<%=results[i].instagram %>" 
-						src="/views/imgs/instagram_logo.png" width="20" height="20"></a>
+						src="/views/imgs/instagram_logo.png" width="20vh" height="20vh"></a>
+					</td> -->
+					<td><a href="https://www.instagram.com/<%= results[i].instagram %>">
+						<i class="fab fa-instagram fa-2x"></i></a>
 					</td>
-					<td><a href=""><img border="0" alt="email" 
-						src="/views/imgs/email_icon.png" width="20" height="20"></a></td> <!-- TODO -->
-					<td><a href="/report?id=<%= results[i].id %>"><img border="0" alt="Report user" 
-						src="/views/imgs/report_icon.png" width="20" height="20"></a></td>
+					<!-- <td><a href=""><img border="0" alt="email" 
+						src="/views/imgs/email_icon.png" width="22vh" height="16vh"></a></td> -->
+					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td>
+		
+					<!-- <td><a href="/report?id=<%= results[i].id %>"><img border="0" alt="Report user" 
+						src="/views/imgs/report_icon.png" width="20vh" height="20vh"></a></td> -->
+					<td><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
 				</tr>
 			<% } %>
 		<% } %>
