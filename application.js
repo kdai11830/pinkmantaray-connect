@@ -35,25 +35,25 @@ app.set('view engine', 'ejs');
 // 	multipleStatements: 'true'
 // });
 
-// var pool = mysql.createPool({
-// 	connectionLimit : 10,
-// 	host     : 'localhost',
-// 	user     : 'root',
-// 	password : 'Jkmrhi11830!',
-// 	database : 'pinkmantaray_connect',
-// })
+var pool = mysql.createPool({
+	connectionLimit : 10,
+	host     : 'localhost',
+	user     : 'root',
+	password : 'Jkmrhi11830!',
+	database : 'pinkmantaray_connect',
+})
 
-// const query = util.promisify(connection.query).bind(connection);
+const query = util.promisify(connection.query).bind(connection);
 
 // vic's mysql connection
 // establish mysql connection
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "bearbear",
-  database: "new_schema2",
-  multipleStatements: "true",
-});
+// var connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "bearbear",
+//   database: "new_schema2",
+//   multipleStatements: "true",
+// });
 
 // set session
 var sess = {
