@@ -28,16 +28,19 @@
 
 		<div id="profileInfoDiv">
 			<div>
-				<%= data.name[0] %>
+				<div>
+					<%= data.name[0] %>
+				</div>
 			</div>
 			<table id="profileInfo">
 				<tr>
 					<td><%= data.name %></td>
-					<td><%= new Date().getFullYear() - data.year %></td>
+				</tr>
+				<tr>
 					<td><%= data.pronouns %></td>
-					<td><a href="https://instagram.com/<%= data.instagram %>">
-						<i class="fab fa-instagram fa-2x"></i></a></td>
-					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td> <!-- TODO -->
+				</tr>
+				<tr>
+					<td><%= new Date().getFullYear() - data.year %> years old</td>
 				</tr>
 				<tr>
 					<td><%= data.gender.join(', ') %></td>
@@ -60,6 +63,11 @@
 				<tr>
 					<td><%= data.interest.join(', ') %></td>
 				</tr>
+				<tr>
+					<td><a href="https://instagram.com/<%= data.instagram %>">
+							<i class="fab fa-instagram fa-2x"></i></a></td>
+					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td> <!-- TODO -->
+				</tr>
 			</table>
 		</div>
 
@@ -75,7 +83,7 @@
 			<form id="profileForm" action="/profile?edit=" method="GET">
 
 			<div id="reportDiv">
-				<button type="submit" name="edit">Edit</button>
+				<button type="submit" name="edit"><i class="far fa-edit fa-2x"></i></button>
 			</div>
 		<% } %>
 

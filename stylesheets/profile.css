@@ -1,5 +1,6 @@
 #profileInfo{
-    width: 100%;
+    width: 50%;
+    height: 50vh;
     text-transform: capitalize;
 }
 
@@ -7,13 +8,23 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    /* width: 118vh; */
 
 }
 
-#profileInfoDiv div:first-child {
+#profileInfoDiv > div {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 4vh;
+}
+
+#profileInfoDiv > div > div:first-child {
     /* background-color: violet; */
-    width: 23vh;
-    height: 23vh;
+    width: 28vh;
+    height: 28vh;
     border-radius: 12vh;
     display: flex;
     justify-content: center;
@@ -32,34 +43,44 @@
     outline: none;
 
 
-    /* text-shadow: 5px 4px #dfdbdb; */
-    border-radius: 128px;
-background: rgb(244, 156, 224);
-/* box-shadow:  22px 22px 46px #c1bdbd, 
-             -22px -22px 46px #ffffff; */
+    border-radius: 16vh;
+    background: rgb(244, 156, 224);
+
+}
+
+#profileInfoDiv tr:last-child {
+    display: flex;
+    justify-content: center;
+    font-weight: bolder;
+}
+
+#profileInfoDiv tr:last-child td:first-child {
+    padding-right: 3vh;
 }
 
 #reportDiv button {
-    height: 7vh;
-    width: 18vh;
+    /* height: 7vh;
+    width: 18vh; */
 
+    /* color: white; */
+    /* background: rgb(139, 218, 247); */
+
+    position: absolute;
+    top: 24vh;
+    left: 104vh;
+    background: none;
     color: white;
-    background: rgb(139, 218, 247);
-
-    font-size: 2vh;
-    font-weight: 800;
-    text-transform: uppercase;
 
     outline: none;
     border: none;
 	text-align: center;
     cursor: pointer;
-    border-radius: 43px;
 }
 
 #reportDiv button:active {
-    background-color: rgb(147, 220, 247);
-	box-shadow: 
-		inset rgba(70,70,70,0.4) 2px 2px 4px,
-		inset rgb(208, 210, 211) -2px -2px 4px;
+    color: rgb(228, 220, 220);
+}
+
+tbody tr:first-child {
+    font-weight: bolder;
 }
