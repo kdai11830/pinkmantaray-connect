@@ -75,7 +75,7 @@ h2 {
     width: 37vh;
 }
 
-/* login button  */
+/* connect button  */
 #submitButton {
     height: 7vh;
     width: 18vh;
@@ -95,7 +95,7 @@ h2 {
     margin-left: 79vh;
 }
 
-/* login button active */
+/* connect button active */
 #submitButton:active {
     background-color: rgb(147, 220, 247);
 	box-shadow: 

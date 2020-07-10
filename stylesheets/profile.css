@@ -10,6 +10,7 @@
     align-items: center;
     justify-content: center;
     /* width: 118vh; */
+    font-size: 2vh;
 
 }
 
@@ -18,13 +19,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 4vh;
+    padding-bottom: 2vh;
 }
 
 #profileInfoDiv > div > div:first-child {
     /* background-color: violet; */
-    width: 28vh;
-    height: 28vh;
+    width: 22vh;
+    height: 22vh;
     border-radius: 12vh;
     display: flex;
     justify-content: center;
@@ -32,7 +33,8 @@
 
 
     font-family: 'Roboto', sans-serif;
-    font-size: 13vh;
+    font-size: 12vh;
+    font-size: 12vh;
     font-weight: 600;
     color: rgb(242, 123, 214);
 
@@ -48,39 +50,39 @@
 
 }
 
-#profileInfoDiv tr:last-child {
+#profileInfoDiv tr:first-child {
     display: flex;
     justify-content: center;
     font-weight: bolder;
 }
 
-#profileInfoDiv tr:last-child td:first-child {
+#profileInfoDiv tr:first-child td:first-child {
     padding-right: 3vh;
 }
 
 #reportDiv button {
-    /* height: 7vh;
-    width: 18vh; */
+   height: 7vh;
+    width: 18vh;
 
-    /* color: white; */
-    /* background: rgb(139, 218, 247); */
-
-    position: absolute;
-    top: 24vh;
-    left: 104vh;
-    background: none;
     color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
 
     outline: none;
     border: none;
 	text-align: center;
     cursor: pointer;
+    border-radius: 43px;
+    /* margin-left: 79vh; */
 }
 
 #reportDiv button:active {
     color: rgb(228, 220, 220);
 }
 
-tbody tr:first-child {
+tbody tr:nth-child(2) {
     font-weight: bolder;
 }

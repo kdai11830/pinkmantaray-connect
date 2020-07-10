@@ -31,8 +31,14 @@
 				<div>
 					<%= data.name[0] %>
 				</div>
+				
 			</div>
 			<table id="profileInfo">
+				<tr>
+					<td><a href="https://instagram.com/<%= data.instagram %>">
+							<i class="fab fa-instagram fa-2x"></i></a></td>
+					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td> <!-- TODO -->
+				</tr>
 				<tr>
 					<td><%= data.name %></td>
 				</tr>
@@ -62,11 +68,6 @@
 				</tr>
 				<tr>
 					<td><%= data.interest.join(', ') %></td>
-				</tr>
-				<tr>
-					<td><a href="https://instagram.com/<%= data.instagram %>">
-							<i class="fab fa-instagram fa-2x"></i></a></td>
-					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td> <!-- TODO -->
 				</tr>
 			</table>
 		</div>
