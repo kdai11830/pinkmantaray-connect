@@ -15,12 +15,12 @@ body > div {
     align-items: flex-end; */
     justify-content: space-evenly;
 
-    width: 79vh;
+    width: 91vh;
     height: 60vh;
     position: fixed;
     top: 63%;
     left: 50%;
-    padding-right: 4vh;
+    /* padding-right: 4vh; */
 
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
@@ -39,7 +39,7 @@ body > div {
 body > div > div {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    /* align-items: flex-end; */
     justify-content: space-evenly;
 }
 
