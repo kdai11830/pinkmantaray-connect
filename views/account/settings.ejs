@@ -4,36 +4,43 @@
 <title>Account Settings | Pinkmantaray Connect</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-</style>
+<script src="https://kit.fontawesome.com/07e3f56f33.js" crossorigin="anonymous"></script>
+
+<link href="../../stylesheets/settings.css" rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;800;900&family=Open+Sans&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,500;0,900;1,900&display=swap"
+	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
 
 <body>
-	
-	<div id="usernameDiv">
-		<p id="username">Username: <%= data.username %></p>
-		<button id="changeUsername">Change</button>
-	</div>
+	<%- include("../partials/header") %>
+	<h2>
+		Account settings
+	</h2>
+	<div>
+		<div>
+			<div id="usernameDiv">
+				<p id="username"><span>Username: </span><%= data.username %></p>
+				<button id="changeUsername"><i class="far fa-edit fa-2x"></i></button>
+			</div>
 
-	<div id="passwordDiv">
-		<p id="password">Change password</p>
-		<button id="changePassword">Change</button>
-	</div>
+			<div id="passwordDiv">
+				<p id="password"><span>Password: </span>******</p>
+				<button id="changePassword"><i class="far fa-edit fa-2x"></i></button>
+			</div>
 
-	<div id="emailDiv">
-		<p id="email">Email: <%= data.email %></p>
-		<button id="changeEmail">Change</button>
+			<div id="emailDiv">
+				<p id="email"><span>Email: </span><%= data.email %></p>
+				<button id="changeEmail"><i class="far fa-edit fa-2x"></i></button>
+			</div>
+			<div id="passwordDiv">
+				<p id="instagram"><span>Instagram handle: </span><%= data.instagram %></p>
+				<button id="changeInstagram"><i class="far fa-edit fa-2x"></i></button>
+			</div>
+		</div>
 	</div>
-	<div id="passwordDiv">
-		<p id="instagram">Instagram handle: <%= data.instagram %></p>
-		<button id="changeInstagram">Change</button>
-	</div>
-
 
 </body>

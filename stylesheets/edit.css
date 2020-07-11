@@ -1,0 +1,80 @@
+#editBody {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8vh;
+}
+
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    margin: 0;
+    text-align: left;
+}
+
+#editForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: baseline;
+    height: 70vh;
+    padding-top: 3vh;
+}
+
+#editForm > div {
+    display: flex;
+    width: 135vh;
+    text-align: left;
+}
+
+#editForm > div > label {
+    font-weight: bold;
+    padding-right: 2vh;
+}
+
+#interests {
+    height: 3vh;
+}
+
+#interests_list li, #language_list li {
+    padding: 0 2vh 0 2vh;
+}
+
+.close {
+    cursor: pointer;
+    color: red;
+}
+
+#submitButton, #cancelButton {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+    /* margin-left: 79vh; */
+}
+
+/* connect button active */
+#submitButton:active, #cancelButton:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+#buttonParent {
+    display: flex;
+    width: 40vh !important;
+    justify-content: space-between;
+}

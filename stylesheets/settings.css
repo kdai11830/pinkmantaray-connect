@@ -1,0 +1,84 @@
+h2 {
+    color: rgb(139, 218, 247);
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+    margin: 0;
+    padding: 0 0 0 8vh;
+    text-align: left;
+}
+
+/* the postcard */
+body > div {
+    display: flex;
+    /* flex-direction: column;
+    align-items: flex-end; */
+    justify-content: space-evenly;
+
+    width: 79vh;
+    height: 60vh;
+    position: fixed;
+    top: 63%;
+    left: 50%;
+    padding-right: 4vh;
+
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+
+    border-radius: 1vh;
+    /* background: #f4f7f9; */
+    background: #fefefe;
+    box-shadow:  7px 7px 14px #b9bcbe, 
+                -7px -7px 14px #f2f4f5;
+}
+
+/* the text */
+body > div > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-evenly;
+}
+
+body > div > div > div {
+    display: flex;
+}
+
+body > div > div button {
+    color: rgb(139, 218, 247);
+    /* height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    border-radius: 43px;
+    text-transform: uppercase; */
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+}
+
+body > div > div button:hover {
+    /* background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+        inset rgb(208, 210, 211) -2px -2px 4px; */
+        color: rgb(100, 206, 245);
+}
+
+p > span {
+    font-weight: bolder;
+    padding-right: 2vh;
+}
+
+p {
+    padding-right: 2vh;
+}
