@@ -17,79 +17,83 @@
 <body>
 	
 	<%- include("../partials/header") %>
+	<div id="connectBody">
 
-	<% if (Object.keys(data).length === 0) { %>
-		<form action="/" method="GET">
-		<h2>Profile not found!</h2>
-		<input type="submit" name="returnHome" value="Return to Home">
-		</form>
+	
+		<h2>My profile</h2>
 
-	<% } else { %>	
+		<% if (Object.keys(data).length === 0) { %>
+			<form action="/" method="GET">
+			<h2>Profile not found!</h2>
+			<input type="submit" name="returnHome" value="Return to Home">
+			</form>
 
-		<div id="profileInfoDiv">
-			<div>
-				<div>
-					<%= data.name[0] %>
-				</div>
-				
-			</div>
-			<table id="profileInfo">
-				<tr>
-					<td><a href="https://instagram.com/<%= data.instagram %>">
-							<i class="fab fa-instagram fa-2x"></i></a></td>
-					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td> <!-- TODO -->
-				</tr>
-				<tr>
-					<td><%= data.name %></td>
-				</tr>
-				<tr>
-					<td><%= data.pronouns %></td>
-				</tr>
-				<tr>
-					<td><%= new Date().getFullYear() - data.year %> years old</td>
-				</tr>
-				<tr>
-					<td><%= data.gender.join(', ') %></td>
-				</tr>
-				<tr>
-					<td><%= data.country %></td>
-				</tr>
-				<tr>
-					<td><%= data.language.join(', ') %></td>
-				</tr>
-				<tr>
-					<td><%= data.sexuality.join(', ') %></td>
-				</tr>
-				<tr>
-					<td><%= data.race_ethnicity.join(', ') %></td>
-				</tr>
-				<tr>
-					<td><%= data.religion.join(', ') %></td>
-				</tr>
-				<tr>
-					<td><%= data.interest.join(', ') %></td>
-				</tr>
-			</table>
-		</div>
-
-		<% if (!data.myProfile) { %>
-			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
-
-			<input type="hidden" name="userId" value="<%= data.id %>">
-			<input type="hidden" name="username" value="<%= data.username %>">
-			<div id="reportDiv">
-				<input type="submit" name="reportBtn" value="Report">
-			</div>
 		<% } else { %>
-			<form id="profileForm" action="/profile?edit=" method="GET">
+			
+			<div id="profilePage">
 
-			<div id="reportDiv">
-				<button type="submit" name="edit"><i class="far fa-edit fa-2x"></i></button>
+				<div id="profileLeft">
+					<div>
+						<%= data.name[0] %>
+					</div>
+					<div>
+						<a href="https://instagram.com/<%= data.instagram %>">
+							<i class="fab fa-instagram fa-2x"></i></a>
+						<a href=""><i class="far fa-envelope fa-2x"></i></a>
+					</div> <!-- TODO -->
+
+					<div><%= data.name %></div>
+			
+					<div><%= data.pronouns %></div>				
+				</div>
+				<div id="profileRight">
+					<table id="profileInfo">
+						<tr>
+							<td><%= new Date().getFullYear() - data.year %> years old</td>
+						</tr>
+						<tr>
+							<td><%= data.gender.join(', ') %></td>
+						</tr>
+						<tr>
+							<td><%= data.country %></td>
+						</tr>
+						<tr>
+							<td><%= data.language.join(', ') %></td>
+						</tr>
+						<tr>
+							<td><%= data.sexuality.join(', ') %></td>
+						</tr>
+						<tr>
+							<td><%= data.race_ethnicity.join(', ') %></td>
+						</tr>
+						<tr>
+							<td><%= data.religion.join(', ') %></td>
+						</tr>
+						<tr>
+							<td><%= data.interest.join(', ') %></td>
+						</tr>
+					</table>
+				</div>
+
+				<% if (!data.myProfile) { %>
+					<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
+
+					<input type="hidden" name="userId" value="<%= data.id %>">
+					<input type="hidden" name="username" value="<%= data.username %>">
+					<div id="reportDiv">
+						<input type="submit" name="reportBtn" value="Report">
+					</div>
+				<% } else { %>
+					<form id="profileForm" action="/profile?edit=" method="GET">
+
+					<div id="reportDiv">
+						<button type="submit" name="edit"><i class="far fa-edit fa-2x"></i></button>
+					</div>
+				<% } %>
+
+				</form>
 			</div>
+
 		<% } %>
-
-		</form>
-
-	<% } %>
-
+	</div>
 </body>

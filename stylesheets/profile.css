@@ -1,28 +1,87 @@
-#profileInfo{
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    /* width: 29vh; */
+    margin: 0;
+    text-align: left;
+}
+
+#connectBody {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8vh;
+}
+
+#profilePage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    width: 113vh;
+    height: 62vh;
+    position: fixed;
+    top: 31%;
+    left: 22%;
+
+    border-radius: 1vh;
+    /* background: #f4f7f9; */
+    background: #fefefe;
+    box-shadow:  7px 7px 14px #b9bcbe, 
+                -7px -7px 14px #f2f4f5;
+}
+
+#profileInfo {
     width: 50%;
-    height: 50vh;
+    height: 100%;
     text-transform: capitalize;
 }
 
-#profileInfoDiv {
+#profileLeft {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+#profileLeft div:nth-child(2) {
+    display: flex;
+    justify-content: inherit;
+}
+
+.fab, .far {
+    color: rgb(27, 29, 94);
+}
+
+.fab:hover, .far:hover {
+    color: rgb(68, 71, 173);
+    color: rgb(244, 156, 224);
+    transition-duration: 100ms;
+}
+
+#profileRight {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* width: 118vh; */
-    font-size: 2vh;
 
+
+    width: 26vh;
+    font-size: 2vh;
+    padding: 0 !important;
+
+    height: 93%;
 }
 
-#profileInfoDiv > div {
-    width: 50%;
+#profileRight > div {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-bottom: 2vh;
 }
 
-#profileInfoDiv > div > div:first-child {
+#profileLeft > div:first-child {
     /* background-color: violet; */
     width: 22vh;
     height: 22vh;
@@ -51,14 +110,10 @@
 
 }
 
-#profileInfoDiv tr:first-child {
-    display: flex;
-    justify-content: center;
+#profileLeft div:nth-child(3), #profileLeft div:nth-child(4)  {
+    /* display: flex;
+    justify-content: center; */
     font-weight: bolder;
-}
-
-#profileInfoDiv tr:first-child td:first-child {
-    padding-right: 3vh;
 }
 
 #reportDiv button {
@@ -84,6 +139,6 @@
     color: rgb(228, 220, 220);
 }
 
-tbody tr:nth-child(2) {
-    font-weight: bolder;
+#profilePage > div, #profileForm {
+    padding: 0 10vh;
 }

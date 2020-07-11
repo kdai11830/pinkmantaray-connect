@@ -35,6 +35,8 @@ h2 {
 
 #interests {
     height: 3vh;
+    width: 36vh;
+    padding-left: 1vh;
 }
 
 #interests_list li, #language_list li {
