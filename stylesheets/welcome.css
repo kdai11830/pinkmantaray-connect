@@ -95,15 +95,16 @@ body {
     align-items: center;
 
     /* padding-bottom: 4vh; */
-    font-family: "Century Gothic", sans-serif
+    font-family: "Century Gothic", sans-serif !important;
 }
 
 #welcome-header {
     display: flex;
     align-items: center;
     float: left;
-    font-size: 3vh;
+    font-size: 6vh;
     color: black;
+    /* font-weight: bolder; */
 }
 
 #welcome-header img {
@@ -130,8 +131,13 @@ body {
     /* color: black; */
 }
 
-#welcome-top > img {
+/* #welcome-top > img {
     width: 72vh;
+} */
+
+#welcome-top > div {
+    width: 50%;
+    
 }
 
 #welcome-bottom {
@@ -140,7 +146,7 @@ body {
 }
 
 #welcome-bottom div:first-child {
-    padding-right: 52vh;
+    padding-right: 41vh;
 }
 
 #login-buttons {
@@ -155,7 +161,7 @@ body {
 .signup{
     height: 7vh;
     width: 18vh;
-    margin-left: 11vh;
+    margin-left: 15vh;
 
     color: rgb(241, 244, 245);
     color: white;
@@ -189,3 +195,233 @@ body {
 #welcome-description {
     font-size: 3vh;
 }
+
+/**
+Globe Elements
+**/
+.globe__placeholder {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+      border-radius: 6px;
+    /* overflow: visible; */
+    /* position: relative; */
+    /* float: left; */
+    /* padding: 16vh 0vh 0vh 16vh; */
+    margin: 0;
+    /* margin-bottom: 16px; */
+    /* height: 50vh;
+    width: 50vh; */
+    text-align: -webkit-center;
+    /* padding-top: 14vh; */
+}
+
+.globe__container {
+  overflow: visible;
+  position: relative;  
+  display: block;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+}
+
+.globe__container,
+.globe {
+  width: 33vh;
+    height: 33vh;  
+}
+.globe {
+  overflow: visible;
+  position: relative;  
+  display: block;
+  margin: 0;
+  padding: 0;
+  top: 0; left: 0;
+}
+
+.globe__worldmap,
+.globe__worldmap__front,
+.globe__worldmap__back,
+.globe__sphere,
+.globe__outer_shadow,
+.globe__reflections__bottom,
+.globe__inner_shadow,
+.globe__reflections__top,
+.globe__outer_shadow {
+  position: absolute; display: block; margin: 0; right: auto; bottom: auto;  
+}
+
+.globe__sphere,
+.globe__outer_shadow,
+.globe__reflections__bottom,
+.globe__inner_shadow,
+.globe__reflections__top {
+  left: 0; top: 0; width: 200px; height: 200px;
+  background-position: 0 0; background-repeat: no-repeat;
+}
+.globe__outer_shadow {
+  left: 0; top: 186px; width: 200px; height: 30px;
+  background-position: 0 0; background-repeat: no-repeat;
+}
+
+/* Circle mask for animated SVG files */
+.globe__worldmap {
+  left: 0; top: 0; width: 200px; height: 200px; overflow: hidden;
+  -webkit-border-radius: 50%;
+   -khtml-border-radius: 50%;
+     -moz-border-radius: 50%;
+          border-radius: 50%;
+-webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+/*
+  overflow: visible;
+*/
+}
+
+.globe__worldmap__front,
+.globe__worldmap__back {
+  left: 0; top: 0; width: 1000px; height: 200px; overflow: visible;
+  background-image: url(http://www.cakecounter.com/globe/white-blue/globe_images/worldmap_2x.svg);
+  background-repeat: no-repeat;
+}
+
+
+.backimg4{
+  background-image: url(http://www.cakecounter.com/globe/blue-purple-gradient/globe_images/worldmap_2x.svg);
+}
+
+.spehere4{
+  
+}
+
+
+/**
+Globe elements visibility options
+**/
+.globe__sphere { background-image: url(http://www.cakecounter.com/globe/white-blue/globe_images/sphere.svg); display: none;}
+
+.globe__outer_shadow { background-image: url(http://www.cakecounter.com/globe/white-blue/globe_images/outer_shadow.svg);}
+.globe__reflections__top { background-image: url(http://www.cakecounter.com/globe/white-blue/globe_images/reflections.svg); display: none;}
+.globe__reflections__bottom { background-image: url(http://www.cakecounter.com/globe/white-blue/globe_images/reflections.svg); display: none;}
+.globe__inner_shadow { background-image: url(http://www.cakecounter.com/globe/white-blue/globe_images/inner_shadow.svg);}
+.globe__worldmap__front { background-position: 0px 0px;
+animation: textureSpinreverse 8s linear infinite;
+}
+.globe__worldmap__back { background-position: 0px -220px;
+    animation: textureSpin 8s linear infinite;
+}
+
+
+div.opacity {
+  padding-bottom: 0;
+}
+div.opacity div {
+  padding-left: 15px;
+  margin-right: 10px;
+  position: relative;
+  font-size: 12px;
+}
+
+
+div.reflections {
+  font-size: 12px;
+  padding-bottom: 20px;
+}
+.reflections strong {
+  font-weight: normal;
+  padding-left: 15px;
+  padding-right: 5px;
+}
+.reflections a {
+  padding-left:  1px;
+  padding-right: 1px;
+}
+
+
+.reflections .t {
+  padding: 2px 5px;
+  display: inline-block;
+}
+
+
+#Stage {
+    -webkit-transition: background-color 0.2s ease 0.0s;
+       -moz-transition: background-color 0.2s ease 0.0s;
+        -ms-transition: background-color 0.2s ease 0.0s;
+         -o-transition: background-color 0.2s ease 0.0s;
+            transition: background-color 0.2s ease 0.0s;
+}
+
+.ani_bgc {
+    -webkit-transition: background-color 0.25s ease 0.0s;
+       -moz-transition: background-color 0.25s ease 0.0s;
+        -ms-transition: background-color 0.25s ease 0.0s;
+         -o-transition: background-color 0.25s ease 0.0s;
+            transition: background-color 0.25s ease 0.0s;
+}
+.ani_opacity {
+-webkit-transition: 0.25s opacity;
+   -moz-transition: 0.25s opacity;
+     -o-transition: 0.25s opacity;
+        transition: 0.25s opacity;
+}
+
+
+/*
+@media screen and (max-width: 1920px){}
+@media screen and (max-width: 1680px){}
+*/
+@media screen and (max-width: 1400px){
+  #Stage, .title {
+/*  left: 250px !important;*/
+  }
+}
+/*
+@media screen and (max-width: 1200px){}
+@media screen and (max-width: 1024px){}
+*/
+
+
+@keyframes textureSpin {
+  from {
+    transform: translateX(0);
+  }
+  to {
+        transform: translateX(-47.5%);
+  }
+}
+
+
+@keyframes textureSpinreverse {
+  from {
+        transform: translateX(-47.5%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+
+
+@media screen and (max-width: 768px)
+{
+  .container{padding-left: 140px;}
+}
+
+@media screen and (max-width: 425px)
+{
+  .container{padding-left: 70px;}
+}
+
+@media screen and (max-width: 320px)
+{
+  .container{padding-left: 0px;}
+}
+
+
+
+
+

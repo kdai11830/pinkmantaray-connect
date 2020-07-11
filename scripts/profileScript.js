@@ -101,6 +101,8 @@ $(document).ready(function() {
 	$("#confirmationDialog").css('z-index', 9999);
 	$('#confirmationDialog').css('background-color', 'white');
 	$('#confirmationDialog').css('border-style', 'outset');
+	$('#confirmationDialog').css('padding', '4vh');
+
 
 	$("#confirmationDialog").dialog({
 		autoOpen: false,
