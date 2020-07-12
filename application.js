@@ -9,6 +9,8 @@ var url = require('url');
 var qs = require('qs');
 var util = require('util');
 var http = require('http');
+var nodemailer = require('nodemailer');
+var crypto = require('crypto');
 
 // declare application and connect to db
 var app = new express();
@@ -55,6 +57,24 @@ var sess = {
 };
 
 var sessionMiddleware = session(sess);
+
+// set node mailing transport
+var smtpTransport = nodemailer.createTransport({
+	service: '',
+	auth: {
+		user: '',
+		pass: ''
+	}
+});
+var rand, mailOptions, host, link;
+
+// random string generator for authenticator token
+function genRandomString(size=128) {
+	return crypto
+		.randomBytes(size)
+		.toString('hex')
+		.slice(0, size);
+}
 
 io.use(function(socket, next) {
 	sessionMiddleware(socket.request, socket.request.res || {}, next);
@@ -123,6 +143,47 @@ app.get('/login', function(req, res) {
 app.get('/signup', function(req, res) {
 	res.render('signup/index');
 });
+
+
+/** SEND VERIFICATION EMAIL **/
+app.get('/send', function(req, res) {
+	rand = genRandomString();
+	host = req.get('host');
+	link = 'http://'+req.get('host')+'/verify?id='+rand;
+	mailOptions = {
+		to: req.query.to,
+		subject: 'Pinkmantaray Connect Email Verification',
+		html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
+	}
+	console.log(mailOptions);
+	smtpTransport.sendMail(mailOptions, function(error, response) {
+		if (error) {
+			console.log(error);
+			// do some other error handling
+		} else {
+			console.log('message sent: ' + response.message);
+			// do some success handling
+		}
+	});
+});
+
+
+/** EMAIL VERIFICATION PATH **/
+app.get('/verify', function(req, res) {
+	console.log(req.protocol+":/"+req.get('host'));
+	if((req.protocol+"://"+req.get('host'))==("http://"+host)) {
+		console.log("Domain is matched. Information is from Authentic email");
+		if (req.query.id == rand) {
+			console.log('email is verified');
+			// do success handling here, update db
+		} else {
+			console.log('not verified');
+			// do some error handling here
+		}
+	} else {
+		// request from unknown source
+	}
+})
 
 
 /** HOME PAGE **/
