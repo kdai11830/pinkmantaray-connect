@@ -16,6 +16,11 @@ body {
 
 <div class="login">
 	<h2>Login</h2>
+
+	<% if (!auth) { %>
+		<!-- add error message div here -->
+	<% } %>
+
 	<form action="auth" method="POST">
 	<input type="text" placeholder="Username" name="uname" required>
 	<input type="password" placeholder="Password" name="pwd" required>

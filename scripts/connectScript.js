@@ -147,7 +147,6 @@ $(document).ready(function() {
 		// show custom popup since I'm too lazy to turn off and reset my chrome
 		clickedConnectBtn = $(this).closest('tr').attr('id');
 		$("#confirmationDialog").dialog('open');
-
 	});
 
 

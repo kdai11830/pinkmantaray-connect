@@ -620,7 +620,7 @@ app.post('/auth', function(req, res) {
 
 			} else {
 				// bad username
-				res.send('Incorrect username and/or password!');
+				res.redirect('/login?auth=false');
 				return;
 			}			
 			// res.end();
