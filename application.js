@@ -379,21 +379,34 @@ app.get('/profile', restrict, function(req, res) {
 
 /** REPORT PAGE **/
 app.get('/report', restrict, function(req, res) {
-	var userId = req.query.id;
-	console.log(userId);
-	var sql = `SELECT info.name FROM user_info info
-		WHERE info.id = ?`;
+	if (!('id' in req.query)) {
+		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram 
+			FROM user_info info WHERE info.id = ?`;
+		connection.query(sql, req.session.user_id, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
 
-	connection.query(sql, userId, function(error, results, fields) {
-		if (error) throw error;
-		console.log(results);
+			res.render('help/report', {'data': results});
+			return;
+		})
 
-		var vals = {"id": userId, "name": results[0].name};
-		console.log(vals);
+	} else {
+		var userId = req.query.id;
+		console.log(userId);
+		var sql = `SELECT info.name FROM user_info info
+			WHERE info.id = ?`;
 
-		res.render('account/report', {"data": vals});
-		return;
-	});	
+		connection.query(sql, userId, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+
+			var vals = {"id": userId, "name": results[0].name};
+			console.log(vals);
+
+			res.render('account/report', {"data": vals});
+			return;
+		});	
+	}
 });
 
 
@@ -414,8 +427,8 @@ app.get('/settings', restrict, function(req, res) {
 		if (error) throw error;
 		console.log(results);
 		res.render('account/settings', {"data": results[0]});
-	})
-		
+		return;
+	});
 });
 
 
@@ -689,8 +702,8 @@ app.post('/new-user-auth', function(req, res) {
 			?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 		)`;
 	// perform first sql insertion into user_info
-	// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE
-	// TO PREVENT CALLBACK HELL
+	// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE TO PREVENT CALLBACK HELL
+
 	// hash password
 	bcrypt.genSalt(saltRounds, function(err, salt) {
 		if (err) {
@@ -1127,6 +1140,72 @@ io.sockets.on('connection', function(socket) {
 		connection.query(sql, insertIds, function(error, results, fields) {
 			if (error) throw error;
 			console.log(results);
+		});
+	});
+
+	socket.on('updateInfo', function(vals) {
+		var verifyPass = vals['verifyPass'];
+		var sql = `SELECT info.username, info.password FROM user_info info 
+			WHERE info.id = ?`;
+		connection.query(sql, socket.request.session.user_id, function(error, results, fields) {
+			if (error) throw error;
+			bcrypt.compare(verifyPass, results[0]['password']).then((result) => {
+				console.log(result);
+				if (result) {
+					// get column to update
+					var updateCol = '';
+					for (var i = 0; i < Object.keys(vals).length; i++) {
+						if (Object.keys(vals)[i] !== 'verifyPass') {
+							updateCol = Object.keys(vals)[i];
+						}
+					}
+
+					// do some specific checks for password types
+					if (updateCol === 'password') {
+						// hash password
+						bcrypt.genSalt(saltRounds, function(err, salt) {
+							if (err) { throw err;}
+							else {
+								bcrypt.hash(vals[updateCol], salt, function(err, hash) {
+									var sql = `UPDATE user_info info SET info.password = ? WHERE info.id = ?`;
+									connection.query(sql, [hash, socket.request.session.user_id], function(errors, results, fields) {
+										if (errors) throw errors;
+										socket.emit('updateInfoResult', {'success': true});
+										return;
+									});
+								});
+							}
+						});
+
+
+					// all other update types
+					} else {
+						// successful password verification, continue on
+						var sql = `UPDATE user_info info SET info.` + updateCol + ` = ? WHERE info.id = ?`;
+
+						// update column
+						connection.query(sql, [String(vals[updateCol]), socket.request.session.user_id], function(errors, results, fields) {
+							if (errors) {
+								console.log("FAILURE");
+								if (errors.errno == 1062) {
+									// duplicate entry error
+									console.log('DUPLICATE ENTRY ERROR');
+									// return some value to jquery script
+								} else throw errors;
+
+								// failure, send failure message back to settings
+								//socket.emit('updateInfoResult', {'success': false});
+								//return;
+							} else {
+								console.log("SUCCESS");
+								// success, send success message back to settings
+								socket.emit('updateInfoResult', {'success': true});
+								return;
+							}
+						});
+					}
+				}
+			});
 		});
 	});
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Report a User | Pinkmantaray Connect</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+
+<body>
+	
+	<%- include("../partials/header") %>
+
+	<table>
+	<% for (var i = 0; i < data.length; i++) { %>
+		<tr>
+			<td><button class='reportBtn' value='<%= data[i].id %>'>Report</button></td>
+			<td>data[i].name</td>
+			<td>data[i].pronouns</td>
+			<td><a href="https://www.instagram.com/<%= data[i].instagram %>">data[i].instagram</a></td>
+		</tr>		
+
+	<% } %>
+	</table>
+
+	
+
+</body>
