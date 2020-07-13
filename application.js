@@ -60,7 +60,7 @@ var sess = {
 var sessionMiddleware = session(sess);
 
 // set node mailing transport
-var smtpTransport = nodemailer.createTransport("SMTP", {
+var smtpTransport = nodemailer.createTransport({
 	host: "smtp.ionos.com",
 	secureConnection: false,
 	port: 587,
@@ -111,16 +111,21 @@ app.use(express.static(__dirname));
 
 /** LOGIN AUTHENTICATION MIDDLEWARE **/
 function restrict(req, res, next) {
-	if (req.session.loggedin && req.session.verified) {
+	if (req.session.loggedin) {
 		next();
-	} else if (!req.session.verified) {
-		res.redirect('/login?verified=false'); // TODO: add not verified message?
 	} else {
 		res.redirect('/welcome');
 	}
 }
 
 // TODO: ADD SECOND VERIFICATION CHECK SEPARATE FROM RESTRICT
+function verifyRestrict(req, res, next) {
+	if (req.session.verified) {
+		next();
+	} else {
+		res.redirect('/login?verified=false');
+	}
+}
 
 /** ADMIN AUTHENTICATION MIDDLEWARE **/
 function adminRestrict(req, res, next) {
@@ -144,12 +149,12 @@ app.get('/login', function(req, res) {
 	if (req.query.auth == 'false') {
 		auth = false;
 	}
-	verified = true;
+	/*verified = true;
 	if (req.query.verified == 'false') {
 		verified = false;
-	}
+	}*/
 	req.session.destroy();
-	res.render('login/index', {'auth': auth, 'verified': verified});
+	res.render('login/index', {'auth': auth});
 });
 
 
