@@ -15,9 +15,10 @@ var crypto = require('crypto');
 // declare application and connect to db
 var app = new express();
 const port = 3000;
+const hostname = 'localhost';
 
-var server = app.listen(port, function() {
-	console.log(new Date().toISOString() + ": server started on port " + port)
+var server = app.listen(port, hostname, function() {
+	console.log(new Date().toISOString() + `: server running at http://${hostname}:${port}/`)
 })
 var io = require('socket.io').listen(server);
 
@@ -59,14 +60,19 @@ var sess = {
 var sessionMiddleware = session(sess);
 
 // set node mailing transport
-var smtpTransport = nodemailer.createTransport({
-	service: '',
+var smtpTransport = nodemailer.createTransport("SMTP", {
+	host: "smtp.ionos.com",
+	secureConnection: false,
+	port: 587,
 	auth: {
-		user: '',
-		pass: ''
+		user: 'noreply@pinkmantaray.com',
+		pass: 'z%R4*C8N*0P%@Q*9'
+	},
+	tls: {
+		ciphers: 'SSLv3'
 	}
 });
-var rand, mailOptions, host, link;
+var rand, host;
 
 // random string generator for authenticator token
 function genRandomString(size=128) {
@@ -105,12 +111,16 @@ app.use(express.static(__dirname));
 
 /** LOGIN AUTHENTICATION MIDDLEWARE **/
 function restrict(req, res, next) {
-	if (req.session.loggedin) {
+	if (req.session.loggedin && req.session.verified) {
 		next();
+	} else if (!req.session.verified) {
+		res.redirect('/login?verified=false'); // TODO: add not verified message?
 	} else {
 		res.redirect('/welcome');
 	}
 }
+
+// TODO: ADD SECOND VERIFICATION CHECK SEPARATE FROM RESTRICT
 
 /** ADMIN AUTHENTICATION MIDDLEWARE **/
 function adminRestrict(req, res, next) {
@@ -125,7 +135,7 @@ function adminRestrict(req, res, next) {
 app.get('/welcome', function(req, res) {
 	req.session.destroy();
 	res.render('welcome');
-})
+});
 
 /** LOGIN PAGE **/
 app.get('/login', function(req, res) {
@@ -134,8 +144,12 @@ app.get('/login', function(req, res) {
 	if (req.query.auth == 'false') {
 		auth = false;
 	}
+	verified = true;
+	if (req.query.verified == 'false') {
+		verified = false;
+	}
 	req.session.destroy();
-	res.render('login/index', {'auth': auth});
+	res.render('login/index', {'auth': auth, 'verified': verified});
 });
 
 
@@ -149,8 +163,8 @@ app.get('/signup', function(req, res) {
 app.get('/send', function(req, res) {
 	rand = genRandomString();
 	host = req.get('host');
-	link = 'http://'+req.get('host')+'/verify?id='+rand;
-	mailOptions = {
+	var link = 'http://'+req.get('host')+'/verify?id='+rand;
+	var mailOptions = {
 		to: req.query.to,
 		subject: 'Pinkmantaray Connect Email Verification',
 		html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
@@ -183,7 +197,7 @@ app.get('/verify', function(req, res) {
 	} else {
 		// request from unknown source
 	}
-})
+});
 
 
 /** HOME PAGE **/
@@ -666,6 +680,7 @@ app.post('/auth', function(req, res) {
 				// console.log(results);
 
 				req.session.user_id = results[0].id;
+				req.session.verified = results[0].verified;
 				console.log(results[0].id);
 				console.log(req.session.user_id);
 
