@@ -28,13 +28,23 @@ const saltRounds = 10;
 app.set('view engine', 'ejs'); 
 
 // establish mysql connection
+/*
 var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
+	host     : 'db5000506482.hosting-data.io',
+	user     : 'dbu298071',
+	password : 'wLb6kdR#3Ac@$cDKp7nW!',
+	database : 'dbs486117',
+	multipleStatements: 'true'
+});
+*/
+
+var connection = mysql.createConnection({
+	host 	 : 'localhost',
+	user 	 : 'root',
 	password : 'Jkmrhi11830!',
 	database : 'pinkmantaray_connect',
 	multipleStatements: 'true'
-});
+})
 
 /*var pool = mysql.createPool({
 	connectionLimit : 10,
@@ -123,7 +133,7 @@ function verifyRestrict(req, res, next) {
 	if (req.session.verified) {
 		next();
 	} else {
-		res.redirect('/login?verified=false');
+		res.redirect('/?verified=false');
 	}
 }
 
@@ -149,10 +159,6 @@ app.get('/login', function(req, res) {
 	if (req.query.auth == 'false') {
 		auth = false;
 	}
-	/*verified = true;
-	if (req.query.verified == 'false') {
-		verified = false;
-	}*/
 	req.session.destroy();
 	res.render('login/index', {'auth': auth});
 });
@@ -192,13 +198,27 @@ app.get('/verify', function(req, res) {
 	console.log(req.protocol+":/"+req.get('host'));
 	if((req.protocol+"://"+req.get('host'))==("http://"+host)) {
 		console.log("Domain is matched. Information is from Authentic email");
-		if (req.query.id == rand) {
-			console.log('email is verified');
-			// do success handling here, update db
-		} else {
-			console.log('not verified');
-			// do some error handling here
-		}
+		var username = req.query.username
+		var sql = `SELECT verify_key FROM user_info WHERE username = ?`;
+		connection.query(sql, [username], function(errors, results, fields) {
+			if (errors) throw errors;
+			var rand_key = results[0].verify_key;
+
+			// key matches the verification link, update db and login
+			if (req.query.id == rand_key) {
+				console.log('email is verified');
+				var sql = `UPDATE user_info SET verify_key = NULL WHERE username = ?`;
+				connection.query(sql, [username], function(errors, results, fields) {
+					if (errors) throw errors;
+					req.session.verified = true;
+					res.render('account/verified');
+				})
+			} else {
+				console.log('not verified');
+				// do some error handling here
+			}
+		})
+		
 	} else {
 		// request from unknown source
 	}
@@ -206,7 +226,11 @@ app.get('/verify', function(req, res) {
 
 
 /** HOME PAGE **/
-app.get('/', restrict, function(req, res) {
+app.get('/', restrict, verifyRestrict, function(req, res) {
+	verified = true;
+	if (req.query.verified == 'false') {
+		verified = false;
+	}
 
 	// double sql query
 	var sql = `SELECT user_info.id, name, pronouns, email, instagram FROM user_info 
@@ -221,14 +245,14 @@ app.get('/', restrict, function(req, res) {
 		}
 		console.log(req.session.user_id);
 		console.log(results);
-		res.render('index', {"results": results});
+		res.render('index', {"results": results, 'verified': verified});
 		return;
 	});
 });
 
 
 /** CONNECT PAGE **/
-app.get('/connect', restrict, function(req, res) {
+app.get('/connect', restrict, verifyRestrict, function(req, res) {
 	var sql = `SELECT MIN(year) AS youngest 
 		FROM user_info; 
 		SELECT MAX(year) AS oldest 
@@ -243,7 +267,7 @@ app.get('/connect', restrict, function(req, res) {
 
 
 /** NOTIFICATIONS PAGE **/
-app.get('/notifications', restrict, function(req, res) {
+app.get('/notifications', restrict, verifyRestrict, function(req, res) {
 	
 	var sql = `SELECT conn.user_id FROM connections conn
 		WHERE (conn.connection_id = ?) AND (conn.pending = 1);
@@ -359,7 +383,7 @@ app.get('/notifications', restrict, function(req, res) {
 
 
 /** PAGES FOR INDIVIDUAL PROFILES **/
-app.get('/profile', restrict, function(req, res) {
+app.get('/profile', restrict, verifyRestrict, function(req, res) {
 	// get id from query parameters
 	var username = ""
 	if ("username" in req.query) {
@@ -458,7 +482,7 @@ app.get('/profile', restrict, function(req, res) {
 
 
 /** REPORT PAGE **/
-app.get('/report', restrict, function(req, res) {
+app.get('/report', restrict, verifyRestrict, function(req, res) {
 	if (!('id' in req.query)) {
 		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram 
 			FROM user_info info WHERE info.id = ?`;
@@ -491,7 +515,7 @@ app.get('/report', restrict, function(req, res) {
 
 
 /** REPORTED SUCCESS OR FAILURE **/
-app.get('/reported', restrict, function(req, res) {
+app.get('/reported', restrict, verifyRestrict, function(req, res) {
 	var success = (req.query.success == 'true');
 	res.render('account/reported', {"success": success});
 	return;
@@ -499,7 +523,7 @@ app.get('/reported', restrict, function(req, res) {
 
 
 /** PRIVACY AND SECURITY SETTINGS PAGE **/
-app.get('/settings', restrict, function(req, res) {
+app.get('/settings', restrict, verifyRestrict, function(req, res) {
 	var userId = req.session.user_id;
 	var sql = `SELECT id, name, username, email, instagram FROM user_info
 		WHERE id = ?`;
@@ -521,7 +545,7 @@ app.get('/logout', function(req, res) {
 
 
 /** REPORT UPDATES **/
-app.post('/reported', restrict, function(req, res) {
+app.post('/reported', restrict, verifyRestrict, function(req, res) {
 	var reportedId = req.body.id;
 	var reason = req.body.reason;
 
@@ -548,7 +572,7 @@ app.post('/reported', restrict, function(req, res) {
 
 
 /** PROFILE EDIT UPDATES **/
-app.post('/edited', restrict, function(req, res) {
+app.post('/edited', restrict, verifyRestrict, function(req, res) {
 	var sID = req.session.user_id;
 	var insertVals = [req.body.option_name, req.body.option_year, req.body.option_pronouns, 
 		req.body.option_instagram, req.body.option_email, req.body.option_location, sID];
@@ -700,6 +724,14 @@ app.post('/auth', function(req, res) {
 
 						req.session.loggedin = true;
 						req.session.username = username;
+
+						// set remember me cookie
+						if (req.body.remember) {
+							req.session.cookie.maxAge = 14 * 24 * 3600000;
+						} else {
+							req.session.cookie.expires = false;
+						}
+
 						res.redirect('/');
 						return;
 					} else {
@@ -776,11 +808,11 @@ app.post('/new-user-auth', function(req, res) {
 	// insert information into database
 	var sql = `INSERT INTO user_info 
 		(
-			username, password, name, pronouns, email, year, instagram, country, state, looking_for
+			username, password, name, pronouns, email, year, instagram, country, state, looking_for, verify_key
 		)
 		VALUES
 		(
-			?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 		)`;
 	// perform first sql insertion into user_info
 	// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE TO PREVENT CALLBACK HELL
@@ -795,7 +827,8 @@ app.post('/new-user-auth', function(req, res) {
 					throw err;
 
 				} else {
-					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, looking_for];
+					rand = genRandomString();
+					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, looking_for, rand];
 					console.log(insertVals);
 
 					connection.query(sql, insertVals, function(err, result, fields) {
@@ -889,8 +922,26 @@ app.post('/new-user-auth', function(req, res) {
 									console.log(err);
 								} else {
 									// console.log(nestResult);
-									res.redirect('/');
-									return
+									// send verification email
+									host = req.get('host');
+									var link = 'http://'+req.get('host')+'/verify?username='+req.session.username+'&id='+rand;
+									var mailOptions = {
+										to: req.query.to,
+										subject: 'Pinkmantaray Connect Email Verification',
+										html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
+									}
+									console.log(mailOptions);
+									smtpTransport.sendMail(mailOptions, function(error, response) {
+										if (error) {
+											console.log(error);
+											// do some other error handling TODO
+										} else {
+											console.log('message sent: ' + response.message);
+											// log user in with unverified restrictions
+											res.redirect('/?verified=false');
+											return
+										}
+									});									
 								}
 							});
 						}
@@ -906,6 +957,34 @@ app.post('/new-user-auth', function(req, res) {
 /** SOCKET.IO LISTEN AND EMIT FUNCTIONS **/
 io.sockets.on('connection', function(socket) {
 	console.log('socket connected...');
+
+	socket.on('checkDuplicates', function(vals) {
+		console.log('CHECKING DUPES');
+		var checks = Object.keys(vals);
+		var sql = '';
+		var insertVals = [];
+		console.log(checks);
+		for (var i = 0; i < checks.length; i++) {
+			sql += 'SELECT * FROM user_info WHERE ' + checks[i] + ' = ?; ';
+			insertVals.push(vals[checks[i]]);
+		}
+		connection.query(sql, insertVals, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+			if (results.length <= 0) {
+				socket.emit('checkedDuplicates', {'duplicates': []});
+				return;
+			} 
+			var duplicates = [];
+			for (var i = 0; i < results.length; i++) {
+				if (results[i].length > 0) {
+					duplicates.push(checks[i]);
+				}
+			}
+			socket.emit('checkedDuplicates', {'duplicates': duplicates});
+			return;
+		});
+	});
 
 	socket.on('search', function(vals) {
 		console.log(vals);

@@ -16,7 +16,17 @@ body {
 
 <body>
 
-<%- include("partials/header") %>
+<%- include("../partials/header") %>
+
+
+<% if (!verified) { %>
+<div id='not-verified'>
+	<h2>Your email is not verified!</h2>
+	<p>Please verify your email to get full access to Pinkmantaray Connect.</p>
+</div>
+<% } %>
+
+
 
 <div id="my-connections">
 

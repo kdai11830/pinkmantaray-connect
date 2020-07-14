@@ -11,6 +11,7 @@ body {
 </style>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script> 
 <script type="text/javascript" src="/scripts/formScript.js"></script>
 
 </head>
@@ -35,7 +36,7 @@ body {
 	<!-- BASIC INFORMATION -->
 	<div class="tab">
 		<label for="entry_email">Email: </label>
-		<input type="email" name="entry_email" class="required">
+		<input type="email" name="entry_email" id="email" class="required">
 
 		<label for="entry_name">Name: </label>
 		<input type="text" name="entry_name" class="required">

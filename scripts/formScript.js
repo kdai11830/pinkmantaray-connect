@@ -4,6 +4,12 @@ $(document).ready(function() {
 
 	console.log("JS SCRIPT RUNNING");
 
+	var socket = io();
+
+	var emailDupe = false;
+	var usernameDupe = false;
+	var instagramDupe = false;
+
 	var currentTab = 0;
 	showTab(currentTab);
 
@@ -30,7 +36,27 @@ $(document).ready(function() {
 	}
 
 	function nextPrev(n) {
+		$('#duplicateInstagram').remove();
+		$('#duplicateEmail').remove();
+		$('#duplicateUsername').remove();
+
 		if (n===1 && !validateForm()) return false;
+
+		console.log(emailDupe);
+		console.log(usernameDupe);
+		console.log(instagramDupe);
+
+		if (emailDupe || usernameDupe) {
+			$(".tab:eq("+currentTab+")").hide();
+			currentTab = 0;
+			showTab(currentTab);
+			return false;
+		} else if (instagramDupe) {
+			$(".tab:eq("+currentTab+")").hide();
+			currentTab = 1;
+			showTab(currentTab);
+			return false;
+		}
 
 		$(".tab:eq("+currentTab+")").hide();
 		currentTab += n;
@@ -77,6 +103,14 @@ $(document).ready(function() {
 				$(".tab:eq("+currentTab+")").append('<p id="pwd-notMatched">Passwords do not match!</p>');
 				$('#pwd-notMatched').css('color', 'red');
 			}
+
+			// check if username and email already exist
+			socket.emit('checkDuplicates', {'email': $('#email').val(), 'username': $('#username').val()});
+		}
+
+		// check if instagram already exists
+		if (currentTab === 2) {
+			socket.emit('checkDuplicates', {'instagram': $('#instagram').val()});
 		}
 
 		return valid;
@@ -215,7 +249,53 @@ $(document).ready(function() {
 		$(this).parent().remove();
 	});
 
+	$("#email").on('input', function() {
+		$('#duplicateEmail').remove();
+	});
 
-	
+	$('#username').on('input', function() {
+		$('#duplicateUsername').remove();
+	});
+
+	$('#instagram').on('input', function() {
+		$('#duplicateInstagram').remove();
+	});
+
+	socket.on('checkedDuplicates', function(d) {
+		console.log('CHECKED DUPES');
+		console.log(d);
+		if (d['duplicates'].includes('email') || d['duplicates'].includes('username')) {
+			if (d['duplicates'].includes('email')) {
+				emailDupe = true;
+				$('#email').after('<div id="duplicateEmail"><p>This email is already being used!</p></div>')
+			} else {
+				emailDupe = false;
+			}
+			if (d['duplicates'].includes('username')) {
+				usernameDupe = true;
+				$('#username').after('<div id="duplicateUsername"><p>This username already exists!</p></div>')
+			} else {
+				usernameDupe = false;
+			}
+		} else if (d['duplicates'].includes('instagram')) {
+			instagramDupe = true;
+			$('#instagram').after('<div id="duplicateInstagram"><p>This Instagram handle is already being used!</p></div>')
+		} else {
+			instagramDupe = false;
+			emailDupe = false;
+			usernameDupe = false;
+		}
+
+		if (emailDupe || usernameDupe) {
+			console.log("AKSDFAKRHJKAJEFKAS");
+			$(".tab:eq("+currentTab+")").hide();
+			currentTab = 1;
+			showTab(currentTab);
+		} else if (instagramDupe) {
+			$(".tab:eq("+currentTab+")").hide();
+			currentTab = 2;
+			showTab(currentTab);
+		}
+	});	
 
 });
