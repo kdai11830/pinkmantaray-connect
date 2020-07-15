@@ -14,7 +14,7 @@
 
 </head>
 
-<body>
+<body id="profileBody">
 	
 	<%- include("../partials/header") %>
 	<div id="connectBody">
@@ -34,13 +34,31 @@
 
 				<div id="profileLeft">
 					<div>
-						<%= data.name[0] %>
+						<%= data.name.split(" ")[0] %>
 					</div>
-					<div>
-						<a href="https://instagram.com/<%= data.instagram %>">
-							<i class="fab fa-instagram fa-2x"></i></a>
-						<a href=""><i class="far fa-envelope fa-2x"></i></a>
-					</div> <!-- TODO -->
+				
+					<% if (!data.myProfile) { %>
+					<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
+					
+						<input type="hidden" name="userId" value="<%= data.id %>">
+						<input type="hidden" name="username" value="<%= data.username %>">
+						<div id="reportDiv">
+							<input type="submit" name="reportBtn" value="Report">
+						</div>
+						<% } else { %>
+						<form id="profileForm" action="/profile?edit=" method="GET">
+					
+							<div id="reportDiv">
+								<button type="submit" name="edit">Edit Profile <i class="far fa-edit"></i></button>
+							</div>
+							<% } %>
+					
+						</form>
+						<div>
+							<a href="https://instagram.com/<%= data.instagram %>">
+								<i class="fab fa-instagram fa-2x"></i></a>
+							<a href=""><i class="far fa-envelope fa-2x"></i></a>
+						</div> <!-- TODO -->
 
 					<div><%= data.name %></div>
 			
@@ -49,49 +67,31 @@
 				<div id="profileRight">
 					<table id="profileInfo">
 						<tr>
-							<td><%= new Date().getFullYear() - data.year %> years old</td>
+							<td><span>Age: </span><%= new Date().getFullYear() - data.year %> years old</td>
 						</tr>
 						<tr>
-							<td><%= data.gender.join(', ') %></td>
+							<td><span>Gender: </span><%= data.gender.join(', ') %></td>
 						</tr>
 						<tr>
-							<td><%= data.country %></td>
+							<td><span>Country: </span><%= data.country %></td>
 						</tr>
 						<tr>
-							<td><%= data.language.join(', ') %></td>
+							<td><span>Language: </span><%= data.language.join(', ') %></td>
 						</tr>
 						<tr>
-							<td><%= data.sexuality.join(', ') %></td>
+							<td><span>Sexuality: </span><%= data.sexuality.join(', ') %></td>
 						</tr>
 						<tr>
-							<td><%= data.race_ethnicity.join(', ') %></td>
+							<td><span>Ethnicity: </span><%= data.race_ethnicity.join(', ') %></td>
 						</tr>
 						<tr>
-							<td><%= data.religion.join(', ') %></td>
+							<td><span>Religion: </span><%= data.religion.join(', ') %></td>
 						</tr>
 						<tr>
-							<td><%= data.interest.join(', ') %></td>
+							<td><span>Interests: </span><%= data.interest.join(', ') %></td>
 						</tr>
 					</table>
 				</div>
-
-				<% if (!data.myProfile) { %>
-					<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
-
-					<input type="hidden" name="userId" value="<%= data.id %>">
-					<input type="hidden" name="username" value="<%= data.username %>">
-					<div id="reportDiv">
-						<input type="submit" name="reportBtn" value="Report">
-					</div>
-				<% } else { %>
-					<form id="profileForm" action="/profile?edit=" method="GET">
-
-					<div id="reportDiv">
-						<button type="submit" name="edit"><i class="far fa-edit fa-2x"></i></button>
-					</div>
-				<% } %>
-
-				</form>
 			</div>
 
 		<% } %>

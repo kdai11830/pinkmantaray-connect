@@ -1,65 +1,3 @@
-/* body {
-    margin: 0;
-}
-
-#welcome {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    height: 100vh;
-    margin: 0;
-    
-    background: linear-gradient(180deg, #F7A8B8 35%, #f4f8fa 91%);
-    background: linear-gradient(180deg, #F7A8B8 35%, rgb(232, 235, 240) 91%);
-    background: #F7A8B8;
-    background: rgb(244, 156, 224);
-}
-
-#welcome-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    width: 70%;
-}
-
-#welcome-header  {
-    text-align: right;
-
-    font-family: 'Poppins', sans-serif;
-    font-size: 13vh;
-    font-weight: 600;
-    color: rgb(244, 156, 224);
-
-    text-shadow: 
-    -8px -8px 12px rgba(245, 184, 218, 0.619),
-    8px 8px 12px rgba(0, 0, 0, 0.212);
-    caret-color:#262626;
-    outline: none;
-
-    z-index: 2;
-}
-
-#welcome-header span {
-    -webkit-animation: fadein 4s; 
-    -moz-animation: fadein 4s;
-    -ms-animation: fadein 4s; 
-    -o-animation: fadein 4s;
-    animation: fadein 4s;
-
-   color: white;
-   text-shadow: none;
-}
-
-#welcome-description {
-    font-size: 3vh;
-    text-align: right;
-    font-family: 'Century Gothic', sans-serif;
-    color: white;
-    z-index: 2;
-} */
-
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
@@ -96,14 +34,15 @@ body {
 
     /* padding-bottom: 4vh; */
     font-family: "Century Gothic", sans-serif !important;
+    background-color: rgb(4, 4, 46);
+    color: white;
 }
 
 #welcome-header {
     display: flex;
     align-items: center;
     float: left;
-    font-size: 6vh;
-    color: black;
+    font-size: 3.5vh;
     /* font-weight: bolder; */
 }
 
@@ -119,7 +58,6 @@ body {
     font-size: 12vh;
     font-family: 'Poppins', sans-serif;
     font-weight: bolder;
-    color: black;
     text-align: left;
 
     padding: 3vh 10vh 1vh 10vh;
@@ -165,7 +103,6 @@ body {
 
     color: rgb(241, 244, 245);
     color: white;
-    background: rgb(147, 220, 247);
 
     font-size: 2vh;
     font-weight: 800;
@@ -177,16 +114,33 @@ body {
     border-radius: 43px;
 }
 
-.signup:hover {
-    color: white;
-    background-color: rgb(97,207,248);
-    /* background-color: rgb(179,228,238); */
-       box-shadow:  14px 14px 39px #d8dbdcbe, 
-                -4px -4px 39px #f7e8f7;
+.log {
+  background: rgb(147, 220, 247);
 }
 
-.signup:active{
-    background-color: rgb(97,207,248);;
+.sign {
+  background: rgb(244, 156, 224);
+}
+
+.log:hover {
+    color: white;
+    background-color: rgb(97,207,248);
+}
+
+.sign:hover {
+    color: white;
+    background-color: rgb(247, 136, 221);
+}
+
+.log:active{
+    background-color: rgb(97,207,248);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+.sign:active{
+    background-color: rgb(247, 136, 221);
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;

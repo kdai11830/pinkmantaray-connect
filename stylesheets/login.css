@@ -17,7 +17,7 @@ body {
 
 #login-body {
     height: 100vh;
-    background-color: #eff3f5;
+    background-color: rgb(4, 4, 46);
 }
 
 /* the postcard */
@@ -41,9 +41,9 @@ body {
 
     border-radius: 1vh;
     /* background: #f4f7f9; */
-    background: #fefefe;
-    box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
 }
 
 #login-page div {
@@ -68,14 +68,9 @@ body {
 /* "connect" */
 #login-page > div:first-child span{
    color: var(--pink);
-   color: black;
+   color: white;
    text-shadow: rgba(218, 213, 213, 0.603) 0px 0px 10px;
    font-size: 8vh;
-   /* text-shadow: 
-   -8px -8px 12px rgba(201, 199, 199, 0.543),
-   8px 8px 12px rgba(0,0,0,0.08);
-   caret-color:#262626;
-   outline: none; */
 }
 
 /* middle line */
@@ -104,7 +99,7 @@ body {
     font-family: 'Century Gothic', sans-serif;
     font-size: 4vh;
     word-spacing: 0.3vh;
-    color: rgba(2, 2, 2, 0.632);
+    color: white;
 }
 
 #login-form {
@@ -123,14 +118,14 @@ body {
     border-radius: 1rem;
     font-size: 2.5vh;
     padding-left: 1.4rem;
-    box-shadow: inset .2rem .2rem .5rem #d7e4f0, 
-                inset -.2rem -.2rem .5rem var(--white);
+    box-shadow: inset .2rem .2rem .5rem black, 
+                inset -.2rem -.2rem .5rem gray;
     background: none;
-    color: var(--greyDark);
+    color: white;
 }
 
 #login-form input::placeholder { 
-    color: var(--greyLight-3); 
+    color: rgb(181, 181, 184);
 }
 
 #login-form input:focus { 

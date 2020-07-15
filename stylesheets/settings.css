@@ -1,3 +1,4 @@
+
 h2 {
     color: rgb(139, 218, 247);
     color: rgb(244, 156, 224);
@@ -22,17 +23,17 @@ body > div {
     left: 50%;
     /* padding-right: 4vh; */
 
-    transform: translate(-50%, -50%);
+    /* transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%); */
 
     border-radius: 1vh;
     /* background: #f4f7f9; */
-    background: #fefefe;
-    box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
 }
 
 /* the text */

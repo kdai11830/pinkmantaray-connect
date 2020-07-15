@@ -8,32 +8,37 @@ h2 {
     text-align: left;
 }
 
+#profileBody {
+    background-color: rgb(4, 4, 46);
+}
+
 #connectBody {
     display: flex;
     flex-direction: column;
     padding-left: 8vh;
+    color: white;
 }
 
 #profilePage {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     
-    width: 91vh;
-    height: 62vh;
+    width: 85vh;
+    height: 59vh;
     position: fixed;
     top: 31%;
     left: 28%;
 
     border-radius: 1vh;
     /* background: #f4f7f9; */
-    background: #fefefe;
-    box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
 }
 
 #profileInfo {
-    width: 50%;
+    /* width: 50%; */
     height: 100%;
     text-transform: capitalize;
 }
@@ -43,6 +48,7 @@ h2 {
     flex-direction: column;
     height: 100%;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 #profileLeft div:nth-child(2) {
@@ -51,7 +57,7 @@ h2 {
 }
 
 .fab, .far {
-    color: rgb(27, 29, 94);
+    color: rgb(244, 244, 247);
 }
 
 .fab:hover, .far:hover {
@@ -81,6 +87,7 @@ h2 {
     padding-bottom: 2vh;
 }
 
+/* profile name */
 #profileLeft > div:first-child {
     /* background-color: violet; */
     width: 22vh;
@@ -92,8 +99,7 @@ h2 {
 
 
     font-family: 'Roboto', sans-serif;
-    font-size: 12vh;
-    font-size: 12vh;
+    font-size: 5vh;
     font-weight: 600;
     text-transform: capitalize;
     color: rgb(242, 123, 214);
@@ -117,29 +123,38 @@ h2 {
 }
 
 #reportDiv button {
-   height: 7vh;
+   /* height: 7vh; */
     width: 18vh;
 
-    color: white;
-    background: rgb(139, 218, 247);
+    color: rgb(139, 218, 247);
+    background: none;
 
     font-size: 2vh;
     font-weight: 800;
-    text-transform: uppercase;
+    text-transform: capitalize;
 
     outline: none;
     border: none;
 	text-align: center;
     cursor: pointer;
-    border-radius: 43px;
+    /* border-radius: 43px; */
     /* margin-left: 79vh; */
 }
 
-#reportDiv button:active {
-    color: rgb(228, 220, 220);
+#reportDiv button:hover {
+    text-decoration: underline;
 }
 
 #profilePage > div, #profileForm {
-    padding: 0 10vh;
+    /* padding: 0 10vh; */
+    text-transform: capitalize;
+}
+
+td > span {
+    color: rgb(139, 218, 247);
+    background: none;
+
+    font-size: 2vh;
+    font-weight: 800;
     text-transform: capitalize;
 }

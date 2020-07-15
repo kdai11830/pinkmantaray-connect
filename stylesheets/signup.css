@@ -4,7 +4,8 @@
 
 body {
     margin: 0px;
-    background-color: #eff3f5;
+    background-color: rgb(4, 4, 46);
+    color: white;
 }
 
 /* postcard */
@@ -35,9 +36,9 @@ body > form {
     -ms-transform: translate(-50%, -50%);
 
     border-radius: 1vh;
-    background: #fefefe;
-    box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
 
     overflow-y:auto;
 }
@@ -58,7 +59,6 @@ body > form > h1:first-child {
     font-size: 7vh;
     text-transform: uppercase;
     font-weight: bold;
-    color: rgb(43, 41, 41);
 
 }
 
@@ -111,6 +111,10 @@ body > form > h1:first-child {
     /* padding: 10vh; */
 }
 
+.signup-info > div > label {
+    color: rgb(244, 156, 224);
+}
+
 .further-signup-info > div {
     display: flex;
     flex-direction: column;
@@ -118,6 +122,7 @@ body > form > h1:first-child {
 
 .further-signup-info div label {
     margin: 4vh 0 2vh 0;
+    color: rgb(244, 156, 224);
 }
 
 /* middle line */
@@ -139,10 +144,10 @@ body > form > h1:first-child {
     border-radius: 1rem;
     font-size: 2.5vh;
     padding-left: 1.4rem;
-    box-shadow: inset .2rem .2rem .5rem #c6ced3, 
-                inset -.2rem -.2rem .5rem white;
+    box-shadow: inset .2rem .2rem .5rem black, 
+                inset -.2rem -.2rem .5rem gray;
     background: none;
-    color: rgb(80, 79, 79);
+    color: white;
 }
 
 #select_state, #select_lang, #select_year, #select_country {
@@ -221,6 +226,7 @@ body > form > h1:first-child {
     height: 4vh;
     font-family: 'Century Gothic', sans-serif;
     padding-left: 1vh;
+    
 }
 
 /* .signup-id-info div {
@@ -235,10 +241,9 @@ body > form > h1:first-child {
 }
 
 #notRead {
-    position: absolute;
-    bottom: 26px;
+    /* position: absolute;
+    bottom: 26px; */
 }
-
 
 
 #resource_div {

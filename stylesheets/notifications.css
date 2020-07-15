@@ -83,9 +83,9 @@ body > div > div {
 
 
     border-radius: 1vh;
-    background: #fefefe;
-    box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
 
     overflow-y:auto;
 }
