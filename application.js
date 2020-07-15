@@ -394,7 +394,7 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 		edit = false
 	}
 
-	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.instagram, info.email,
+	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.instagram, info.email, info.hidden,
 		language.language, gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
 		FROM user_info info
 		LEFT JOIN user_language language ON language.user_id = info.id
@@ -426,6 +426,7 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 			infoVals["year"] = results[i].year;
 			infoVals["instagram"] = results[i].instagram;
 			infoVals["email"] = results[i].email;
+			infoVals["hidden"] = results[i].hidden;
 
 			if (("gender" in infoVals) && !(infoVals["gender"].includes(results[i].gender)))
 				infoVals["gender"].push(results[i].gender);
@@ -1022,7 +1023,7 @@ io.sockets.on('connection', function(socket) {
 			conn.user_id = info.id WHERE 
 			(info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
 			OR ((info.id NOT IN (SELECT conn.connection_id FROM connections conn)) AND (info.id NOT IN (SELECT conn.user_id FROM connections conn)))) 
-			AND (info.reported != 1) AND `;
+			AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND `;
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] != '') {
@@ -1383,6 +1384,17 @@ io.sockets.on('connection', function(socket) {
 					}
 				}
 			});
+		});
+	});
+
+	socket.on('hideProfile', function(vals) {
+		var hide = '';
+		if (vals["hide"]) hide = '1';
+		else hide = '0';
+		var sql = `UPDATE user_info info SET hidden = ` + hide + ` WHERE id = ?`;
+		connection.query(sql, socket.request.session.user_id, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
 		});
 	});
 
