@@ -11,6 +11,7 @@ body {
 </style>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script> 
 <script type="text/javascript" src="/scripts/formScript.js"></script>
 
@@ -376,7 +377,7 @@ body {
 		</div>
 
 		<label for="select_language">Language: </label>
-		<select name="select_language" data-placeholder="Choose a Language...">
+		<select name="select_language" id="select_language" data-placeholder="Choose a Language...">
 			<option value=""></option>
 			<option value="Afrikaans">Afrikaans</option>
 			<option value="Albanian">Albanian</option>
@@ -573,6 +574,106 @@ body {
 					<input type="checkbox" name="entry_religion[]" value="noanswer"> Prefer not to say
 				</label>
 			</div>
+
+			<div class='ui-widget'>
+				<label><h3>Religion (select all that apply): </h3></label>
+				<select id="combobox">
+					<option value="">Prefer not to answer</option>
+					<option value="Ahmadiyya">Ahmadiyya</option>
+					<option value="Aladura">Aladura</option>
+					<option value="Amish">Amish</option>
+					<option value="Anglicanism">Anglicanism</option>
+					<option value="Asatru">Asatru</option>
+					<option value="Assemblies of God">Assemblies of God</option>
+					<option value="Atheism">Atheism</option>
+					<option value="Baha'i Faith">Baha'i Faith</option>
+					<option value="Baptists">Baptists</option>
+					<option value="Bon">Bon</option>
+					<option value="Buddhism">Buddhism</option>
+					<option value="Candomble">Candomble</option>
+					<option value="Cao Dai">Cao Dai</option>
+					<option value="Cathari">Cathari</option>
+					<option value="Catholicism">Catholicism</option>
+					<option value="Charismatic movement">Charismatic movement</option>
+					<option value="Chinese Religion">Chinese Religion</option>
+					<option value="Christianity">Christianity</option>
+					<option value="Church of God">Church of God</option>
+					<option value="Church of God in Christ">Church of God in Christ</option>
+					<option value="Confucianism">Confucianism</option>
+					<option value="Conservative Judaism">Conservative Judaism</option>
+					<option value="Deism">Deism</option>
+					<option value="Druze">Druze</option>
+					<option value="Eastern Orthodox Church">Eastern Orthodox Church</option>
+					<option value="Epicureanism">Epicureanism</option>
+					<option value="Evangelicalism">Evangelicalism</option>
+					<option value="Falun Gong">Falun Gong</option>
+					<option value="Gnosticism">Gnosticism</option>
+					<option value="Greek Religion">Greek Religion</option>
+					<option value="Hare Krishna">Hare Krishna</option>
+					<option value="Hasidism">Hasidism</option>
+					<option value="Hellenic Reconstructionism">Hellenic Reconstructionism</option>
+					<option value="Hinduism">Hinduism</option>
+					<option value="Islam">Islam</option>
+					<option value="Jainism">Jainism</option>
+					<option value="Jehovah's Witnesses">Jehovah's Witnesses</option>
+					<option value="Judaism">Judaism</option>
+					<option value="Kabbalah">Kabbalah</option>
+					<option value="Kemetic Reconstructionism">Kemetic Reconstructionism</option>
+					<option value="Lutheranism">Lutheranism</option>
+					<option value="Mahayana Buddhism">Mahayana Buddhism</option>
+					<option value="Mayan Religion">Mayan Religion</option>
+					<option value="Methodism">Methodism</option>
+					<option value="Mithraism">Mithraism</option>
+					<option value="Mormonism">Mormonism</option>
+					<option value="Neopaganism">Neopaganism</option>
+					<option value="New Age">New Age</option>
+					<option value="New Thought">New Thought</option>
+					<option value="Nichiren">Nichiren</option>
+					<option value="Norse Religion">Norse Religion</option>
+					<option value="Olmec Religion">Olmec Religion</option>
+					<option value="Oneness Pentecostalism">Oneness Pentecostalism</option>
+					<option value="Orthodox Judaism">Orthodox Judaism</option>
+					<option value="Pentecostalism">Pentecostalism</option>
+					<option value="Presbyterianism">Presbyterianism</option>
+					<option value="Priory of Sion">Priory of Sion</option>
+					<option value="Protestantism">Protestantism</option>
+					<option value="Pure Land Buddhism">Pure Land Buddhism</option>
+					<option value="Quakers">Quakers</option>
+					<option value="Rastafarianism">Rastafarianism</option>
+					<option value="Reform Judaism">Reform Judaism</option>
+					<option value="Rinzai Zen Buddhism">Rinzai Zen Buddhism</option>
+					<option value="Roman Religion">Roman Religion</option>
+					<option value="Satanism">Satanism</option>
+					<option value="Seventh-Day Adventism">Seventh-Day Adventism</option>
+					<option value="Shaivism">Shaivism</option>
+					<option value="Shi'a Islam">Shi'a Islam</option>
+					<option value="Shinto">Shinto</option>
+					<option value="Sikhism">Sikhism</option>
+					<option value="Soto Zen Buddhism">Soto Zen Buddhism</option>
+					<option value="Spiritualism">Spiritualism</option>
+					<option value="Stoicism">Stoicism</option>
+					<option value="Sufism">Sufism</option>
+					<option value="Sunni Islam">Sunni Islam</option>
+					<option value="Taoism">Taoism</option>
+					<option value="Tendai Buddhism">Tendai Buddhism</option>
+					<option value="Theravada Buddhism">Theravada Buddhism</option>
+					<option value="Tibetan Buddhism">Tibetan Buddhism</option>
+					<option value="Typhonian Order">Typhonian Order</option>
+					<option value="Umbanda">Umbanda</option>
+					<option value="Unification Church">Unification Church</option>
+					<option value="Unitarian Universalism">Unitarian Universalism</option>
+					<option value="Vaishnavism">Vaishnavism</option>
+					<option value="Vajrayana Buddhism">Vajrayana Buddhism</option>
+					<option value="Vedanta">Vedanta</option>
+					<option value="Vineyard Churches">Vineyard Churches</option>
+					<option value="Wicca">Wicca</option>
+					<option value="Worldwide Church of God">Worldwide Church of God</option>
+					<option value="Yezidi">Yezidi</option>
+					<option value="Zen">Zen</option>
+					<option value="Zionism">Zionism</option>
+					<option value="Zoroastrianism">Zoroastrianism</option>
+				</select>
+			</div>
 		</div>
 
 		<div id="interests_div">
@@ -589,11 +690,11 @@ body {
 		</div>
 
 		<div id="resource_div">
-			<label for="entry_friend_resource">I'm looking for: </label>
+			<label for="entry_friend_resource">I'm looking... </label>
 			<input type="radio" name="entry_friend_resource" id="entry_friend" value="friend" checked>
-			<label for="entry_friend">Friend</label>
+			<label for="entry_friend">For friends/resources</label>
 			<input type="radio" name="entry_friend_resource" id="entry_resource" value="resource">
-			<label for="entry_resource">Resource</label>
+			<label for="entry_resource">To be a resource for others</label>
 			<input type="radio" name="entry_friend_resource" id="entry_both" value="friend,resource">
 			<label for="entry_both">Both</label>
 		</div>

@@ -85,7 +85,7 @@ var smtpTransport = nodemailer.createTransport({
 var rand, host;
 
 // random string generator for authenticator token
-function genRandomString(size=128) {
+function genRandomString(size=45) {
 	return crypto
 		.randomBytes(size)
 		.toString('hex')
@@ -207,7 +207,7 @@ app.get('/verify', function(req, res) {
 			// key matches the verification link, update db and login
 			if (req.query.id == rand_key) {
 				console.log('email is verified');
-				var sql = `UPDATE user_info SET verify_key = NULL WHERE username = ?`;
+				var sql = `UPDATE user_info SET verify_key = NULL, verified = 1 WHERE username = ?`;
 				connection.query(sql, [username], function(errors, results, fields) {
 					if (errors) throw errors;
 					req.session.verified = true;
@@ -226,11 +226,7 @@ app.get('/verify', function(req, res) {
 
 
 /** HOME PAGE **/
-app.get('/', restrict, verifyRestrict, function(req, res) {
-	verified = true;
-	if (req.query.verified == 'false') {
-		verified = false;
-	}
+app.get('/', restrict, function(req, res) {
 
 	// double sql query
 	var sql = `SELECT user_info.id, name, pronouns, email, instagram FROM user_info 
@@ -245,7 +241,7 @@ app.get('/', restrict, verifyRestrict, function(req, res) {
 		}
 		console.log(req.session.user_id);
 		console.log(results);
-		res.render('index', {"results": results, 'verified': verified});
+		res.render('index', {"results": results, 'verified': req.session.verified});
 		return;
 	});
 });
@@ -926,7 +922,8 @@ app.post('/new-user-auth', function(req, res) {
 									host = req.get('host');
 									var link = 'http://'+req.get('host')+'/verify?username='+req.session.username+'&id='+rand;
 									var mailOptions = {
-										to: req.query.to,
+										from: 'noreply@pinkmantaray.com',
+										to: email,
 										subject: 'Pinkmantaray Connect Email Verification',
 										html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
 									}
@@ -936,7 +933,7 @@ app.post('/new-user-auth', function(req, res) {
 											console.log(error);
 											// do some other error handling TODO
 										} else {
-											console.log('message sent: ' + response.message);
+											console.log(response);
 											// log user in with unverified restrictions
 											res.redirect('/?verified=false');
 											return
@@ -1350,16 +1347,18 @@ io.sockets.on('connection', function(socket) {
 								if (errors.errno == 1062) {
 									// duplicate entry error
 									console.log('DUPLICATE ENTRY ERROR');
-									// return some value to jquery script
-								} else throw errors;
-
-								// failure, send failure message back to settings
-								//socket.emit('updateInfoResult', {'success': false});
-								//return;
+									socket.emit('updateInfoResult', {'success': 'duplicate'});
+									return;
+								} else {
+									console.log('OTHER ERROR');
+									// failure, send failure message back to settings
+									socket.emit('updateInfoResult', {'success': 'false'});
+									return;
+								}
 							} else {
 								console.log("SUCCESS");
 								// success, send success message back to settings
-								socket.emit('updateInfoResult', {'success': true});
+								socket.emit('updateInfoResult', {'success': 'true'});
 								return;
 							}
 						});

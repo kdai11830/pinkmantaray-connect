@@ -22,74 +22,104 @@ $(document).ready(function() {
     	}
 	});
 
+	var currentDialog;
+
 	$('#changeUsername').click(function() {
 		$('#changeUsernameDiv').dialog('open');
+		currentDialog = $('#changeUsernameDiv');
 	});
 
 	$('#changePassword').click(function() {
 		$('#changePasswordDiv').dialog('open');
+		currentDialog = $('#changePasswordDiv');
 	});
 
 	$('#changeEmail').click(function() {
 		$('#changeEmailDiv').dialog('open');
+		currentDialog = $('#changeEmailDiv');
 	});	
 
 	$('#changeInstagram').click(function() {
 		$('#changeInstagramDiv').dialog('open');
+		$('#invalidInstagram').remove();
+		currentDialog = $('#changeInstagramDiv');
 	});
 
-	$('#usernameSubmit').click(function() {
+	$('#usernameSubmit').click(function(e) {
+		e.preventDefault();
 		var emitVals = {
-			"verifyPass": $("#usernameForm [name='verifyPass']").val(),
-			"username": $("[name='newUsername']").val()
+			"verifyPass": $("#usernameVerifyPass").val(),
+			"username": $("[name='username']").val()
 		}
 		socket.emit('updateInfo', emitVals);
+		return false;
 	});
 
-	$('#passwordSubmit').click(function() {
-		console.log($("#passwordSubmit [name='verifyPass']").val());
+	$('#passwordSubmit').click(function(e) {
+		e.preventDefault();
 		if ($("[name='newPass']").val() === $("[name='confirmPass']").val())
 		var emitVals = {
-			"verifyPass": $("#passwordForm [name='verifyPass']").val(),
-			"password": $("[name='newPass']").val()
+			"verifyPass": $("#passwordVerifyPass").val(),
+			"password": $("[name='password']").val()
 		}
 		socket.emit('updateInfo', emitVals);
+		return false;
 	});
 
 	// do we need email verification again?
-	$('#emailSubmit').click(function() {
+	$('#emailSubmit').click(function(e) {
+		e.preventDefault();
 		var emitVals = {
-			"verifyPass": $("#emailForm [name='verifyPass']").val(),
-			"email": $("[name='newEmail']").val()
+			"verifyPass": $("#emailVerifyPass").val(),
+			"email": $("[name='email']").val()
 		}
 		socket.emit('updateInfo', emitVals);
+		return false;
 	});
 
-	$('#instagramSubmit').click(function() {
+	$('#instagramSubmit').click(function(e) {
+		e.preventDefault();
+		$('#invalidInstagram').remove();
 		var req = new XMLHttpRequest();
 		req.open('GET', 'http://www.instagram.com/' + $("[name='instagram']").val() + '/', false);
 		req.send(null);
 		if (req.status != 404) {
 			var emitVals = {
-				"verifyPass": $("#instagramForm [name='verifyPass']").val(),
+				"verifyPass": $("#instagramVerifyPass").val(),
 				"instagram": $("[name='instagram']").val()
 			}
 			socket.emit('updateInfo', emitVals);
 		} else {
-			// TODO: add invalid instagram behavior here
+			$('[name="newInstagram"]').after('<p id="invalidInstagram">Invalid Instagram handle!</p>').css('color', 'red');
 		}
 	});
 
 	$('.cancelBtn').click(function() {
+		$('#duplicateMsg').remove();
 		$(this).closest('.dialog').dialog('close');
 	});
 
-	socket.on('updateInfoResult', function(d) {
-		if (d['success']) {
-			// TODO: display success message
-		} else {
-			// TODO: display failure message
-		}
+	$('.submitBtn').click(function() {
+		$('#duplicateMsg').remove();
 	})
+
+	$('.changeBtn').click(function() {
+		$('#successMsg').empty();
+	});
+
+	socket.on('updateInfoResult', function(d) {
+		if (d['success'] === 'true') {
+			// $('#successMsg').append('<h3>User information successfully updated!</h3>');
+			currentDialog.dialog('close');
+			// var value = currentDialog.find('.changeVal').attr('name');
+			location.reload(true);
+		} else if (d['success'] === 'false') {
+			$('#successMsg').append('<h3>Something went wrong! User information not failed to update.</h3>');
+			currentDialog.dialog('close');
+		} else { // duplicate entry
+			var value = currentDialog.find('.changeVal').attr('name');
+			currentDialog.prepend('<p id="duplicateMsg">This '+ value +' is already in use!</p>');
+		}
+	});
 
 });

@@ -20,62 +20,63 @@ body {
 
 <body>
 	<%- include("../partials/header") %>
+	<div id='successMsg'></div>
 	
 	<div id="usernameDiv">
-		<p id="username">Username: <%= data.username %></p>
-		<button id="changeUsername">Change</button>
+		<p>Username: <%= data.username %></p>
+		<button class='changeBtn' id="changeUsername">Change</button>
 	</div>
 
 	<div id="changeUsernameDiv" class='dialog'>
 		<form id="usernameForm">
-			<input type="password" name="verifyPass" placeholder="Current password" required>
-			<input type="text" name="newUsername" placeholder="New username" required>
+			<input type="password" name="verifyPass" id='usernameVerifyPass' placeholder="Current password" required>
+			<input type="text" class="changeVal" name="username" placeholder="New username" required>
 			<button class='cancelBtn'>Cancel</button>
-			<button class='submitBtn' id='usernameSubmit' type="submit">Submit</button>
+			<button class='submitBtn' id='usernameSubmit'>Submit</button>
 		</form>
 	</div>
 
 	<div id="passwordDiv">
-		<p id="password">Change password</p>
-		<button id="changePassword">Change</button>
+		<p>Change password</p>
+		<button class='changeBtn' id="changePassword">Change</button>
 	</div>
 
 	<div id="changePasswordDiv" class='dialog'>
 		<form id="passwordForm">
-			<input type="password" name="verifyPass" placeholder="Current password" required>
-			<input type="password" name="newPass" placeholder="New password" required>
+			<input type="password" name="verifyPass" id='passwordVerifyPass' placeholder="Current password" required>
+			<input type="password" class="changeVal" name="password" placeholder="New password" required>
 			<input type="password" name="confirmPass" placeholder="Confirm new password" required>
 			<button class='cancelBtn'>Cancel</button>
-			<button class='submitBtn' id='passwordSubmit' type="submit">Submit</button>
+			<button class='submitBtn' id='passwordSubmit'>Submit</button>
 		</form>
 	</div>
 
 	<div id="emailDiv">
-		<p id="email">Email: <%= data.email %></p>
-		<button id="changeEmail">Change</button>
+		<p>Email: <%= data.email %></p>
+		<button class='changeBtn' id="changeEmail">Change</button>
 	</div>
 
 	<div id="changeEmailDiv" class='dialog'>
 		<form id="emailForm">
-			<input type="password" name="verifyPass" placeholder="Current password" required>
-			<input type="text" name="newEmail" placeholder="New email" required>
+			<input type="password" name="verifyPass" id='emailVerifyPass' placeholder="Current password" required>
+			<input type="text" class="changeVal" name="email" placeholder="New email" required>
 			<button class='cancelBtn'>Cancel</button>
-			<button class='submitBtn' id='emailSubmit' type="submit">Submit</button>
+			<button class='submitBtn' id='emailSubmit'>Submit</button>
 		</form>
 	</div>
 
 
 	<div id="instagramDiv">
-		<p id="instagram">Instagram handle: <%= data.instagram %></p>
-		<button id="changeInstagram">Change</button>
+		<p>Instagram handle: <%= data.instagram %></p>
+		<button class='changeBtn' id="changeInstagram">Change</button>
 	</div>
 
 	<div id="changeInstagramDiv" class='dialog'>
 		<form id="instagramForm">
-			<input type="password" name="verifyPass" placeholder="Current password" required>
-			<input type="text" name="newInstagram" placeholder="New Instagram handle" required>
+			<input type="password" name="verifyPass" id='instagramVerifyPass' placeholder="Current password" required>
+			<input type="text" class="changeVal" name="instagram" placeholder="New Instagram handle" required>
 			<button class='cancelBtn'>Cancel</button>
-			<button class='submitBtn' id='instagramSubmit' type="submit">Submit</button>
+			<button class='submitBtn' id='instagramSubmit'>Submit</button>
 		</form>
 	</div>
 
