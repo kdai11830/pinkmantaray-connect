@@ -929,9 +929,18 @@ app.post('/new-user-auth', function(req, res) {
 									}
 									console.log(mailOptions);
 									smtpTransport.sendMail(mailOptions, function(error, response) {
+
 										if (error) {
 											console.log(error);
+
+											if (error.responseCode ==550) {
+												res.redirect('/?verified=false');
+											} 
+
+											else throw error; // idk what other errors there can be
+
 											// do some other error handling TODO
+											// actually does it even matter if they provide invalid email?
 										} else {
 											console.log(response);
 											// log user in with unverified restrictions
@@ -957,6 +966,7 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('checkDuplicates', function(vals) {
 		console.log('CHECKING DUPES');
+		console.log(vals);
 		var checks = Object.keys(vals);
 		var sql = '';
 		var insertVals = [];
@@ -973,6 +983,14 @@ io.sockets.on('connection', function(socket) {
 				return;
 			} 
 			var duplicates = [];
+			// username and email
+			if (results.length >= 2) {
+				if (results[0].length > 0) duplicates.push(checks[0]);
+				if (results[1].length > 0) duplicates.push(checks[1]);
+			// instagram
+			} else {
+				duplicates.push(checks[0]);
+			}
 			for (var i = 0; i < results.length; i++) {
 				if (results[i].length > 0) {
 					duplicates.push(checks[i]);
