@@ -155,9 +155,9 @@ app.get('/welcome', function(req, res) {
 /** LOGIN PAGE **/
 app.get('/login', function(req, res) {
 	// clear current session
-	auth = true;
-	if (req.query.auth == 'false') {
-		auth = false;
+	auth = '';
+	if ('auth' in req.query) {
+		auth = req.query.auth;
 	}
 	req.session.destroy();
 	res.render('login/index', {'auth': auth});
@@ -563,7 +563,8 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 	var sql = `UPDATE user_info info SET
 		info.reported = 1 WHERE info.id = ?;
 		INSERT INTO report_logs (user_id, reported_id, reason)
-		VALUES (?, ?, ?);`;
+		VALUES (?, ?, ?);
+		SELECT * FROM report_logs WHERE report_time >= DATE_SUB(NOW(), interval 1 hour);`;
 	var insertVals = [reportedId, req.session.user_id, reportedId, reason];
 	console.log(insertVals);
 
@@ -728,8 +729,16 @@ app.post('/auth', function(req, res) {
 					if (result) {
 
 						// redirect if correct information entered
-						console.log("SUCCESS");
+						console.log("ACCOUNT FOUND");
 						// req.session.id = results[0].id;
+
+						if (results[0].reported == 1) {
+							console.log("ACCOUNT WAS REPORTED");
+							res.redirect('/login?auth=reported');
+						} else if (results[0].on_hold == 1) {
+							console.log("ACCOUNT ON HOLD");
+							res.redirect('/login?auth=onhold');
+						}
 
 						req.session.loggedin = true;
 						req.session.username = username;
@@ -748,14 +757,14 @@ app.post('/auth', function(req, res) {
 						// bad password
 						console.log("FAILED");
 						// res.send('Incorrect username and/or password!');
-						res.redirect('/login?auth=false');
+						res.redirect('/login?auth=failed');
 						return;
 					}
 				}).catch((err)=>console.error(err));
 
 			} else {
 				// bad username
-				res.redirect('/login?auth=false');
+				res.redirect('/login?auth=failed');
 				return;
 			}			
 			// res.end();

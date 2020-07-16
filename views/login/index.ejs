@@ -17,8 +17,14 @@ body {
 <div class="login">
 	<h2>Login</h2>
 
-	<% if (!auth) { %>
-		<!-- add error message div here -->
+	<% if (auth == 'failed') { %>
+		<div class='loginFail'>Invalid username or password!</div>
+
+	<% } else if (auth == 'reported') { %>
+		<div class='loginFail'>Your account has been put under review because it was reported by another user. If you have any questions, please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>,</div>
+
+	<% } else if (auth == 'onhold') { %>
+		<div class='loginFail'><p>Your account has been permanently removed due to violations of our <a href="/guidelines">community guidelines</a>. If you think this was a mistake or if you have questions, please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>.</p></div>
 	<% } %>
 
 	<form action="auth" method="POST">
