@@ -18,8 +18,8 @@
 <body>
 
 <%- include("../partials/header") %>
-<div id="notif-body">
-	<div>
+<div>
+	<div id="notif-body">
 		<div class="notif-header">Requests</div>
 		<table id="invitationsTable">
 			<% var counter = 0; %>
@@ -48,9 +48,6 @@
 			<% var counter = 0; %>
 			<% for (var i in data['pending']) { %>
 				<tr id="<%= counter %>">
-					<!-- <td id="buttons<%= counter %>" class="buttonParent">
-						<td><button class="ignoreBtn cancelBtn" id=id="cancel<%= counter %>">✘</button></td>
-					</td> -->
 					<td id="buttons<%= counter %>">
 						<button class="cancelBtn" id="cancel<%= counter %>">✘</button>
 					</td>

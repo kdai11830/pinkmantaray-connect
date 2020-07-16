@@ -1,3 +1,9 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+    font-size: 1vh;
+}
+
 #editBody {
     display: flex;
     flex-direction: column;
@@ -18,7 +24,7 @@ h2 {
     flex-direction: column;
     justify-content: space-between;
     align-items: baseline;
-    height: 70vh;
+    height: 65vh;
     padding-top: 3vh;
 }
 
@@ -30,7 +36,11 @@ h2 {
 
 #editForm > div > label {
     font-weight: bold;
-    padding-right: 2vh;
+    padding: 0 1vh 0 2vh;
+}
+
+#editForm > div > label:first-child {
+    padding-left: 0;
 }
 
 #interests {
