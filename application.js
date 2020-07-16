@@ -210,7 +210,8 @@ app.get('/', restrict, function(req, res) {
 	// double sql query
 	var sql = `SELECT user_info.id, name, pronouns, email, instagram FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
-		WHERE connections.user_id = ? AND connections.pending = 0 AND user_info.reported != 1; `
+		WHERE connections.user_id = ? AND connections.pending = 0 AND 
+		user_info.reported != 1 AND user_info.on_hold != 1; `
 
 	connection.query(sql, req.session.user_id, function(err, results, fields) {
 		if (err) {
