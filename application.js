@@ -572,10 +572,13 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 				html: html
 			}
 			console.log(mailOptions);
-			smtpTransport.sendMail(mailOptions, function(error, response) 
-
-			req.session.destroy();
-			res.redirect('/login?auth=onhold');
+			smtpTransport.sendMail(mailOptions, function(error, response) {
+				if (error) throw error;
+				console.log(response);
+				req.session.destroy();
+				res.redirect('/login?auth=onhold');
+				return;
+			});
 		}
 
 		res.redirect('/reported?success='+success);
