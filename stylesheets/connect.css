@@ -1,3 +1,8 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+}
+
 #connect-body {
     display: flex;
     flex-direction: column;
@@ -40,7 +45,7 @@ h2 {
 #language_list li {
     padding-top: 0;
     padding-bottom: 0;
-    color: black;
+    /* color: black; */
     cursor: default;
 }
 
@@ -52,6 +57,7 @@ h2 {
 .search-row > label {
     font-weight: bold;
     padding-right: 2vh;
+    color: rgb(139, 218, 247);
 }
 
 #option_gender_div {

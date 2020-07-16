@@ -36,7 +36,11 @@ tbody {
 }
 
 tbody tr:nth-child(even) {
-    background-color: rgb(240, 248, 249);
+    background-color: rgb(49, 50, 85);
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgb(22, 22, 61);
 }
 
 tr {
@@ -50,14 +54,14 @@ tr > td:nth-child(3), tr > td:nth-child(4), tr > td:nth-child(5) {
 }
 
 tr > td:nth-child(5) {
-    background-color: #fbea2b8e;
+    /* background-color: #fbea2b8e; */
     
 }
 
 tr > td:nth-child(4) {
-    background-color: rgba(139, 218, 247, 0.651);
+    /* background-color: rgba(139, 218, 247, 0.651); */
 }
 
 tr > td:nth-child(3) {
-    background-color: rgba(223, 42, 239, 0.692);
+    /* background-color: rgb(244, 156, 224); */
 }
