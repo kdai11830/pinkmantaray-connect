@@ -43,7 +43,7 @@ body {
 						<img border="0" alt="www.instagram.com/<%=results[i].instagram %>" 
 						src="/views/imgs/instagram_logo.png" width="20" height="20"></a>
 					</td>
-					<td><a href=""><img border="0" alt="email" 
+					<td><a href="mailto:<%= results[i].email %>"><img border="0" alt="Email <%= results[i].name %>" 
 						src="/views/imgs/email_icon.png" width="20" height="20"></a></td> <!-- TODO -->
 					<td><a href="/report?id=<%= results[i].id %>"><img border="0" alt="Report user" 
 						src="/views/imgs/report_icon.png" width="20" height="20"></a></td>

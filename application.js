@@ -533,6 +533,18 @@ app.get('/settings', restrict, verifyRestrict, function(req, res) {
 });
 
 
+/** COMMUNITY GUIDELINES PAGE **/
+app.get('/guidelines', function(req, res) {
+	res.render('help/guidelines');
+	return;
+});
+
+
+/** CONTACT ADMIN PAGE **/
+app.get('/contact', function(req, res) {
+	res.render('help/contact');
+});
+
 
 /** LOGOUT FUNCTIONALITY **/
 app.get('/logout', function(req, res) {
@@ -564,7 +576,7 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 		}
 		res.redirect('/reported?success='+success);
 		return;
-	})
+	});
 });
 
 
