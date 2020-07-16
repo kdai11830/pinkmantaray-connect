@@ -16,7 +16,7 @@ h2 {
 }
 
 #my-connections {
-    padding: 0 0 0 8vh;
+    padding: 6vh 0 0 8vh;
 
 }
 
@@ -24,7 +24,7 @@ table {
     min-width: 181vh;
     border-collapse: collapse;
     border-radius: 4vh;
-    border-collapse:separate; 
+    /* border-collapse:separate;  */
     border-spacing: 0px 4vh;
 }
 

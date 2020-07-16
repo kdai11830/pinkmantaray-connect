@@ -2,6 +2,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+    background-color: rgb(4,4,46);
+    color: white;
+}
 body > div {
    display: flex; 
    /* font-family: 'Open Sans', sans-serif; */
@@ -16,7 +20,6 @@ body > div > div {
     text-transform: capitalize;
     align-items: center;
 }
-
 
 .notif-header {
     color: rgb(244, 156, 224);
@@ -73,7 +76,7 @@ body > div > div {
     flex-direction: column;
     align-items: center;
 
-    padding: 3vh 0;
+    /* padding: 3vh 0; */
     margin-top: 3vh;
 
     font-size: 2vh;
@@ -91,16 +94,22 @@ body > div > div {
 }
 
 tbody {
-    border-collapse: separate;
+    /* border-collapse: separate; */
     border-spacing:0 15px;
-    padding: 2vh;
+    /* padding: 2vh; */
     min-width: 80vh;
     font-size: 1.7vh;
     text-shadow: 0.3px 0.5px rgba(88, 87, 87, 0.521);
+    border-collapse: collapse;
 }
 
 tbody tr:nth-child(even) {
-    background-color: rgb(240, 248, 249);
+    background-color: rgb(49, 50, 85);
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgb(22, 22, 61);
+    background-color: #0d354e62;
 }
 
 tr {
@@ -109,6 +118,7 @@ tr {
     /* justify-content: space-between; */
     /* text-align: center; */
     height: 10vh;
+    width: 100%;
 }
 
 td {

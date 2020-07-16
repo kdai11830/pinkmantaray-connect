@@ -9,6 +9,11 @@ h2 {
     text-align: left;
 }
 
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+}
+
 /* the postcard */
 body > div {
     display: flex;
@@ -19,8 +24,8 @@ body > div {
     width: 91vh;
     height: 60vh;
     position: fixed;
-    top: 63%;
-    left: 50%;
+    top: 34%;
+    left: 29%;
     /* padding-right: 4vh; */
 
     /* transform: translate(-50%, -50%);
@@ -60,6 +65,7 @@ body > div > div button {
     font-weight: 800;
     border-radius: 43px;
     text-transform: uppercase; */
+    background: none;
 
     outline: none;
     border: none;
@@ -72,7 +78,7 @@ body > div > div button:hover {
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
         inset rgb(208, 210, 211) -2px -2px 4px; */
-        color: rgb(100, 206, 245);
+        color: rgb(82, 200, 243);
 }
 
 p > span {

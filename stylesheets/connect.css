@@ -127,14 +127,13 @@ h2 {
 }
 
 .connectBtn {
-    height: 3vh;
+    height: 4vh;
     /* width: 7vh; */
 
-    color: rgb(139, 218, 247);
-    color: rgb(244, 156, 224);
-    background: none;
+    color: white;
+    background: rgb(244, 156, 224);
 
-    font-size: 2vh;
+    font-size: 1vh;
     font-weight: 800;
     text-transform: uppercase;
 
