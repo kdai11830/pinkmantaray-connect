@@ -24,7 +24,7 @@ body {
 		<div class='loginFail'>Your account has been put under review because it was reported by another user. If you have any questions, please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>,</div>
 
 	<% } else if (auth == 'onhold') { %>
-		<div class='loginFail'><p>Your account has been permanently removed due to violations of our <a href="/guidelines">community guidelines</a>. If you think this was a mistake or if you have questions, please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>.</p></div>
+		<div class='loginFail'><p>You’ve recently reported too many accounts. Because we want to protect against potential fraudulent behavior, we are placing your account on hold while we review. Please check back later. If you have questions, contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>.</p></div>
 	<% } %>
 
 	<form action="auth" method="POST">

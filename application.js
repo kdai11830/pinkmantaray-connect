@@ -114,6 +114,9 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
 
+const maxReports = 10;
+
+
 /*****************************************************************************
 ******************************************************************************
 *****************************************************************************/
@@ -168,30 +171,6 @@ app.get('/login', function(req, res) {
 app.get('/signup', function(req, res) {
 	res.render('signup/index');
 });
-
-
-/** SEND VERIFICATION EMAIL **/
-app.get('/send', function(req, res) {
-	rand = genRandomString();
-	host = req.get('host');
-	var link = 'http://'+req.get('host')+'/verify?id='+rand;
-	var mailOptions = {
-		to: req.query.to,
-		subject: 'Pinkmantaray Connect Email Verification',
-		html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
-	}
-	console.log(mailOptions);
-	smtpTransport.sendMail(mailOptions, function(error, response) {
-		if (error) {
-			console.log(error);
-			// do some other error handling
-		} else {
-			console.log('message sent: ' + response.message);
-			// do some success handling
-		}
-	});
-});
-
 
 /** EMAIL VERIFICATION PATH **/
 app.get('/verify', function(req, res) {
@@ -564,8 +543,8 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 		info.reported = 1 WHERE info.id = ?;
 		INSERT INTO report_logs (user_id, reported_id, reason)
 		VALUES (?, ?, ?);
-		SELECT * FROM report_logs WHERE report_time >= DATE_SUB(NOW(), interval 1 hour);`;
-	var insertVals = [reportedId, req.session.user_id, reportedId, reason];
+		SELECT * FROM report_logs WHERE (user_id = ?) AND (report_time >= DATE_SUB(NOW(), interval 1 hour));`;
+	var insertVals = [reportedId, req.session.user_id, reportedId, reason, req.session.user_id];
 	console.log(insertVals);
 
 	connection.query(sql, insertVals, function(error, results, fields) {
@@ -575,6 +554,30 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 		if (results[0].affectedRows === 1) {
 			success = true;
 		}
+
+		// if reported too many times in the past, log them out and send email
+		if (results[2].length >= maxReports) {
+
+			host = req.get('host');
+			var html = `Hello `+ req.session.username + `,<br>
+				You’ve recently reported ` + results[2].length +` accounts. 
+				Because we want to protect against potential fraudulent behavior, we are placing your account on hold while we review.<br>
+				This email is sent to you from an account we use for sending message only. 
+				Please don’t reply to this email — we won’t receive your response. 
+				Please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a> if you have further questions.`
+			var mailOptions = {
+				from: 'noreply@pinkmantaray.com',
+				to: req.session.email,
+				subject: 'Pinkmantaray Connect Notification',
+				html: html
+			}
+			console.log(mailOptions);
+			smtpTransport.sendMail(mailOptions, function(error, response) 
+
+			req.session.destroy();
+			res.redirect('/login?auth=onhold');
+		}
+
 		res.redirect('/reported?success='+success);
 		return;
 	});
@@ -735,13 +738,16 @@ app.post('/auth', function(req, res) {
 						if (results[0].reported == 1) {
 							console.log("ACCOUNT WAS REPORTED");
 							res.redirect('/login?auth=reported');
+							return;
 						} else if (results[0].on_hold == 1) {
 							console.log("ACCOUNT ON HOLD");
 							res.redirect('/login?auth=onhold');
+							return;
 						}
 
 						req.session.loggedin = true;
 						req.session.username = username;
+						req.session.email = results[0].email;
 
 						// set remember me cookie
 						if (req.body.remember) {
@@ -965,6 +971,7 @@ app.post('/new-user-auth', function(req, res) {
 											// actually does it even matter if they provide invalid email?
 										} else {
 											console.log(response);
+											req.session.email = email;
 											// log user in with unverified restrictions
 											res.redirect('/?verified=false');
 											return
