@@ -111,7 +111,8 @@ body > form > h1:first-child {
     /* padding: 10vh; */
 }
 
-.signup-info > div > label {
+.signup-info > div > label, .further-signup-info div label {
+    font-weight: bolder;
     color: rgb(244, 156, 224);
 }
 
@@ -122,7 +123,6 @@ body > form > h1:first-child {
 
 .further-signup-info div label {
     margin: 4vh 0 2vh 0;
-    color: rgb(244, 156, 224);
 }
 
 /* middle line */
@@ -198,16 +198,24 @@ body > form > h1:first-child {
 .signup-id-info {
     display: flex;
     flex-direction: column;
-    padding-top: 57vh;
+    padding-top: 15vh;
     /* padding: 0 0vh 10vh 0; */
+}
+
+.culture-page {
+    padding-top: 25vh;
 }
 
 .signup-row {
     display: flex;
 }
 
-.signup-id-info div label h3 span {
+label h3 {
     color: rgb(244, 156, 224);
+}
+
+.signup-id-info div label h3 span, .signup-id-info div label h3 span, .culture-page label h3 span {
+    color: white;
 }
 
 .consent-checkbox {
@@ -234,7 +242,7 @@ body > form > h1:first-child {
     padding: 0 1vh 0vh 0;
 } */
 
-.signup-id-info div div {
+.signup-id-info div div, .culture-page div div {
     display: flex;
     flex-direction: column;
     width: 62vh;
@@ -252,4 +260,18 @@ body > form > h1:first-child {
 
 .close {
     color: red;
+}
+
+.blurb {
+    color: rgb(147, 220, 247);
+    /* padding-top: 12vh; */
+    display: block;
+}
+
+.blurb a {
+    color: rgb(19, 241, 255);
+}
+
+.looking-for {
+    width: 124vh
 }

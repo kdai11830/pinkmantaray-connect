@@ -286,27 +286,179 @@
 							<option value="ZMB">Zambia</option>
 							<option value="ZWE">Zimbabwe</option>
 						</select>
+						<label for="option_age1">Age range: </label> <!-- TODO: add values based on minimum and maximum ages (inclusive) -->
+						<select name="option_age1">
+							<option value=""></option>
+							<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
+							<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
+							<% } %>
+						</select>
+						<div>to</div>
+						<select name="option_age2">
+							<option value=""></option>
+							<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
+							<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
+							<% } %>
+						</select>
+
+							<label for="interests">Interests: </label>
+							<input type="list" name="interests" id="interests" placeholder="Add interests by typing and pressing enter.">
+							<datalist id="interests_datalist">
+								<option value="watermelon" />
+								<option value="Canada" />
+								<option value="refrigerator" />
+								<option value="Valentine's Day" />
+							</datalist>
+							<ul id="interests_list" class="variable_list"></ul> <!-- will fill this with entries using jQuery -->
+							<!-- add interests to hidden input with name "entry_interests" -->
+							<label for="select_language">Language: </label>
+							<select id="select_language" name="select_language" data-placeholder="Choose a Language...">
+								<option value=""></option>
+								<option value="Afrikaans">Afrikaans</option>
+								<option value="Albanian">Albanian</option>
+								<option value="Arabic">Arabic</option>
+								<option value="Armenian">Armenian</option>
+								<option value="Basque">Basque</option>
+								<option value="Bengali">Bengali</option>
+								<option value="Bulgarian">Bulgarian</option>
+								<option value="Catalan">Catalan</option>
+								<option value="Cambodian">Cambodian</option>
+								<option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
+								<option value="Croatian">Croatian</option>
+								<option value="Czech">Czech</option>
+								<option value="Danish">Danish</option>
+								<option value="Dutch">Dutch</option>
+								<option value="English">English</option>
+								<option value="Estonian">Estonian</option>
+								<option value="Fiji">Fiji</option>
+								<option value="Finnish">Finnish</option>
+								<option value="French">French</option>
+								<option value="Georgian">Georgian</option>
+								<option value="German">German</option>
+								<option value="Greek">Greek</option>
+								<option value="Gujarati">Gujarati</option>
+								<option value="Hebrew">Hebrew</option>
+								<option value="Hindi">Hindi</option>
+								<option value="Hungarian">Hungarian</option>
+								<option value="Icelandic">Icelandic</option>
+								<option value="Indonesian">Indonesian</option>
+								<option value="Irish">Irish</option>
+								<option value="Italian">Italian</option>
+								<option value="Japanese">Japanese</option>
+								<option value="Javanese">Javanese</option>
+								<option value="Korean">Korean</option>
+								<option value="Latin">Latin</option>
+								<option value="Latvian">Latvian</option>
+								<option value="Lithuanian">Lithuanian</option>
+								<option value="Macedonian">Macedonian</option>
+								<option value="Malay">Malay</option>
+								<option value="Malayalam">Malayalam</option>
+								<option value="Maltese">Maltese</option>
+								<option value="Maori">Maori</option>
+								<option value="Marathi">Marathi</option>
+								<option value="Mongolian">Mongolian</option>
+								<option value="Nepali">Nepali</option>
+								<option value="Norwegian">Norwegian</option>
+								<option value="Persian">Persian</option>
+								<option value="Polish">Polish</option>
+								<option value="Portuguese">Portuguese</option>
+								<option value="Punjabi">Punjabi</option>
+								<option value="Quechua">Quechua</option>
+								<option value="Romanian">Romanian</option>
+								<option value="Russian">Russian</option>
+								<option value="Samoan">Samoan</option>
+								<option value="Serbian">Serbian</option>
+								<option value="Slovak">Slovak</option>
+								<option value="Slovenian">Slovenian</option>
+								<option value="Spanish">Spanish</option>
+								<option value="Swahili">Swahili</option>
+								<option value="Swedish ">Swedish </option>
+								<option value="Tamil">Tamil</option>
+								<option value="Tatar">Tatar</option>
+								<option value="Telugu">Telugu</option>
+								<option value="Thai">Thai</option>
+								<option value="Tibetan">Tibetan</option>
+								<option value="Tonga">Tonga</option>
+								<option value="Turkish">Turkish</option>
+								<option value="Ukrainian">Ukrainian</option>
+								<option value="Urdu">Urdu</option>
+								<option value="Uzbek">Uzbek</option>
+								<option value="Vietnamese">Vietnamese</option>
+								<option value="Welsh">Welsh</option>
+								<option value="Xhosa">Xhosa</option>
+							</select>
+							<div>
+								<ul class="variable_list" id="language_list">
+									<!-- to be populated when user selects languages -->
+								</ul>
+							</div>
 					</div>
 	
-			
-				<div id="div_age" class="search-row">
-					<label for="option_age1">Age range:  </label> <!-- TODO: add values based on minimum and maximum ages (inclusive) -->
-					<select name="option_age1">
-						<option value=""></option>
-						<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
-							<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
-						<% } %>
-					</select>
-					<div>to</div>
-					 <select name="option_age2">
-						<option value=""></option>
-						<% for (var i = results[1][0].oldest; i >= results[0][0].youngest; i--) { %>
-							<option value="<%= i %>"><%= new Date().getFullYear() - i %></option>
-						<% } %>
-					</select>
-				</div>
+
 		
 				<div id="div_gender" class="search-row">
+					<!-- <label for="option_gender_div">Gender:  </label> -->
+					<div id="option_gender_div" class="dropdown-check-list">
+						<span class="anchor">Gender</span>
+						<ul class="items">
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="transgender"> Transgender
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="cisgender"> Cisgender
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="male"> Male
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="female"> Female
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="gnc"> Gender nonconforming (GNC)
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="nonbinary"> Nonbinary
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="fluid"> Genderfluid, Genderqueer
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="bigender"> Bigender, pangender
+							</label>
+							</li>
+							<li>
+							<label>
+								<input type="checkbox" name="option_gender[]" value="custom"> Other <input type="text" name="custom_gender">
+							</label>
+						</li></ul>
+					</div>
+					<script type="text/javascript">
+
+						var checkList = document.getElementById('option_gender_div');
+						checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
+							if (checkList.classList.contains('visible'))
+								checkList.classList.remove('visible');
+							else
+								checkList.classList.add('visible');
+						}
+					</script>
+				</div>
+				<!-- <div id="div_gender" class="search-row">
 					<label for="option_gender_div">Gender:  </label>
 					<div id="option_gender_div">
 						<label>
@@ -337,7 +489,7 @@
 							<input type="checkbox" name="option_gender[]" value="custom"> Other <input type="text" name="custom_gender">
 						</label>
 					</div>
-				</div>
+				</div> -->
 
 					
 				<div id="div_sexuality" class="search-row">	
@@ -413,101 +565,7 @@
 					</div>
 				</div>
 			
-				<div id="div_interests" class="search-row">
-					<label for="interests">Interests: </label>
-					<input type="list" name="interests" id="interests" placeholder="Add interests by typing and pressing enter.">
-					<datalist id="interests_datalist">
-						<option value="watermelon"/>
-						<option value="Canada"/>
-						<option value="refrigerator"/>
-						<option value="Valentine's Day"/>
-					</datalist>
-					<ul id="interests_list" class="variable_list"></ul> <!-- will fill this with entries using jQuery -->
-					<!-- add interests to hidden input with name "entry_interests" -->
-				</div>
-				<div id="div_language" class="search-row">
-					<label for="select_language">Language: </label>
-					<select id="select_language" name="select_language" data-placeholder="Choose a Language...">
-						<option value=""></option>
-						<option value="Afrikaans">Afrikaans</option>
-						<option value="Albanian">Albanian</option>
-						<option value="Arabic">Arabic</option>
-						<option value="Armenian">Armenian</option>
-						<option value="Basque">Basque</option>
-						<option value="Bengali">Bengali</option>
-						<option value="Bulgarian">Bulgarian</option>
-						<option value="Catalan">Catalan</option>
-						<option value="Cambodian">Cambodian</option>
-						<option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
-						<option value="Croatian">Croatian</option>
-						<option value="Czech">Czech</option>
-						<option value="Danish">Danish</option>
-						<option value="Dutch">Dutch</option>
-						<option value="English">English</option>
-						<option value="Estonian">Estonian</option>
-						<option value="Fiji">Fiji</option>
-						<option value="Finnish">Finnish</option>
-						<option value="French">French</option>
-						<option value="Georgian">Georgian</option>
-						<option value="German">German</option>
-						<option value="Greek">Greek</option>
-						<option value="Gujarati">Gujarati</option>
-						<option value="Hebrew">Hebrew</option>
-						<option value="Hindi">Hindi</option>
-						<option value="Hungarian">Hungarian</option>
-						<option value="Icelandic">Icelandic</option>
-						<option value="Indonesian">Indonesian</option>
-						<option value="Irish">Irish</option>
-						<option value="Italian">Italian</option>
-						<option value="Japanese">Japanese</option>
-						<option value="Javanese">Javanese</option>
-						<option value="Korean">Korean</option>
-						<option value="Latin">Latin</option>
-						<option value="Latvian">Latvian</option>
-						<option value="Lithuanian">Lithuanian</option>
-						<option value="Macedonian">Macedonian</option>
-						<option value="Malay">Malay</option>
-						<option value="Malayalam">Malayalam</option>
-						<option value="Maltese">Maltese</option>
-						<option value="Maori">Maori</option>
-						<option value="Marathi">Marathi</option>
-						<option value="Mongolian">Mongolian</option>
-						<option value="Nepali">Nepali</option>
-						<option value="Norwegian">Norwegian</option>
-						<option value="Persian">Persian</option>
-						<option value="Polish">Polish</option>
-						<option value="Portuguese">Portuguese</option>
-						<option value="Punjabi">Punjabi</option>
-						<option value="Quechua">Quechua</option>
-						<option value="Romanian">Romanian</option>
-						<option value="Russian">Russian</option>
-						<option value="Samoan">Samoan</option>
-						<option value="Serbian">Serbian</option>
-						<option value="Slovak">Slovak</option>
-						<option value="Slovenian">Slovenian</option>
-						<option value="Spanish">Spanish</option>
-						<option value="Swahili">Swahili</option>
-						<option value="Swedish ">Swedish </option>
-						<option value="Tamil">Tamil</option>
-						<option value="Tatar">Tatar</option>
-						<option value="Telugu">Telugu</option>
-						<option value="Thai">Thai</option>
-						<option value="Tibetan">Tibetan</option>
-						<option value="Tonga">Tonga</option>
-						<option value="Turkish">Turkish</option>
-						<option value="Ukrainian">Ukrainian</option>
-						<option value="Urdu">Urdu</option>
-						<option value="Uzbek">Uzbek</option>
-						<option value="Vietnamese">Vietnamese</option>
-						<option value="Welsh">Welsh</option>
-						<option value="Xhosa">Xhosa</option>
-					</select>
-					<div>
-						<ul class="variable_list" id="language_list">
-							<!-- to be populated when user selects languages -->
-						</ul>
-					</div>
-				</div>
+
 				<button type="submit" id="submitButton"><i class="fas fa-search"></i></button>
 			</div>
 		

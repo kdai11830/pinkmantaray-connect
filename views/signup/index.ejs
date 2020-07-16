@@ -467,6 +467,13 @@ body {
 
 	<!-- IDENTITY INFORMATION -->
 	<div class="tab signup-id-info">
+		<div class="signup-row blurb">
+			<!-- <div> -->
+			Please enter the following information in the way that feels the most appropriate and comfortable for you. Labels can
+			often be unnecessarily limiting, so feel free to interpret each of these however you’d like or leave anything blank. If
+			you have feedback about how this information is presentedor gathered, <span><a href="mailto:feedback@pinkmantaray.com">email us</a></span>!
+			<!-- </div> -->
+		</div>
 		<div class="signup-row">
 			<div id="gender_div">
 				<label for="entry_gender_div"><h3>Gender <span>(select all that apply)</span>: </h3></label>
@@ -484,13 +491,13 @@ body {
 						<input type="checkbox" name="entry_gender[]" value="female"> Female
 					</label>
 					<label>
-						<input type="checkbox" name="entry_gender[]" value="gnc"> Gender non_comforming (GNC)
+						<input type="checkbox" name="entry_gender[]" value="gnc"> Gender nonconforming (GNC)
 					</label>
 					<label>
-						<input type="checkbox" name="entry_gender[]" value="nonbinary"> Non_binary
+						<input type="checkbox" name="entry_gender[]" value="nonbinary"> Nonbinary
 					</label>
 					<label>
-						<input type="checkbox" name="entry_gender[]" value="fluid"> Gender fluid, gender queer
+						<input type="checkbox" name="entry_gender[]" value="fluid"> Genderfluid, Genderqueer
 					</label>
 					<label>
 						<input type="checkbox" name="entry_gender[]" value="bigender"> Bigender, pangender
@@ -535,10 +542,19 @@ body {
 			</div>
 		</div>
 
-		<div class="signup-row">
+	</div>
 
+	<div class="tab culture-page">
+		<div class="signup-row blurb">
+			Many folks identify themselves with countries of origin or ancestry. Schuyler would enter “Korean”, “American”,
+			“Mixed-race”, “White”, and “Asian” here. You’re welcome to interpret this question however you’d like and add as many
+			things as feel appropriate to you.
+		</div>
+		<div class="signup-row">
 			<div id="race_div">
-				<label for="entry_race_div"><h3>Race & Ethnicity <span>(select all that apply)</span>: </h3></label>
+				<label for="entry_race_div">
+					<h3>Race & Ethnicity <span>(select all that apply)</span>: </h3>
+				</label>
 				<div id="entry_race_div">
 					<label>
 						<input type="checkbox" name="entry_race[]" value="white"> White
@@ -560,9 +576,11 @@ body {
 					</label>
 				</div>
 			</div>
-
+		
 			<div id="religion_div">
-				<label for="entry_religion_div"><h3>Religion <span>(select all that apply)</span>: </h3></label>
+				<label for="entry_religion_div">
+					<h3>Religion <span>(select all that apply)</span>: </h3>
+				</label>
 				<div id="entry_religion_div">
 					<label>
 						<input type="checkbox" name="entry_religion[]" value="christian"> Christian
@@ -580,7 +598,8 @@ body {
 						<input type="checkbox" name="entry_religion[]" value="atheist"> Atheist
 					</label>
 					<label>
-						<input type="checkbox" name="entry_religion[]" value="custom"> Other: <input type="text" name='custom_religion'>
+						<input type="checkbox" name="entry_religion[]" value="custom"> Other: <input type="text"
+							name='custom_religion'>
 					</label>
 					<label>
 						<input type="checkbox" name="entry_religion[]" value="noanswer"> Prefer not to say
@@ -588,23 +607,27 @@ body {
 				</div>
 			</div>
 		</div>
-
-		<div class="signup-row">
-
+		
+		<div class="signup-row looking-for">
+		
 			<div id="interests_div">
-				<label for="entry_interests"><h3>Interests: </h3></label>
-				<input list="interests_datalist" name="interests" id="interests" placeholder="Add interests by typing and pressing enter.">
+				<label for="entry_interests">
+					<h3>Interests: </h3>
+				</label>
+				<input list="interests_datalist" name="interests" id="interests"
+					placeholder="Add interests by typing and pressing enter.">
 				<datalist id="interests_datalist">
-					<option value="watermelon"/>
-					<option value="Canada"/>
-					<option value="refrigerator"/>
-					<option value="Valentine's Day"/>
+					<option value="watermelon" />
+					<option value="Canada" />
+					<option value="refrigerator" />
+					<option value="Valentine's Day" />
 				</datalist>
 				<ul class="variable_list" id="interests_list"></ul> <!-- will fill this with entries using jQuery -->
 				<!-- add hidden inputs here for list of interests dynamically -->
 			</div>
 			<div id="resource_div">
-				<label for="entry_friend_resource"></label><h3>I'm looking for: </h3></label>
+				<label for="entry_friend_resource">
+				<h3>I'm looking for: </h3></label>
 				<input type="radio" name="entry_friend_resource" id="entry_friend" value="friend" checked>
 				<label for="entry_friend">Friend</label>
 				<input type="radio" name="entry_friend_resource" id="entry_resource" value="resource">
@@ -613,12 +636,11 @@ body {
 				<label for="entry_both">Both</label>
 			</div>
 		</div>
-			
+		
 		<div class="signup-row">
 			<input type="checkbox" name="consent" value="read" class="required consent-checkbox">
 			<label for="consent">I have read and agree to the <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</label>
 		</div>
-
 	</div>
 
 	<div id="move-buttons">
