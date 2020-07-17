@@ -23,6 +23,7 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     position: absolute;
     left: 28%;
 
@@ -31,7 +32,7 @@ h2 {
     font-size: 2vh;
     
     width: 91vh;
-    height: 60vh;
+    height: 64vh;
 
     border-radius: 1vh;
     background: #0d112e;
@@ -41,15 +42,58 @@ h2 {
     overflow-y:auto;
 }
 
+.name, td > span {
+    color: royalblue;
+    padding-right: 2vh;
+}
+
+
+
 #profileInfo > tbody{
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 62vh;
     font-weight: bolder;
+    text-transform: capitalize;
 }
 
 tr {
     margin: 2vh;
+    width: 100%;
+    text-align: center;
+    text-align: -webkit-center;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* login button  */
+#reportDiv button {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+}
+
+/* login button active */
+#reportDiv button:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
 }
 /*
 

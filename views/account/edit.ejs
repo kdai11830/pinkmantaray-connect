@@ -96,7 +96,7 @@
 
 		for (var i = 0; i < userData["interest"].length; i++) {
 			if (userData["interest"][i] != null) {
-				var li = $('<li>' + userData["interest"][i] + ' <span class="close">[✘]</span></li>');
+				var li = $('<li>' + userData["interest"][i] + ' <span class="close">×</span></li>');
 				$("#interests_list").after('<input type="hidden" id="option_interest" name="option_interest[]" value="' + userData["interest"][i] + '">');
 				$("#interests_list").append(li);
 			}
@@ -104,7 +104,7 @@
 
 		for (var i = 0; i < userData["language"].length; i++) {
 			if (userData["language"][i] != null) {
-				var li = $('<li>' + userData["language"][i] + ' <span class="close">[✘]</span></li>');
+				var li = $('<li>' + userData["language"][i] + ' <span class="close">×</span></li>');
 				$("#language_list").after('<input type="hidden" id="option_language" name="option_language[]" value="' + userData["language"][i] + '">');
 				$("#language_list").append(li);
 			}
@@ -581,6 +581,7 @@
 		</div>
 
 		<div id="div_interests">
+			<label for="interests">Interests: </label>
 			<input type="list" name="interests" id="interests" placeholder="Add interests by typing and pressing enter.">
 			<datalist id="interests_datalist">
 				<option value="watermelon"/>

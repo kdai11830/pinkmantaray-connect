@@ -58,6 +58,19 @@ h2 {
     color: red;
 }
 
+form div ul > li {
+    padding: 1vh 2vh;
+    margin: 0 2vh;
+    border-color: royalblue;
+    background-color: royalblue;
+    border-radius: 1vh;
+    text-align: center;
+}
+
+form div ul > li:hover {
+    color: white;
+}
+
 #submitButton, #cancelButton {
     height: 7vh;
     width: 18vh;

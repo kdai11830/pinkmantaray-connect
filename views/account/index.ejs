@@ -80,7 +80,7 @@
 		<h2>My Profile</h2>
 		<table id="profileInfo">
 			<tr>
-				<td><%= data.name %></td>
+				<td class="name"><%= data.name %></td>
 				<td><%= new Date().getFullYear() - data.year %></td>
 				<td><%= data.pronouns %></td>
 				<td><a href="https://instagram.com/<%= data.instagram %>">
@@ -88,46 +88,47 @@
 				<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a>
 				</td> <!-- TODO -->
 			</tr>
-			<tr>
-				<td><%= data.gender.join(', ') %></td>
+			<tr> 
+				<td><span>Gender: </span> <%= data.gender.join(', ') %></td>
+			</tr>
+			<tr> 
+				<td><span>Sexuality: </span> <%= data.sexuality.join(', ') %></td>
+			</tr>
+			<tr> 
+				<td><span>Country: </span> <%= data.country %></td>
+			</tr>
+			<tr> 
+				<td><span>Language: </span><%= data.language.join(', ') %></td>
 			</tr>
 			<tr>
-				<td><%= data.country %></td>
+				<td><span>Race + Ethnicity: </span><%= data.race_ethnicity.join(', ') %></td>
+			</tr>
+			<tr> 
+				<td><span>Religion: </span><%= data.religion.join(', ') %></td>
 			</tr>
 			<tr>
-				<td><%= data.language.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.sexuality.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.race_ethnicity.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.religion.join(', ') %></td>
-			</tr>
-			<tr>
-				<td><%= data.interest.join(', ') %></td>
+				<td><span>Interests:</span> <%= data.interest.join(', ') %></td>
 			</tr>
 		</table>
+		<% if (!data.myProfile) { %>
+		<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
+			<input type="hidden" name="userId" value="<%= data.id %>">
+			<input type="hidden" name="username" value="<%= data.username %>">
+			<div id="reportDiv">
+				<input type="submit" name="reportBtn" value="Report">
+			</div>
+			<% } else { %>
+			<div id="myProfileOptions">
+				<form id="profileForm" action="/profile?edit=" method="GET">
+					<div id="reportDiv">
+						<button type="submit" name="edit">Edit Profile</button>
+					</div>
+				</form>
+			</div>
+			<% } %>
+		</form>
 	</div>
-	<% if (!data.myProfile) { %>
-	<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
-		<input type="hidden" name="userId" value="<%= data.id %>">
-		<input type="hidden" name="username" value="<%= data.username %>">
-		<div id="reportDiv">
-			<input type="submit" name="reportBtn" value="Report">
-		</div>
-		<% } else { %>
-		<div id="myProfileOptions">
-			<form id="profileForm" action="/profile?edit=" method="GET">
-				<div id="reportDiv">
-					<button type="submit" name="edit">Edit</button>
-				</div>
-			</form>
-		</div>
-		<% } %>
-	</form>
+
 	<div id="hideDialog" class="dialog">
 		<p>Are you sure you want to hide your profile? Doing so will remove you from the connection pool; you will not
 			be presented when your profile matches others' search queries.</p>
