@@ -17,6 +17,7 @@ h2 {
 
     margin: 0;
     text-align: left;
+    padding-left: 8vh;
 }
 
 #editForm {
@@ -26,6 +27,7 @@ h2 {
     align-items: baseline;
     height: 65vh;
     padding-top: 3vh;
+    padding-left: 8vh;
 }
 
 #editForm > div {
@@ -71,7 +73,7 @@ form div ul > li:hover {
     color: white;
 }
 
-#submitButton, #cancelButton {
+#submitButton, #confirmBtn {
     height: 7vh;
     width: 18vh;
 
@@ -90,16 +92,34 @@ form div ul > li:hover {
     /* margin-left: 79vh; */
 }
 
+#cancelButton, #closeBtn {
+    color: rgb(139, 218, 247);
+    text-decoration: underline;
+    background: none;
+    border: none;
+    outline: none;
+    margin-left: 2vh;
+}
+
 /* connect button active */
-#submitButton:active, #cancelButton:active {
+#submitButton:active {
     background-color: rgb(147, 220, 247);
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;
 }
 
+#cancelButton:active, #closeBtn:active {
+    color: rgb(76, 161, 193);
+}
+
 #buttonParent {
     display: flex;
     width: 40vh !important;
     justify-content: space-between;
+}
+
+/* ui-widget-content */
+.ui-dialog-content {
+    color: black;
 }

@@ -26,8 +26,8 @@
 			<% for (var i in data['invitations']) { %>
 				<tr id="<%= counter %>">
 						<td id="buttons<%= counter %>" class="buttonParent">
-							<button class="acceptBtn" id="accept<%= counter %>">✔</button>
-							<button class="ignoreBtn" id="ignore<%= counter %>">✘</button>
+							<button class="acceptBtn" id="accept<%= counter %>">✓</button>
+							<button class="ignoreBtn" id="ignore<%= counter %>">✕</button>
 						</td>
 						<td><%= data['invitations'][i].pronouns %></td>
 						<td><%= data['invitations'][i].country %></td>
@@ -49,7 +49,7 @@
 			<% for (var i in data['pending']) { %>
 				<tr id="<%= counter %>">
 					<td id="buttons<%= counter %>">
-						<button class="cancelBtn" id="cancel<%= counter %>">✘</button>
+						<button class="cancelBtn" id="cancel<%= counter %>">✕</button>
 					</td>
 					<td><%= data['pending'][i].pronouns %></td>
 					<td><%= data['pending'][i].country %></td>

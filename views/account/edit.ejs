@@ -114,10 +114,12 @@
 
 </head>
 
+<%- include("../partials/header") %>
 <body>
 
-	<%- include("../partials/header") %>
-
+	<h2>
+		Edit Profile
+	</h2>
 	<form id="editForm" action="/edited" method="POST">
 
 		<div id="div_info">
@@ -599,8 +601,10 @@
 			<button id="confirmBtn">Discard Changes</button>
 		</div>
 
-		<button type="submit" id="submitButton">Update</button>
-		<button id="cancelButton">Cancel</button>
+		<div>
+			<button type="submit" id="submitButton">Update</button>
+			<button id="cancelButton">Cancel</button>
+		</div>
 
 	</div>
 
