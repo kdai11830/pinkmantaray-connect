@@ -25,19 +25,23 @@
 			<% var counter = 0; %>
 			<% for (var i in data['invitations']) { %>
 				<tr id="<%= counter %>">
+					<!-- <td> -->
 						<td id="buttons<%= counter %>" class="buttonParent">
 							<button class="acceptBtn" id="accept<%= counter %>">✓</button>
 							<button class="ignoreBtn" id="ignore<%= counter %>">✕</button>
 						</td>
-						<td><%= data['invitations'][i].pronouns %></td>
-						<td><%= data['invitations'][i].country %></td>
-						<td><%= new Date().getFullYear() - data['invitations'][i].year %></td>
-						<td><%= data['invitations'][i].gender.join(', ') %></td>
-						<td><%= data['invitations'][i].sexuality.join(', ') %></td>
-						<td><%= data['invitations'][i].race_ethnicity.join(', ') %></td>
-						<td><%= data['invitations'][i].religion.join(', ') %></td>
-						<td><%= data['invitations'][i].interest.join(', ') %></td>
-					</tr>
+						<td>
+							<%= data['invitations'][i].pronouns %>
+							<%= data['invitations'][i].country %>
+							<%= new Date().getFullYear() - data['invitations'][i].year %>
+							<%= data['invitations'][i].gender.join(', ') %>
+							<%= data['invitations'][i].sexuality.join(', ') %>
+							<%= data['invitations'][i].race_ethnicity.join(', ') %>
+							<%= data['invitations'][i].religion.join(', ') %>
+							<%= data['invitations'][i].interest.join(', ') %>
+						</td>
+					<!-- </td> -->
+				</tr>
 				<% counter++; %>
 			<% } %>
 		</table>

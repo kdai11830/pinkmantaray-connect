@@ -1,0 +1,45 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+    font-family: 'Century Gothic', sans-serif
+}
+
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    margin: 0;
+    text-align: left;
+    padding-left: 8vh;
+}
+
+.text {
+    width: 94%;
+    /* text-align: left; */
+    font-size: 4vh;
+    padding-left: 12vh;
+    padding-top: 7vh;
+    font-weight: bold;
+    display: flex;
+    height: 48vh;
+}
+
+.text > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.text a {
+    color: rgb(139, 218, 247);
+}
+
+.text > div > div {
+    width: 67%;
+}
+
+.other {
+    border: 1vh solid pink;
+    padding: 3vh;
+}
