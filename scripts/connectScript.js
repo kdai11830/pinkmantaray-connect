@@ -6,6 +6,66 @@ $(document).ready(function() {
 
 	var socket = io();
 
+	var bannedWords = [
+		"ass",
+		"asshole",
+		"bikinibody",
+		"bitch",
+		"boho",
+		"curvygirls",
+		"date",
+		"dating",
+		"dm",
+		"graffitiigers",
+		"humpday",
+		"killingit",
+		"kill",
+		"killing",
+		"kissing",
+		"kiss",
+		"kiser",
+		"master",
+		"motherfucker",
+		"nasty",
+		"nigger",
+		"nigga",
+		"petite",
+		"porn",
+		"Pornhub",
+		"shit",
+		"shower",
+		"single",
+		"thot",
+		"undies",
+		"underwear",
+		"vagina",
+		"vag",
+		"cunt",
+		"dick",
+		"penis",
+		"bulge",
+		"fag",
+		"faggot",
+		"fuck",
+		"fucker",
+		"fucking",
+		"fucked",
+		"twink",
+		"hunk",
+		"daddy",
+		"daddies",
+		"zaddy",
+		"zaddies",
+		"pussy",
+		"pussies",
+		"twat",
+		"whore",
+		"bastard",
+		"cock",
+		"retard",
+		"retarded",
+		"schizo"];
+
 	$("#connectForm").submit(function () {
 		// set all the custom values
 		$('.custom').each(function() {
@@ -193,6 +253,7 @@ $(document).ready(function() {
 	$('.list_input').bind('keydown', function(e) {
 		// clear error message if start typing
 		$(this).siblings('.duplicate_msg').remove();
+		$(this).siblings('#bannedWordMsg').remove();
 
 		var datatype = $(this).attr('id');
 
@@ -210,6 +271,12 @@ $(document).ready(function() {
 						value = $(this).val();
 					}
 				});
+
+				if (bannedWords.includes(value.toLowerCase())) {
+					$(this).after('<p id="bannedWordMsg">You cannot enter this value</p>');
+					$(this).val('');
+					return false;
+				}
 
 				// check to see if already entered interest
 				var exists = false;

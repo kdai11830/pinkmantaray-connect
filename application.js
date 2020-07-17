@@ -580,7 +580,10 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 				Because we want to protect against potential fraudulent behavior, we are placing your account on hold while we review.<br>
 				This email is sent to you from an account we use for sending message only. 
 				Please don’t reply to this email — we won’t receive your response. 
-				Please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a> if you have further questions.`
+				Please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a> if you have further questions.<br>
+				<i>Please do not reply to this message. This email is an automated notification and is unable to receive replies. 
+				If you have questions please visit <a href="http://www.connect.pinkmantaray.com/help">connect.pinkmantaray.com/help</a>. 
+				You may also email us at admin@pinkmantaray.com.</i>`
 			var mailOptions = {
 				from: 'noreply@pinkmantaray.com',
 				to: req.session.email,
@@ -968,11 +971,19 @@ app.post('/new-user-auth', function(req, res) {
 									// send verification email
 									host = req.get('host');
 									var link = 'http://'+req.get('host')+'/verify?username='+req.session.username+'&id='+rand;
+									var html = `Hello `+name+ `,<br><br>
+										We’re so excited that you’ve signed up for Pinkmantaray Connect! <br><br>
+										Please click on the link here to verify your email address.<br>` + link + `<br><br>
+										Sincerely,<br>
+										The Pinkmantaray Connect Team<br><br>
+										<i>Please do not reply to this message. This email is an automated notification and is unable to receive replies. 
+										If you have questions please visit <a href="http://www.connect.pinkmantaray.com/help">connect.pinkmantaray.com/help</a>. 
+										You may also email us at admin@pinkmantaray.com.</i>`
 									var mailOptions = {
 										from: 'noreply@pinkmantaray.com',
 										to: email,
 										subject: 'Pinkmantaray Connect Email Verification',
-										html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
+										html: html
 									}
 									console.log(mailOptions);
 									smtpTransport.sendMail(mailOptions, function(error, response) {
