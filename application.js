@@ -30,10 +30,10 @@ app.set('view engine', 'ejs');
 // establish mysql connection
 /*
 var connection = mysql.createConnection({
-	host     : 'db5000506482.hosting-data.io',
-	user     : 'dbu298071',
-	password : 'wLb6kdR#3Ac@$cDKp7nW!',
-	database : 'dbs486117',
+	host     : '127.0.0.1',
+	user     : 'root',
+	password : '99!q57AGv*',
+	database : 'pinkmantaray_connect',
 	multipleStatements: 'true'
 });
 */
