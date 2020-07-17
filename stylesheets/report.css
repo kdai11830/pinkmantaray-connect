@@ -1,3 +1,7 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+}
 #reportDiv {
     display: flex;
     flex-direction: column;
@@ -25,8 +29,9 @@ h2 {
     height: 54vh;
     border-radius: 1vh;
 
-    background: #fefefe;
-    box-shadow: 7px 7px 14px #b9bcbe, -7px -7px 14px #f2f4f5;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
     overflow-y: auto;
 }
 

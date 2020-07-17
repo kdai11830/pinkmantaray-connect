@@ -125,6 +125,10 @@ body > form > h1:first-child {
     margin: 4vh 0 2vh 0;
 }
 
+#signup {
+    padding-top: 75vh;
+}
+
 /* middle line */
 .signup-info > div:first-child:after, .further-signup-info > div:first-child:after {
     display: block;
