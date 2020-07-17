@@ -1,0 +1,44 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+    font-family: 'Century Gothic', sans-serif
+}
+
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    margin: 0;
+    text-align: left;
+    padding-left: 8vh;
+}
+
+p {
+    font-weight: bolder;
+    font-size: 4vh;
+}
+
+ol{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 8vh;
+    list-style-type: decimal-leading-zero;
+}
+
+ol li {
+    padding: 1.5vh 0;
+    font-size: 3vh;
+}
+
+ol li span {
+    color: rgb(139, 218, 247);
+    font-weight: bolder;
+    font-size: 4vh;
+    padding-right: 4vh;
+}
+
+ol li:hover {
+    cursor: default
+}

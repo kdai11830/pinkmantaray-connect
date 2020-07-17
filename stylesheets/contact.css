@@ -15,12 +15,11 @@ h2 {
 }
 
 .text {
-    width: 94%;
+    /* width: 94%; */
     /* text-align: left; */
-    font-size: 4vh;
-    padding-left: 12vh;
-    padding-top: 7vh;
-    font-weight: bold;
+    font-size: 3.5vh;
+    padding: 7vh 12vh 0vh 12vh;
+    /* font-weight: bold; */
     display: flex;
     height: 48vh;
 }
@@ -28,11 +27,12 @@ h2 {
 .text > div {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .text a {
     color: rgb(139, 218, 247);
+    font-weight: bold;
 }
 
 .text > div > div {
