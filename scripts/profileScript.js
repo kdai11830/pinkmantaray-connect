@@ -115,4 +115,14 @@ $(document).ready(function() {
     	}
 	});
 
+	$('#submitButton').click(function() {
+		$('.custom').each(function() {
+			if ($(this).is(':checked')) {
+				console.log($(this));
+				$(this).val($(this).siblings('.custom_text').val());
+			}
+		});
+		$('#editForm').submit();
+	});
+
 });

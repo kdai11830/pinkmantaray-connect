@@ -9,13 +9,16 @@ var url = require('url');
 var qs = require('qs');
 var util = require('util');
 var http = require('http');
+var nodemailer = require('nodemailer');
+var crypto = require('crypto');
 
 // declare application and connect to db
 var app = new express();
 const port = 3000;
+const hostname = 'localhost';
 
-var server = app.listen(port, function() {
-	console.log(new Date().toISOString() + ": server started on port " + port)
+var server = app.listen(port, hostname, function() {
+	console.log(new Date().toISOString() + `: server running at http://${hostname}:${port}/`)
 })
 var io = require('socket.io').listen(server);
 
@@ -47,13 +50,23 @@ app.set('view engine', 'ejs');
 
 // vic's mysql connection
 // establish mysql connection
+
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "bearbear",
   database: "new_schema2",
   multipleStatements: "true",
-});
+})
+
+
+// var connection = mysql.createConnection({
+// 	host 	 : 'localhost',
+// 	user 	 : 'root',
+// 	password : 'Jkmrhi11830!',
+// 	database : 'pinkmantaray_connect',
+// 	multipleStatements: 'true'
+// })
 
 // set session
 var sess = {
@@ -67,6 +80,29 @@ var sess = {
 };
 
 var sessionMiddleware = session(sess);
+
+// set node mailing transport
+var smtpTransport = nodemailer.createTransport({
+	host: "smtp.ionos.com",
+	secureConnection: false,
+	port: 587,
+	auth: {
+		user: 'noreply@pinkmantaray.com',
+		pass: 'z%R4*C8N*0P%@Q*9'
+	},
+	tls: {
+		ciphers: 'SSLv3'
+	}
+});
+var rand, host;
+
+// random string generator for authenticator token
+function genRandomString(size=45) {
+	return crypto
+		.randomBytes(size)
+		.toString('hex')
+		.slice(0, size);
+}
 
 io.use(function(socket, next) {
 	sessionMiddleware(socket.request, socket.request.res || {}, next);
@@ -93,6 +129,9 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
 
+const maxReports = 10;
+
+
 /*****************************************************************************
 ******************************************************************************
 *****************************************************************************/
@@ -104,6 +143,15 @@ function restrict(req, res, next) {
 		next();
 	} else {
 		res.redirect('/welcome');
+	}
+}
+
+// TODO: ADD SECOND VERIFICATION CHECK SEPARATE FROM RESTRICT
+function verifyRestrict(req, res, next) {
+	if (req.session.verified) {
+		next();
+	} else {
+		res.redirect('/?verified=false');
 	}
 }
 
@@ -120,14 +168,14 @@ function adminRestrict(req, res, next) {
 app.get('/welcome', function(req, res) {
 	req.session.destroy();
 	res.render('welcome');
-})
+});
 
 /** LOGIN PAGE **/
 app.get('/login', function(req, res) {
 	// clear current session
-	auth = true;
-	if (req.query.auth == 'false') {
-		auth = false;
+	auth = '';
+	if ('auth' in req.query) {
+		auth = req.query.auth;
 	}
 	req.session.destroy();
 	res.render('login/index', {'auth': auth});
@@ -139,6 +187,37 @@ app.get('/signup', function(req, res) {
 	res.render('signup/index');
 });
 
+/** EMAIL VERIFICATION PATH **/
+app.get('/verify', function(req, res) {
+	console.log(req.protocol+":/"+req.get('host'));
+	if((req.protocol+"://"+req.get('host'))==("http://"+host)) {
+		console.log("Domain is matched. Information is from Authentic email");
+		var username = req.query.username
+		var sql = `SELECT verify_key FROM user_info WHERE username = ?`;
+		connection.query(sql, [username], function(errors, results, fields) {
+			if (errors) throw errors;
+			var rand_key = results[0].verify_key;
+
+			// key matches the verification link, update db and login
+			if (req.query.id == rand_key) {
+				console.log('email is verified');
+				var sql = `UPDATE user_info SET verify_key = NULL, verified = 1 WHERE username = ?`;
+				connection.query(sql, [username], function(errors, results, fields) {
+					if (errors) throw errors;
+					req.session.verified = true;
+					res.render('account/verified');
+				})
+			} else {
+				console.log('not verified');
+				// do some error handling here
+			}
+		})
+		
+	} else {
+		// request from unknown source
+	}
+});
+
 
 /** HOME PAGE **/
 app.get('/', restrict, function(req, res) {
@@ -146,7 +225,8 @@ app.get('/', restrict, function(req, res) {
 	// double sql query
 	var sql = `SELECT user_info.id, name, pronouns, email, instagram FROM user_info 
 		RIGHT JOIN connections ON connections.connection_id = user_info.id 
-		WHERE connections.user_id = ? AND connections.pending = 0 AND user_info.reported != 1; `
+		WHERE connections.user_id = ? AND connections.pending = 0 AND 
+		user_info.reported != 1 AND user_info.on_hold != 1; `
 
 	connection.query(sql, req.session.user_id, function(err, results, fields) {
 		if (err) {
@@ -156,14 +236,14 @@ app.get('/', restrict, function(req, res) {
 		}
 		console.log(req.session.user_id);
 		console.log(results);
-		res.render('index', {"results": results});
+		res.render('index', {"results": results, 'verified': req.session.verified});
 		return;
 	});
 });
 
 
 /** CONNECT PAGE **/
-app.get('/connect', restrict, function(req, res) {
+app.get('/connect', restrict, verifyRestrict, function(req, res) {
 	var sql = `SELECT MIN(year) AS youngest 
 		FROM user_info; 
 		SELECT MAX(year) AS oldest 
@@ -178,7 +258,7 @@ app.get('/connect', restrict, function(req, res) {
 
 
 /** NOTIFICATIONS PAGE **/
-app.get('/notifications', restrict, function(req, res) {
+app.get('/notifications', restrict, verifyRestrict, function(req, res) {
 	
 	var sql = `SELECT conn.user_id FROM connections conn
 		WHERE (conn.connection_id = ?) AND (conn.pending = 1);
@@ -294,7 +374,7 @@ app.get('/notifications', restrict, function(req, res) {
 
 
 /** PAGES FOR INDIVIDUAL PROFILES **/
-app.get('/profile', restrict, function(req, res) {
+app.get('/profile', restrict, verifyRestrict, function(req, res) {
 	// get id from query parameters
 	var username = ""
 	if ("username" in req.query) {
@@ -309,7 +389,7 @@ app.get('/profile', restrict, function(req, res) {
 		edit = false
 	}
 
-	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.instagram, info.email,
+	var sql = `SELECT info.id, info.username, info.name, info.pronouns, info.year, info.country, info.instagram, info.email, info.hidden,
 		language.language, gender.gender, sexuality.sexuality, race.race_ethnicity, religion.religion, interests.interest
 		FROM user_info info
 		LEFT JOIN user_language language ON language.user_id = info.id
@@ -322,7 +402,7 @@ app.get('/profile', restrict, function(req, res) {
 
 	connection.query(sql, username, function(error, results, fields) {
 		if (error) throw error;
-		console.log(results);
+		// console.log(results);
 
 		// if profile doesn't exist, send blank info
 		if (results.length == 0) {
@@ -341,6 +421,7 @@ app.get('/profile', restrict, function(req, res) {
 			infoVals["year"] = results[i].year;
 			infoVals["instagram"] = results[i].instagram;
 			infoVals["email"] = results[i].email;
+			infoVals["hidden"] = results[i].hidden;
 
 			if (("gender" in infoVals) && !(infoVals["gender"].includes(results[i].gender)))
 				infoVals["gender"].push(results[i].gender);
@@ -393,27 +474,40 @@ app.get('/profile', restrict, function(req, res) {
 
 
 /** REPORT PAGE **/
-app.get('/report', restrict, function(req, res) {
-	var userId = req.query.id;
-	console.log(userId);
-	var sql = `SELECT info.name FROM user_info info
-		WHERE info.id = ?`;
+app.get('/report', restrict, verifyRestrict, function(req, res) {
+	if (!('id' in req.query)) {
+		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram 
+			FROM user_info info WHERE info.id = ?`;
+		connection.query(sql, req.session.user_id, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
 
-	connection.query(sql, userId, function(error, results, fields) {
-		if (error) throw error;
-		console.log(results);
+			res.render('help/report', {'data': results});
+			return;
+		})
 
-		var vals = {"id": userId, "name": results[0].name};
-		console.log(vals);
+	} else {
+		var userId = req.query.id;
+		console.log(userId);
+		var sql = `SELECT info.name FROM user_info info
+			WHERE info.id = ?`;
 
-		res.render('account/report', {"data": vals});
-		return;
-	});	
+		connection.query(sql, userId, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+
+			var vals = {"id": userId, "name": results[0].name};
+			console.log(vals);
+
+			res.render('account/report', {"data": vals});
+			return;
+		});	
+	}
 });
 
 
 /** REPORTED SUCCESS OR FAILURE **/
-app.get('/reported', restrict, function(req, res) {
+app.get('/reported', restrict, verifyRestrict, function(req, res) {
 	var success = (req.query.success == 'true');
 	res.render('account/reported', {"success": success});
 	return;
@@ -421,7 +515,7 @@ app.get('/reported', restrict, function(req, res) {
 
 
 /** PRIVACY AND SECURITY SETTINGS PAGE **/
-app.get('/settings', restrict, function(req, res) {
+app.get('/settings', restrict, verifyRestrict, function(req, res) {
 	var userId = req.session.user_id;
 	var sql = `SELECT id, name, username, email, instagram FROM user_info
 		WHERE id = ?`;
@@ -429,10 +523,22 @@ app.get('/settings', restrict, function(req, res) {
 		if (error) throw error;
 		console.log(results);
 		res.render('account/settings', {"data": results[0]});
-	})
-		
+		return;
+	});
 });
 
+
+/** COMMUNITY GUIDELINES PAGE **/
+app.get('/guidelines', function(req, res) {
+	res.render('help/guidelines');
+	return;
+});
+
+
+/** CONTACT ADMIN PAGE **/
+app.get('/contact', function(req, res) {
+	res.render('help/contact');
+});
 
 
 /** LOGOUT FUNCTIONALITY **/
@@ -443,7 +549,7 @@ app.get('/logout', function(req, res) {
 
 
 /** REPORT UPDATES **/
-app.post('/reported', restrict, function(req, res) {
+app.post('/reported', restrict, verifyRestrict, function(req, res) {
 	var reportedId = req.body.id;
 	var reason = req.body.reason;
 
@@ -452,8 +558,9 @@ app.post('/reported', restrict, function(req, res) {
 	var sql = `UPDATE user_info info SET
 		info.reported = 1 WHERE info.id = ?;
 		INSERT INTO report_logs (user_id, reported_id, reason)
-		VALUES (?, ?, ?);`;
-	var insertVals = [reportedId, req.session.user_id, reportedId, reason];
+		VALUES (?, ?, ?);
+		SELECT * FROM report_logs WHERE (user_id = ?) AND (report_time >= DATE_SUB(NOW(), interval 1 hour));`;
+	var insertVals = [reportedId, req.session.user_id, reportedId, reason, req.session.user_id];
 	console.log(insertVals);
 
 	connection.query(sql, insertVals, function(error, results, fields) {
@@ -463,14 +570,41 @@ app.post('/reported', restrict, function(req, res) {
 		if (results[0].affectedRows === 1) {
 			success = true;
 		}
+
+		// if reported too many times in the past, log them out and send email
+		if (results[2].length >= maxReports) {
+
+			host = req.get('host');
+			var html = `Hello `+ req.session.username + `,<br>
+				You’ve recently reported ` + results[2].length +` accounts. 
+				Because we want to protect against potential fraudulent behavior, we are placing your account on hold while we review.<br>
+				This email is sent to you from an account we use for sending message only. 
+				Please don’t reply to this email — we won’t receive your response. 
+				Please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a> if you have further questions.`
+			var mailOptions = {
+				from: 'noreply@pinkmantaray.com',
+				to: req.session.email,
+				subject: 'Pinkmantaray Connect Notification',
+				html: html
+			}
+			console.log(mailOptions);
+			smtpTransport.sendMail(mailOptions, function(error, response) {
+				if (error) throw error;
+				console.log(response);
+				req.session.destroy();
+				res.redirect('/login?auth=onhold');
+				return;
+			});
+		}
+
 		res.redirect('/reported?success='+success);
 		return;
-	})
+	});
 });
 
 
 /** PROFILE EDIT UPDATES **/
-app.post('/edited', restrict, function(req, res) {
+app.post('/edited', restrict, verifyRestrict, function(req, res) {
 	var sID = req.session.user_id;
 	var insertVals = [req.body.option_name, req.body.option_year, req.body.option_pronouns, 
 		req.body.option_instagram, req.body.option_email, req.body.option_location, sID];
@@ -585,7 +719,6 @@ app.post('/edited', restrict, function(req, res) {
 
 	connection.query(sql, insertVals, function(err, results, fields) {
 		if (err) throw err;
-		console.log(results);
 		res.redirect("/profile");
 	});
 });
@@ -608,6 +741,7 @@ app.post('/auth', function(req, res) {
 				// console.log(results);
 
 				req.session.user_id = results[0].id;
+				req.session.verified = results[0].verified;
 				console.log(results[0].id);
 				console.log(req.session.user_id);
 
@@ -617,11 +751,30 @@ app.post('/auth', function(req, res) {
 					if (result) {
 
 						// redirect if correct information entered
-						console.log("SUCCESS");
+						console.log("ACCOUNT FOUND");
 						// req.session.id = results[0].id;
+
+						if (results[0].reported == 1) {
+							console.log("ACCOUNT WAS REPORTED");
+							res.redirect('/login?auth=reported');
+							return;
+						} else if (results[0].on_hold == 1) {
+							console.log("ACCOUNT ON HOLD");
+							res.redirect('/login?auth=onhold');
+							return;
+						}
 
 						req.session.loggedin = true;
 						req.session.username = username;
+						req.session.email = results[0].email;
+
+						// set remember me cookie
+						if (req.body.remember) {
+							req.session.cookie.maxAge = 14 * 24 * 3600000;
+						} else {
+							req.session.cookie.expires = false;
+						}
+
 						res.redirect('/');
 						return;
 					} else {
@@ -629,14 +782,14 @@ app.post('/auth', function(req, res) {
 						// bad password
 						console.log("FAILED");
 						// res.send('Incorrect username and/or password!');
-						res.redirect('/login?auth=false');
+						res.redirect('/login?auth=failed');
 						return;
 					}
 				}).catch((err)=>console.error(err));
 
 			} else {
 				// bad username
-				res.send('Incorrect username and/or password!');
+				res.redirect('/login?auth=failed');
 				return;
 			}			
 			// res.end();
@@ -698,15 +851,15 @@ app.post('/new-user-auth', function(req, res) {
 	// insert information into database
 	var sql = `INSERT INTO user_info 
 		(
-			username, password, name, pronouns, email, year, instagram, country, state, looking_for
+			username, password, name, pronouns, email, year, instagram, country, state, looking_for, verify_key
 		)
 		VALUES
 		(
-			?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 		)`;
 	// perform first sql insertion into user_info
-	// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE
-	// TO PREVENT CALLBACK HELL
+	// THIS WORKS BUT TRY TO GET ASYNC TO WORK IF POSSIBLE TO PREVENT CALLBACK HELL
+
 	// hash password
 	bcrypt.genSalt(saltRounds, function(err, salt) {
 		if (err) {
@@ -717,7 +870,8 @@ app.post('/new-user-auth', function(req, res) {
 					throw err;
 
 				} else {
-					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, looking_for];
+					rand = genRandomString();
+					var insertVals = [req.session.username, hash, name, pronouns, email, year, instagram, country, state, looking_for, rand];
 					console.log(insertVals);
 
 					connection.query(sql, insertVals, function(err, result, fields) {
@@ -811,8 +965,37 @@ app.post('/new-user-auth', function(req, res) {
 									console.log(err);
 								} else {
 									// console.log(nestResult);
-									res.redirect('/');
-									return
+									// send verification email
+									host = req.get('host');
+									var link = 'http://'+req.get('host')+'/verify?username='+req.session.username+'&id='+rand;
+									var mailOptions = {
+										from: 'noreply@pinkmantaray.com',
+										to: email,
+										subject: 'Pinkmantaray Connect Email Verification',
+										html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
+									}
+									console.log(mailOptions);
+									smtpTransport.sendMail(mailOptions, function(error, response) {
+
+										if (error) {
+											console.log(error);
+
+											if (error.responseCode ==550) {
+												res.redirect('/?verified=false');
+											} 
+
+											else throw error; // idk what other errors there can be
+
+											// do some other error handling TODO
+											// actually does it even matter if they provide invalid email?
+										} else {
+											console.log(response);
+											req.session.email = email;
+											// log user in with unverified restrictions
+											res.redirect('/?verified=false');
+											return
+										}
+									});									
 								}
 							});
 						}
@@ -828,6 +1011,43 @@ app.post('/new-user-auth', function(req, res) {
 /** SOCKET.IO LISTEN AND EMIT FUNCTIONS **/
 io.sockets.on('connection', function(socket) {
 	console.log('socket connected...');
+
+	socket.on('checkDuplicates', function(vals) {
+		console.log('CHECKING DUPES');
+		console.log(vals);
+		var checks = Object.keys(vals);
+		var sql = '';
+		var insertVals = [];
+		console.log(checks);
+		for (var i = 0; i < checks.length; i++) {
+			sql += 'SELECT * FROM user_info WHERE ' + checks[i] + ' = ?; ';
+			insertVals.push(vals[checks[i]]);
+		}
+		connection.query(sql, insertVals, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+			if (results.length <= 0) {
+				socket.emit('checkedDuplicates', {'duplicates': []});
+				return;
+			} 
+			var duplicates = [];
+			// username and email
+			if (results.length >= 2) {
+				if (results[0].length > 0) duplicates.push(checks[0]);
+				if (results[1].length > 0) duplicates.push(checks[1]);
+			// instagram
+			} else {
+				duplicates.push(checks[0]);
+			}
+			for (var i = 0; i < results.length; i++) {
+				if (results[i].length > 0) {
+					duplicates.push(checks[i]);
+				}
+			}
+			socket.emit('checkedDuplicates', {'duplicates': duplicates});
+			return;
+		});
+	});
 
 	socket.on('search', function(vals) {
 		console.log(vals);
@@ -850,7 +1070,7 @@ io.sockets.on('connection', function(socket) {
 			conn.user_id = info.id WHERE 
 			(info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
 			OR ((info.id NOT IN (SELECT conn.connection_id FROM connections conn)) AND (info.id NOT IN (SELECT conn.user_id FROM connections conn)))) 
-			AND (info.reported != 1) AND `;
+			AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND `;
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] != '') {
@@ -1141,6 +1361,85 @@ io.sockets.on('connection', function(socket) {
 
 		var insertIds = [socket.request.session.user_id, conn_id];
 		connection.query(sql, insertIds, function(error, results, fields) {
+			if (error) throw error;
+			console.log(results);
+		});
+	});
+
+	socket.on('updateInfo', function(vals) {
+		var verifyPass = vals['verifyPass'];
+		var sql = `SELECT info.username, info.password FROM user_info info 
+			WHERE info.id = ?`;
+		connection.query(sql, socket.request.session.user_id, function(error, results, fields) {
+			if (error) throw error;
+			bcrypt.compare(verifyPass, results[0]['password']).then((result) => {
+				console.log(result);
+				if (result) {
+					// get column to update
+					var updateCol = '';
+					for (var i = 0; i < Object.keys(vals).length; i++) {
+						if (Object.keys(vals)[i] !== 'verifyPass') {
+							updateCol = Object.keys(vals)[i];
+						}
+					}
+
+					// do some specific checks for password types
+					if (updateCol === 'password') {
+						// hash password
+						bcrypt.genSalt(saltRounds, function(err, salt) {
+							if (err) { throw err;}
+							else {
+								bcrypt.hash(vals[updateCol], salt, function(err, hash) {
+									var sql = `UPDATE user_info info SET info.password = ? WHERE info.id = ?`;
+									connection.query(sql, [hash, socket.request.session.user_id], function(errors, results, fields) {
+										if (errors) throw errors;
+										socket.emit('updateInfoResult', {'success': true});
+										return;
+									});
+								});
+							}
+						});
+
+
+					// all other update types
+					} else {
+						// successful password verification, continue on
+						var sql = `UPDATE user_info info SET info.` + updateCol + ` = ? WHERE info.id = ?`;
+
+						// update column
+						connection.query(sql, [String(vals[updateCol]), socket.request.session.user_id], function(errors, results, fields) {
+							if (errors) {
+								console.log("FAILURE");
+								if (errors.errno == 1062) {
+									// duplicate entry error
+									console.log('DUPLICATE ENTRY ERROR');
+									socket.emit('updateInfoResult', {'success': 'duplicate'});
+									return;
+								} else {
+									console.log('OTHER ERROR');
+									// failure, send failure message back to settings
+									socket.emit('updateInfoResult', {'success': 'false'});
+									return;
+								}
+							} else {
+								console.log("SUCCESS");
+								// success, send success message back to settings
+								socket.emit('updateInfoResult', {'success': 'true'});
+								return;
+							}
+						});
+					}
+				}
+			});
+		});
+	});
+
+	socket.on('hideProfile', function(vals) {
+		var hide = '';
+		if (vals["hide"]) hide = '1';
+		else hide = '0';
+		var sql = `UPDATE user_info info SET hidden = ` + hide + ` WHERE id = ?`;
+		connection.query(sql, socket.request.session.user_id, function(error, results, fields) {
 			if (error) throw error;
 			console.log(results);
 		});

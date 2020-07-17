@@ -89,3 +89,7 @@ p > span {
 p {
     padding-right: 2vh;
 }
+
+.ui-widget-overlay {
+    display: none;
+}

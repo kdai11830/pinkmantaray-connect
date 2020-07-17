@@ -2,7 +2,13 @@
 
 $(document).ready(function() {
 
-	console.log("JS SCRIPT RUNNING");
+	// console.log("JS SCRIPT RUNNING");
+
+	var socket = io();
+
+	var emailDupe = false;
+	var usernameDupe = false;
+	var instagramDupe = false;
 
 	var currentTab = 0;
 	showTab(currentTab);
@@ -30,11 +36,18 @@ $(document).ready(function() {
 	}
 
 	function nextPrev(n) {
+		$('#duplicateInstagram').remove();
+		$('#duplicateEmail').remove();
+		$('#duplicateUsername').remove();
+
 		if (n===1 && !validateForm()) return false;
 
 		$(".tab:eq("+currentTab+")").hide();
 		currentTab += n;
 		if (currentTab >= $(".tab").length) {
+			$('.custom:checked').each(function() {
+				$(this).val($(this).siblings('.custom_text').val());
+			});
 			$("#main").submit();
 			return false;
 		}
@@ -74,6 +87,14 @@ $(document).ready(function() {
 				$(".tab:eq("+currentTab+")").append('<p id="pwd-notMatched">Passwords do not match!</p>');
 				$('#pwd-notMatched').css('color', 'red');
 			}
+
+			// check if username and email already exist
+			socket.emit('checkDuplicates', {'email': $('#email').val(), 'username': $('#username').val()});
+		}
+
+		// check if instagram already exists
+		if (currentTab === 2) {
+			socket.emit('checkDuplicates', {'instagram': $('#instagram').val()});
 		}
 
 		return valid;
@@ -101,7 +122,10 @@ $(document).ready(function() {
 	}
 
 
+
 	// controller for selecting state in USA
+	// hide state by default
+	$("#state_div").hide();
 	$("#select_country").change(function() {
 		if ($("#select_country").val() == "USA") {
 			$("#state_div").show();
@@ -130,52 +154,71 @@ $(document).ready(function() {
 	});
 
 
-	// add tag to interests when selecting from data list
-	/*$("#interests").on('change', 'input', function(){
-	    var options = $('#interests_datalist')[0].options;
-	    for (var i=0;i<options.length;i++){
-	    	if (options[i].value == $(this).val()) {
-	    		var li = $('<li>' + interest + '<span class="close">x</span></li>');
-				$("#interests_list").append(li);
-	    	}
-	    }
-	});*/
 
-	// add tag to interests when user presses enter
-	$('#interests').bind('keydown', function(e) {
+	$('.restrict_select').bind('keydown', function(e) {
+		if (e.keyCode==13) {
+			var value = $(this).val();
+			if (value != '') {
+				e.preventDefault();
+				var exists = false;
+				var self = $(this);
+				$(this).siblings('.select_list').children().each(function() {
+					if ($(this).val().toLowerCase() === value.toLowerCase()) {
+						exists = true;
+						self.val($(this).val());
+					}
+				});
+				if (!exists) {
+					e.stopImmediatePropagation();
+					return;
+				}
+			}
+		}
+	});
+
+
+	$('.list_input').bind('keydown', function(e) {
 		// clear error message if start typing
-		$('#interests_message').remove();
+		$(this).siblings('.duplicate_msg').remove();
+
+		var datatype = $(this).attr('id');
 
 		// only do something if user pressed enter when not selecting from datalist
 		if (e.keyCode==13) {
-			var interest = $(this).val();
-			if (interest != '') {
+			var value = $(this).val();
+			if (value != '') {
 				// prevent from submitting form
 				e.preventDefault();
 
+				// replace with capitalized version if exists
+				var self = $(this);
+				$(this).siblings('.select_list').children().each(function() {
+					if ($(this).val().toLowerCase() === value.toLowerCase()) {
+						value = $(this).val();
+					}
+				});
+
 				// check to see if already entered interest
 				var exists = false;
-				for (let li of $("#interests_list li")) {
+				for (let li of $(this).siblings('.variable_list').children('li')) {
 					var liTxt = $(li).clone().children().remove().end().text();
-					if (interest + ' ' === liTxt) {
+					if (value === liTxt) {
 						exists = true;
 					}
 				}
 
 				// if new interest, add to list
 				if (!exists) {
-					var li = $(
-            "<li>" + interest + ' <span class="close">[✘]</span></li>'
-          );
-					$("#interests_list").append(li);
+					var li = $('<li>' + value + '<span class="close"> [X]</span></li>');
+					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					$("#interests_list").after('<input type="hidden" id="entry_interest" name="entry_interests[]" value="' + interest + '">');
+					$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'" value="'+value+'">');
 
 				// otherwise, show message
 				} else {
-					$(this).after('<div id="interests_message">Interest already added!</div>');
-					$("#interests_message").css("color", "red");
+					$(this).after('<div class="duplicate_msg">Interest already added!</div>');
+					$(this).siblings('.duplicate_msg').css("color", "red");
 					$(this).val('');
 				}
 				
@@ -183,38 +226,50 @@ $(document).ready(function() {
 		}
 	});
 
-	// add language to list when user selects language
-	$("#select_language").change(function() {
-		var language = $(this).val();
-		var exists = false;
-		for (let li of $("#language_list li")) {
-			var liTxt = $(li).clone().children().remove().end().text();
-			if (language + ' ' === liTxt) {
-				exists = true;
-			}
-		}
-
-		if (!exists) {
-			var li = $("<li>" + language + ' <span class="close">[✘]</span></li>');
-			$('#language_list').append(li);
-			$(this).val('');
-
-			$('#language_list').after('<input type="hidden" id="entry_language" name="entry_lanuage[]" value="' + language + '">');
-		} else {
-			$(this).val('');
-		}
-	});
-
 	// allow for x "buttons" to close the parent element
 	$(".variable_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
-		$('#entry_interest[value="' + liTxt + '"]').remove();
+		liTxt = liTxt.substring(0, liTxt.length);
+		var listID = $(this).parent().parent().siblings('input').attr('id');
+		$('#entry_'+listID+'[value="' + liTxt + '"]').remove();	
 		// remove li item
 		$(this).parent().remove();
 	});
 
 
-	
+	socket.on('checkedDuplicates', function(d) {
+		if (d['duplicates'].includes('email') || d['duplicates'].includes('username')) {
+			if (d['duplicates'].includes('email')) {
+				emailDupe = true;
+				$('#email').after('<div id="duplicateEmail"><p>This email is already being used!</p></div>')
+			} else {
+				emailDupe = false;
+			}
+			if (d['duplicates'].includes('username')) {
+				usernameDupe = true;
+				$('#username').after('<div id="duplicateUsername"><p>This username already exists!</p></div>')
+			} else {
+				usernameDupe = false;
+			}
+		} else if (d['duplicates'].includes('instagram')) {
+			instagramDupe = true;
+			$('#instagram').after('<div id="duplicateInstagram"><p>This Instagram handle is already being used!</p></div>')
+		} else {
+			instagramDupe = false;
+			emailDupe = false;
+			usernameDupe = false;
+		}
+
+		if (emailDupe || usernameDupe) {
+			$(".tab:eq("+currentTab+")").hide();
+			currentTab = 1;
+			showTab(currentTab);
+		} else if (instagramDupe) {
+			$(".tab:eq("+currentTab+")").hide();
+			currentTab = 2;
+			showTab(currentTab);
+		}
+	});	
 
 });

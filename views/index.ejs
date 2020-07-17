@@ -17,16 +17,21 @@
 
 <%- include("partials/header") %>
 
-<!-- <div id="home-instruct">
-	<div>View your connections and make new ones.</div>
-	<div>Filter by <span>location</span>, <span>age</span>, <span>gender</span>, <span>sexuality</span>, <span>race and ethnicity</span>, <span>religion</span> and <span>interests</span>.</div>
-	<div>Request to connect and wait to hear back!</div>
-</div> -->
+
+<% if (!verified) { %>
+<div id='not-verified'>
+	<h2>Please verify your email!</h2>
+	<p>Visit your email and verify your address to access Pinkmantaray Connect. Make sure to check your junk or spam folder if you cannot find the email.</p>
+</div>
+<% } %>
 
 <h2>My Connections</h2>
 <div class="connect-subtitle">
 	You have (<%= results.length %>) connections.
 </div>
+
+
+
 <div id="my-connections">
 
 
@@ -45,12 +50,10 @@
 					<td><a href="https://www.instagram.com/<%= results[i].instagram %>">
 						<i class="fab fa-instagram fa-2x"></i></a>
 					</td>
-					<!-- <td><a href=""><img border="0" alt="email" 
-						src="/views/imgs/email_icon.png" width="22vh" height="16vh"></a></td> -->
-					<td><a href=""><i class="far fa-envelope fa-2x"></i></a></td>
+					
+					<td><a href="mailto:<%= results[i].email %>"><i class="far fa-envelope fa-2x"></i></a></td>
 		
-					<!-- <td><a href="/report?id=<%= results[i].id %>"><img border="0" alt="Report user" 
-						src="/views/imgs/report_icon.png" width="20vh" height="20vh"></a></td> -->
+
 					<td><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
 				</tr>
 			<% } %>

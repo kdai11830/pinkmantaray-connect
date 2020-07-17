@@ -1,9 +1,8 @@
-h2 {
+/* h2 {
     color: rgb(244, 156, 224);
     font-family: 'Poppins', sans-serif;
     font-size: 8vh;
 
-    /* width: 29vh; */
     margin: 0;
     text-align: left;
 }
@@ -31,14 +30,12 @@ h2 {
     left: 28%;
 
     border-radius: 1vh;
-    /* background: #f4f7f9; */
     background: #0d112e;
     box-shadow:  7px 7px 14px #000000, 
                 -7px -7px 14px #455259;
 }
 
 #profileInfo {
-    /* width: 50%; */
     height: 100%;
     text-transform: capitalize;
 }
@@ -87,9 +84,7 @@ h2 {
     padding-bottom: 2vh;
 }
 
-/* profile name */
 #profileLeft > div:first-child {
-    /* background-color: violet; */
     width: 22vh;
     height: 22vh;
     border-radius: 12vh;
@@ -117,13 +112,11 @@ h2 {
 }
 
 #profileLeft div:nth-child(3), #profileLeft div:nth-child(4)  {
-    /* display: flex;
-    justify-content: center; */
+
     font-weight: bolder;
 }
 
 #reportDiv button {
-   /* height: 7vh; */
     width: 18vh;
 
     color: rgb(139, 218, 247);
@@ -137,8 +130,7 @@ h2 {
     border: none;
 	text-align: center;
     cursor: pointer;
-    /* border-radius: 43px; */
-    /* margin-left: 79vh; */
+
 }
 
 #reportDiv button:hover {
@@ -146,7 +138,6 @@ h2 {
 }
 
 #profilePage > div, #profileForm {
-    /* padding: 0 10vh; */
     text-transform: capitalize;
 }
 
@@ -157,4 +148,4 @@ td > span {
     font-size: 2vh;
     font-weight: 800;
     text-transform: capitalize;
-}
+} */

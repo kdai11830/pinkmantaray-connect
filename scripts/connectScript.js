@@ -2,26 +2,33 @@
 
 $(document).ready(function() {
 
-	console.log("connect script begins...");
+	// console.log("connect script begins...");
 
 	var socket = io();
 
 	$("#connectForm").submit(function () {
+		// set all the custom values
+		$('.custom').each(function() {
+			if ($(this).is(':checked')) {
+				$(this).val($(this).siblings('.custom_text').val());
+			}
+		});
+
 		// put all grouped info in arrays
 		var gender = [];
-		$('input[name="option_gender[]"]:checked').each(function() {
+		$('input[name="option_gender"]').each(function() {
 			gender.push($(this).val());
 		});
 		var sexuality = [];
-		$('input[name="option_sexuality[]"]:checked').each(function() {
+		$('input[name="option_sexuality"]').each(function() {
 			sexuality.push($(this).val());
 		});
 		var race = [];
-		$('input[name="option_race[]"]:checked').each(function() {
+		$('input[name="option_race"]').each(function() {
 			race.push($(this).val());
 		});
 		var religion = [];
-		$('input[name="option_religion[]"]:checked').each(function() {
+		$('input[name="option_religion"]').each(function() {
 			religion.push($(this).val());
 		});
 		var interests = [];
@@ -63,7 +70,6 @@ $(document).ready(function() {
 		for (var key in d["data"]) {
 			data.push(d["data"][key]);
 		}
-		console.log(data);
 
 		if (data.length > 0 ) {
 			/* data: 
@@ -87,7 +93,7 @@ $(document).ready(function() {
 				<th>Age</th>
 				<th>Gender</th>
 				<th>Sexuality</th>
-				<th>Race/Ethnicity</th>
+				<th>Culture</th>
 				<th>Religion</th>
 				<th>Interests</th>
 				<th>Language</th></tr>`;
@@ -146,7 +152,6 @@ $(document).ready(function() {
 		// show custom popup since I'm too lazy to turn off and reset my chrome
 		clickedConnectBtn = $(this).closest('tr').attr('id');
 		$("#confirmationDialog").dialog('open');
-
 	});
 
 
@@ -158,47 +163,75 @@ $(document).ready(function() {
 		// send information to mysql
 		// get user id from the table
 		var id = parseInt($('#' + clickedConnectBtn).find('#userId').html());
-		console.log(id);
 		socket.emit('connectSend', {"id": id});	
 		$('#' + clickedConnectBtn + ' .connectBtn').replaceWith("Pending!");
 		$("#confirmationDialog").dialog('close');
 	});
 
+	$('.restrict_select').bind('keydown', function(e) {
+		if (e.keyCode==13) {
+			var value = $(this).val();
+			if (value != '') {
+				e.preventDefault();
+				var exists = false;
+				var self = $(this);
+				$(this).siblings('.select_list').children().each(function() {
+					if ($(this).val().toLowerCase() === value.toLowerCase()) {
+						exists = true;
+						self.val($(this).val());
+					}
+				});
+				if (!exists) {
+					e.stopImmediatePropagation();
+					return;
+				}
+			}
+		}
+	});
 
-	$('#interests').bind('keydown', function(e) {
+
+	$('.list_input').bind('keydown', function(e) {
 		// clear error message if start typing
-		$('#interests_message').remove();
+		$(this).siblings('.duplicate_msg').remove();
+
+		var datatype = $(this).attr('id');
 
 		// only do something if user pressed enter when not selecting from datalist
 		if (e.keyCode==13) {
-			var interest = $(this).val();
-			if (interest != '') {
+			var value = $(this).val();
+			if (value != '') {
 				// prevent from submitting form
 				e.preventDefault();
 
+				// replace with capitalized version if exists
+				var self = $(this);
+				$(this).siblings('.select_list').children().each(function() {
+					if ($(this).val().toLowerCase() === value.toLowerCase()) {
+						value = $(this).val();
+					}
+				});
+
 				// check to see if already entered interest
 				var exists = false;
-				for (let li of $("#interests_list li")) {
+				for (let li of $(this).siblings('.variable_list').children('li')) {
 					var liTxt = $(li).clone().children().remove().end().text();
-					if (interest + ' ' === liTxt) {
+					if (value === liTxt) {
 						exists = true;
 					}
 				}
 
 				// if new interest, add to list
 				if (!exists) {
-					var li = $(
-            "<li>" + interest + ' <span class="close">[✘]</span></li>'
-          );
-					$("#interests_list").append(li);
+					var li = $('<li>' + value + '<span class="close"> [X]</span></li>');
+					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					$("#interests_list").after('<input type="hidden" id="option_interest" name="option_interest" value="' + interest + '">');
+					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'" value="'+value+'">');
 
 				// otherwise, show message
 				} else {
-					$(this).after('<div id="interests_message">Interest already added!</div>');
-					$("#interests_message").css("color", "red");
+					$(this).after('<div class="duplicate_msg">Interest already added!</div>');
+					$(this).siblings('.duplicate_msg').css("color", "red");
 					$(this).val('');
 				}
 				
@@ -206,43 +239,15 @@ $(document).ready(function() {
 		}
 	});
 
-	// add language to list when user selects language
-	$("#select_language").change(function() {
-		var language = $(this).val();
-		console.log(language);
-		var exists = false;
-		for (let li of $("#language_list li")) {
-			var liTxt = $(li).clone().children().remove().end().text();
-			if (language + ' ' === liTxt) {
-				exists = true;
-			}
-		}
-
-		if (!exists) {
-			var li = $("<li>" + language + ' <span class="close">[✘]</span></li>');
-			$('#language_list').append(li);
-			$(this).val('');
-
-			$('#language_list').after('<input type="hidden" id="option_language" name="option_language" value="' + language + '">');
-		} else {
-			$(this).val('');
-		}
-	});
-
 	// allow for x "buttons" to close the parent element
 	$(".variable_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
-		liTxt = liTxt.substring(0, liTxt.length-1);
-		console.log(liTxt);
-		if (this.id == "language_list") {
-			$('#option_language[value="' + liTxt + '"]').remove();	
-		} else { // this is interest list
-			$('#option_interest[value="' + liTxt + '"]').remove();
-		}
+		liTxt = liTxt.substring(0, liTxt.length);
+		var listID = $(this).parent().parent().siblings('input').attr('id');
+		$('#option_'+listID+'[value="' + liTxt + '"]').remove();	
 		// remove li item
 		$(this).parent().remove();
-		console.log($(this).parent().length);
 	});
 
 })

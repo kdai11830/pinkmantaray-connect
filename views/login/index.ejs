@@ -22,14 +22,27 @@
 				</div>
 				<div>
 					<div>Welcome back!</div>
-					<form action="auth" method="POST" id="login-form">
+					<% if (auth == 'failed') { %>
+					<div class='loginFail'>Invalid username or password!</div>
+					
+					<% } else if (auth == 'reported') { %>
+					<div class='loginFail'>Your account has been put under review because it was reported by another user. If you have any
+						questions, please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>,</div>
+					
+					<% } else if (auth == 'onhold') { %>
+					<div class='loginFail'>
+						<p>You’ve recently reported too many accounts. Because we want to protect against potential fraudulent behavior, we
+							are placing your account on hold while we review. Please check back later. If you have questions, contact us at
+							<a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a>.</p>
+					</div>
+					<% } %>
+					
+					<form action="auth" method="POST">
 						<input type="text" placeholder="Username" name="uname" required>
-	
 						<input type="password" placeholder="Password" name="pwd" required>
-	
 						<button type="submit">Login</button>
 						<label>
-							<input type="checkbox" checked="checked" name="remember"> Remember me
+							<input type="checkbox" checked="checked" name="remember" value="remember"> Remember me
 						</label>
 					</form>
 				</div>

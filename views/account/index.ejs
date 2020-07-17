@@ -11,89 +11,133 @@
 	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script> 
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+			var socket = io();
+			var userData = <% - JSON.stringify(data) %>
+			// dialog css stuff, can be replaced in future css styles file
+			$('.dialog').css('position', 'absolute');
+			$(".dialog").css('z-index', 9999);
+			$('.dialog').css('background-color', 'white');
+			$('.dialog').css('border-style', 'outset');
+			$(".dialog").dialog({
+				autoOpen: false,
+				modal: true,
+				resizable: false,
+				show: false,
+				draggable: false,
+				open: function (event, ui) {
+					$(".ui-dialog-titlebar-close", ui.dialog || ui).hide();
+				}
+			});
+			if (userData["myProfile"]) {
+				if (userData["hidden"] == 0) {
+					$("#profileForm").after('<button id="hideProfile">Hide my profile</button>');
+				} else {
+					$("#profileForm").after('<button id="unhideProfile">Unhide my profile</button>');
+				}
+			}
+
+			$('#myProfileOptions').on('click', '#hideProfile', function () {
+				$('#hideDialog').dialog('open');
+			});
+			$('#myProfileOptions').on('click', '#unhideProfile', function () {
+				$('#unhideDialog').dialog('open');
+			});
+			$('.closeBtn').click(function () {
+				$(this).parent().dialog('close');
+			});
+			$('#hideConfirmBtn').click(function () {
+				socket.emit('hideProfile', { 'hide': true });
+				$(this).parent().dialog('close');
+				$('#hideProfile').remove();
+				$("#profileForm").after('<button id="unhideProfile">Unhide my profile</button>');
+			});
+			$('#unhideConfirmBtn').click(function () {
+				socket.emit('hideProfile', { 'hide': false });
+				$(this).parent().dialog('close');
+				$('#unhideProfile').remove();
+				$("#profileForm").after('<button id="hideProfile">Hide my profile</button>');
+			});
+		})
+	</script>
 
 </head>
 
-<body id="profileBody">
-	
+<body>
+
 	<%- include("../partials/header") %>
-	<div id="connectBody">
 
-	
-		<h2>My profile</h2>
-
-		<% if (Object.keys(data).length === 0) { %>
-			<form action="/" method="GET">
-			<h2>Profile not found!</h2>
-			<input type="submit" name="returnHome" value="Return to Home">
-			</form>
-
-		<% } else { %>
-			
-			<div id="profilePage">
-
-				<div id="profileLeft">
-					<div>
-						<%= data.name.split(" ")[0] %>
-					</div>
-				
-					<% if (!data.myProfile) { %>
-					<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
-					
-						<input type="hidden" name="userId" value="<%= data.id %>">
-						<input type="hidden" name="username" value="<%= data.username %>">
-						<div id="reportDiv">
-							<input type="submit" name="reportBtn" value="Report">
-						</div>
-						<% } else { %>
-						<form id="profileForm" action="/profile?edit=" method="GET">
-					
-							<div id="reportDiv">
-								<button type="submit" name="edit">Edit Profile <i class="far fa-edit"></i></button>
-							</div>
-							<% } %>
-					
-						</form>
-						<!-- <div>
-							<a href="https://instagram.com/<%= data.instagram %>">
-								<i class="fab fa-instagram fa-2x"></i></a>
-							<a href=""><i class="far fa-envelope fa-2x"></i></a>
-						</div> -->
-
-					<div><%= data.name %></div>
-			
-					<div><%= data.pronouns %></div>				
-				</div>
-				<div id="profileRight">
-					<table id="profileInfo">
-						<tr>
-							<td><span>Age: </span><%= new Date().getFullYear() - data.year %> years old</td>
-						</tr>
-						<tr>
-							<td><span>Gender: </span><%= data.gender.join(', ') %></td>
-						</tr>
-						<tr>
-							<td><span>Country: </span><%= data.country %></td>
-						</tr>
-						<tr>
-							<td><span>Language: </span><%= data.language.join(', ') %></td>
-						</tr>
-						<tr>
-							<td><span>Sexuality: </span><%= data.sexuality.join(', ') %></td>
-						</tr>
-						<tr>
-							<td><span>Ethnicity: </span><%= data.race_ethnicity.join(', ') %></td>
-						</tr>
-						<tr>
-							<td><span>Religion: </span><%= data.religion.join(', ') %></td>
-						</tr>
-						<tr>
-							<td><span>Interests: </span><%= data.interest.join(', ') %></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-
-		<% } %>
+	<% if (Object.keys(data).length === 0) { %>
+	<form action="/" method="GET">
+		<h2>Profile not found!</h2>
+		<input type="submit" name="returnHome" value="Return to Home">
+	</form>
+	<% } else { %>
+	<div id="profileInfoDiv">
+		<table id="profileInfo">
+			<tr>
+				<td><%= data.name %></td>
+				<td><%= new Date().getFullYear() - data.year %></td>
+				<td><%= data.pronouns %></td>
+				<td><a href="https://instagram.com/<%= data.instagram %>">
+						<img border="0" alt="https://instagram.com/<%= data.instagram %>"
+							src="/views/imgs/instagram_logo.png" width="20" height="20"></a></td>
+				<td><a href=""><img border="0" alt="email" src="/views/imgs/email_icon.png" width="20" height="20"></a>
+				</td> <!-- TODO -->
+			</tr>
+			<tr>
+				<td><%= data.gender.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.country %></td>
+			</tr>
+			<tr>
+				<td><%= data.language.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.sexuality.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.race_ethnicity.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.religion.join(', ') %></td>
+			</tr>
+			<tr>
+				<td><%= data.interest.join(', ') %></td>
+			</tr>
+		</table>
 	</div>
+	<% if (!data.myProfile) { %>
+	<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
+		<input type="hidden" name="userId" value="<%= data.id %>">
+		<input type="hidden" name="username" value="<%= data.username %>">
+		<div id="reportDiv">
+			<input type="submit" name="reportBtn" value="Report">
+		</div>
+		<% } else { %>
+		<div id="myProfileOptions">
+			<form id="profileForm" action="/profile?edit=" method="GET">
+				<div id="reportDiv">
+					<button type="submit" name="edit">Edit</button>
+				</div>
+			</form>
+		</div>
+		<% } %>
+	</form>
+	<div id="hideDialog" class="dialog">
+		<p>Are you sure you want to hide your profile? Doing so will remove you from the connection pool; you will not
+			be presented when your profile matches others' search queries.</p>
+		<button class='closeBtn'>Close</button>
+		<button id="hideConfirmBtn">Hide my profile</button>
+	</div>
+	<div id="unhideDialog" class="dialog">
+		<p>Unhide your profile and make yourself visible to others' search queries?</p>
+		<button class='closeBtn'>Close</button>
+		<button id="unhideConfirmBtn">Unhide my profile</button>
+	</div>
+	<% } %>
 </body>

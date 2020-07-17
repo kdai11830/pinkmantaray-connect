@@ -12,6 +12,10 @@
 	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script type="text/javascript" src='/socket.io/socket.io.js'></script>
+<script type="text/javascript" src='/scripts/settingsScript.js'></script>
+
 
 </head>
 
@@ -24,21 +28,55 @@
 		<div>
 			<div id="usernameDiv">
 				<p id="username"><span>Username: </span><%= data.username %></p>
-				<button id="changeUsername"><i class="far fa-edit fa-2x"></i></button>
+				<button class='changeBtn' id="changeUsername"><i class="far fa-edit fa-2x"></i></button>
+			</div>
+
+			<div id="changeUsernameDiv" class='dialog'>
+				<form id="usernameForm">
+					<input type="password" name="verifyPass" id='usernameVerifyPass' placeholder="Current password" required>
+					<input type="text" class="changeVal" name="username" placeholder="New username" required>
+					<button class='cancelBtn'>Cancel</button>
+					<button class='submitBtn' id='usernameSubmit'>Submit</button>
+				</form>
 			</div>
 
 			<div id="passwordDiv">
 				<p id="password"><span>Password: </span>******</p>
-				<button id="changePassword"><i class="far fa-edit fa-2x"></i></button>
+				<button class='changeBtn' id="changePassword"><i class="far fa-edit fa-2x"></i></button>
 			</div>
 
+			<div id="changePasswordDiv" class='dialog'>
+				<form id="passwordForm">
+					<input type="password" name="verifyPass" id='passwordVerifyPass' placeholder="Current password" required>
+					<input type="password" class="changeVal" name="password" placeholder="New password" required>
+					<input type="password" name="confirmPass" placeholder="Confirm new password" required>
+					<button class='cancelBtn'>Cancel</button>
+					<button class='submitBtn' id='passwordSubmit'>Submit</button>
+				</form>
+			</div>
 			<div id="emailDiv">
 				<p id="email"><span>Email: </span><%= data.email %></p>
-				<button id="changeEmail"><i class="far fa-edit fa-2x"></i></button>
+				<button class='changeBtn' id="changeEmail"><i class="far fa-edit fa-2x"></i></button>
+			</div>
+			<div id="changeEmailDiv" class='dialog'>
+				<form id="emailForm">
+					<input type="password" name="verifyPass" id='emailVerifyPass' placeholder="Current password" required>
+					<input type="text" class="changeVal" name="email" placeholder="New email" required>
+					<button class='cancelBtn'>Cancel</button>
+					<button class='submitBtn' id='emailSubmit'>Submit</button>
+				</form>
 			</div>
 			<div id="passwordDiv">
 				<p id="instagram"><span>Instagram handle: </span><%= data.instagram %></p>
-				<button id="changeInstagram"><i class="far fa-edit fa-2x"></i></button>
+				<button class='changeBtn' id="changeInstagram"><i class="far fa-edit fa-2x"></i></button>
+			</div>
+			<div id="changeInstagramDiv" class='dialog'>
+				<form id="instagramForm">
+					<input type="password" name="verifyPass" id='instagramVerifyPass' placeholder="Current password" required>
+					<input type="text" class="changeVal" name="instagram" placeholder="New Instagram handle" required>
+					<button class='cancelBtn'>Cancel</button>
+					<button class='submitBtn' id='instagramSubmit'>Submit</button>
+				</form>
 			</div>
 		</div>
 	</div>
