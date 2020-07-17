@@ -1,4 +1,12 @@
-/* h2 {
+#profile-body {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 4vh;
+    background-color: rgb(4, 4, 46);
+    color: white;
+}
+
+h2 {
     color: rgb(244, 156, 224);
     font-family: 'Poppins', sans-serif;
     font-size: 8vh;
@@ -6,6 +14,44 @@
     margin: 0;
     text-align: left;
 }
+
+#profileInfoDiv {
+    padding-left: 8vh;
+}
+
+#profileInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 28%;
+
+    margin-top: 3vh;
+
+    font-size: 2vh;
+    
+    width: 91vh;
+    height: 60vh;
+
+    border-radius: 1vh;
+    background: #0d112e;
+    box-shadow:  7px 7px 14px #000000, 
+                -7px -7px 14px #455259;
+
+    overflow-y:auto;
+}
+
+#profileInfo > tbody{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bolder;
+}
+
+tr {
+    margin: 2vh;
+}
+/*
 
 #profileBody {
     background-color: rgb(4, 4, 46);

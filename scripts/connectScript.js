@@ -222,7 +222,7 @@ $(document).ready(function() {
 
 				// if new interest, add to list
 				if (!exists) {
-					var li = $('<li>' + value + '<span class="close"> [X]</span></li>');
+					var li = $("<li>" + value + '<span class="close"> ×</span></li>');
 					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute

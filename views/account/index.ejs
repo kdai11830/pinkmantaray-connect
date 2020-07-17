@@ -66,7 +66,7 @@
 
 </head>
 
-<body>
+<body id="profile-body">
 
 	<%- include("../partials/header") %>
 
@@ -77,15 +77,15 @@
 	</form>
 	<% } else { %>
 	<div id="profileInfoDiv">
+		<h2>My Profile</h2>
 		<table id="profileInfo">
 			<tr>
 				<td><%= data.name %></td>
 				<td><%= new Date().getFullYear() - data.year %></td>
 				<td><%= data.pronouns %></td>
 				<td><a href="https://instagram.com/<%= data.instagram %>">
-						<img border="0" alt="https://instagram.com/<%= data.instagram %>"
-							src="/views/imgs/instagram_logo.png" width="20" height="20"></a></td>
-				<td><a href=""><img border="0" alt="email" src="/views/imgs/email_icon.png" width="20" height="20"></a>
+						<i class="fab fa-instagram fa-2x"></i></a></td>
+				<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a>
 				</td> <!-- TODO -->
 			</tr>
 			<tr>

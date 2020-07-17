@@ -32,27 +32,69 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: baseline;
     height: 55vh;
 }
 
-.search-row {
+.connect-row{
     display: flex;
-    /* flex-direction: column; */
-    /* align-items: center; */
-    /* width: 65vh; */
+    align-items: center;
+    width: 100%;
+}
+
+.connect-row > label {
+    width: 9%;
+    text-align: left;
+    color: rgb(244, 156, 224);
+    font-weight: bolder;
+}
+
+.results {
+    display: flex;
+}
+
+.results > input {
+    padding: 1vh 2vh;
+}
+
+.results > ul > li {
+    padding: 1vh 2vh;
+    margin: 0 2vh;
+    border-color: royalblue;
+    background-color: royalblue;
+    border-radius: 1vh;
+    text-align: center;
+}
+
+.results > ul > li:hover {
+    color: white;
+}
+
+#div_age > select {
+    margin-right: 1vh;
+}
+
+#div_age > select:nth-child(3) {
+    margin-left: 1vh;
+}
+
+.close:hover {
+    cursor: pointer;
+    color: red;
+}
+
+
+/* 
+#search-row {
+    display: flex;
 }
 
 #language_list li {
     padding-top: 0;
     padding-bottom: 0;
-    /* color: black; */
     cursor: default;
 }
 
-.close {
-    cursor: pointer;
-    color: red;
-}
 
 .search-row > label {
     font-weight: bold;
@@ -77,9 +119,8 @@ h2 {
 
 #interests {
     width: 37vh;
-}
+} */
 
-/* connect button  */
 #submitButton {
     height: 7vh;
     width: 18vh;

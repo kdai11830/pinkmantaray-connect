@@ -75,3 +75,11 @@ tr > td:nth-child(3) {
     padding-bottom: 5vh;
     padding-left: 8vh;
 }
+
+#not-verified p {
+    text-align: left;
+    font-weight: bolder;
+    padding-left: 8vh;
+    font-size: 3vh;
+    color: rgb(168, 224, 249);
+}
