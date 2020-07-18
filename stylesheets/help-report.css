@@ -1,0 +1,56 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+    font-family: 'Century Gothic', sans-serif;
+}
+
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    margin: 0;
+    text-align: left;
+    padding-left: 8vh;
+}
+
+body > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 68%;
+    padding-left: 8vh;
+    text-align: left;
+    height: 56vh;
+}
+
+/* login button  */
+.reportBtn {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+}
+
+/* login button active */
+.reportBtn:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+td {
+    text-transform: capitalize;
+}

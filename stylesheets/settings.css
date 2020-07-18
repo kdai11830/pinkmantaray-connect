@@ -93,3 +93,61 @@ p {
 .ui-widget-overlay {
     display: none;
 }
+
+.ui-widget-content {
+    display: flex;
+    border-radius: 4vh;
+    padding: 1vh;
+    height: 40vh;
+    width: 40vh;
+}
+
+#changeUsernameDiv, #passwordForm, #changeEmailDiv, #changeInstagramDiv {
+    display: flex;
+    flex-direction: column;
+    padding: 2vh;
+    justify-content: space-evenly;
+}
+
+.buttons {
+    display: flex;
+    padding-top: 2vh;
+    justify-content: space-evenly;
+}
+
+.submitBtn {
+    height: 5vh;
+    width: 10vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    /* font-size: 2vh; */
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+    /* margin-left: 79vh; */
+}
+
+/* connect button active */
+.submitBtn:active {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+.submitBtn:hover {
+    color: white;
+    background-color: rgb(147, 220, 247);
+}
+
+.ui-corner-all {
+    display: none;
+
+}
