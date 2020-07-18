@@ -162,9 +162,9 @@ body > form > h1:first-child {
 }
 
 #move-buttons {
-    /* position: fixed;
+    position: fixed;
     right: 4vh;
-    bottom: 5vh; */
+    bottom: 5vh;
 }
 
 #pwd-notMatched {
