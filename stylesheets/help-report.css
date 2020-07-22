@@ -14,14 +14,15 @@ h2 {
     padding-left: 8vh;
 }
 
-body > div {
+#divDesc {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    width: 68%;
-    padding-left: 8vh;
+    justify-content: space-between;
+    width: 46%;
+    padding: 0 8vh 0 8vh;
     text-align: left;
     height: 56vh;
+    font-size: 3vh;
 }
 
 /* login button  */
@@ -53,4 +54,13 @@ body > div {
 
 td {
     text-transform: capitalize;
+}
+
+#report-page {
+    display: flex;
+    padding-top: 3vh;
+}
+
+table {
+    width: 74vh;
 }

@@ -27,25 +27,29 @@
 	
 	<%- include("../partials/header") %>
 	<h2>Report A User</h2>
-	<div id="divDesc">
-		<div>Your safety and privacy is a top priority. If someone has made you feel unsafe in any way, please let us know. If you’re unsure of the boundaries on this website, please visit our <a href="/guidelines">community guidelines</a>.</div>
-	
-		<div>If someone hasn’t violated community guidelines but you no longer want to be connected with them, you can simply DELETE them from your connections. Please keep in mind that if this person has already saved your contact information outside of Pinkmantaray Connect, deleting them here will not remove you from their devices. Pinkmantaray Connect cannot be responsible for information outside of its control.</div>
-	
-		<div><a href="/contact">Contact us</a> if you have any questions. We are here to help and protect your privacy in any way that we are able.</div>
-	
-		<table>
-		<% for (var i = 0; i < data.length; i++) { %>
-			<tr>
-				<td><button class='reportBtn' value='<%= data[i].id %>'>Report</button></td>
-				<td><%= data[i].name %></td>
-				<td><%= data[i].pronouns %></td>
-				<td><a href="https://www.instagram.com/<%= data[i].instagram %>"><i class="fab fa-instagram fa-2x"></i></a></td>
-			</tr>		
-	
-		<% } %>
-		</table>
-F
+	<div id="report-page">
+
+		<div id="divDesc">
+			<div>Your safety and privacy is a top priority. If someone has made you feel unsafe in any way, please let us know. If you’re unsure of the boundaries on this website, please visit our <a href="/guidelines">community guidelines</a>.</div>
+		
+			<div>If someone hasn’t violated community guidelines but you no longer want to be connected with them, you can simply DELETE them from your connections. Please keep in mind that if this person has already saved your contact information outside of Pinkmantaray Connect, deleting them here will not remove you from their devices. Pinkmantaray Connect cannot be responsible for information outside of its control.</div>
+		
+			<div><a href="/contact">Contact us</a> if you have any questions. We are here to help and protect your privacy in any way that we are able.</div>
+		
+		</div>
+		<div>
+			<table>
+				<% for (var i = 0; i < data.length; i++) { %>
+					<tr>
+						<td><button class='reportBtn' value='<%= data[i].id %>'>Report</button></td>
+						<td><%= data[i].name %></td>
+						<td><%= data[i].pronouns %></td>
+						<td><a href="https://www.instagram.com/<%= data[i].instagram %>"><i class="fab fa-instagram fa-2x"></i></a></td>
+					</tr>		
+			
+				<% } %>
+			</table>
+		</div>
 	</div>
 
 	
