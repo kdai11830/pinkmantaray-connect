@@ -30,13 +30,13 @@ app.set('view engine', 'ejs');
 // establish mysql connection and promisify
 
 //kevin's (old?) mysql connection
-// var connection = mysql.createConnection({
-// 	host     : 'localhost',
-// 	user     : 'root',
-// 	password : 'Jkmrhi11830!',
-// 	database : 'pinkmantaray_connect',
-// 	multipleStatements: 'true'
-// });
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : 'Jkmrhi11830!',
+	database : 'pinkmantaray_connect',
+	multipleStatements: 'true'
+});
 
 // var pool = mysql.createPool({
 // 	connectionLimit : 10,
@@ -51,13 +51,13 @@ app.set('view engine', 'ejs');
 // vic's mysql connection
 // establish mysql connection
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "bearbear",
-  database: "new_schema2",
-  multipleStatements: "true",
-})
+// var connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "bearbear",
+//   database: "new_schema2",
+//   multipleStatements: "true",
+// })
 
 
 // var connection = mysql.createConnection({
@@ -476,8 +476,9 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 /** REPORT PAGE **/
 app.get('/report', restrict, verifyRestrict, function(req, res) {
 	if (!('id' in req.query)) {
-		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram 
-			FROM user_info info WHERE info.id = ?`;
+		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram FROM user_info info 
+			LEFT JOIN connections conn ON conn.user_id = info.id 
+			WHERE conn.connection_id = ?`;
 		connection.query(sql, req.session.user_id, function(error, results, fields) {
 			if (error) throw error;
 			console.log(results);
@@ -580,7 +581,10 @@ app.post('/reported', restrict, verifyRestrict, function(req, res) {
 				Because we want to protect against potential fraudulent behavior, we are placing your account on hold while we review.<br>
 				This email is sent to you from an account we use for sending message only. 
 				Please don’t reply to this email — we won’t receive your response. 
-				Please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a> if you have further questions.`
+				Please contact us at <a href="mailto:admin@pinkmantaray.com">admin@pinkmantaray.com</a> if you have further questions.<br>
+				<i>Please do not reply to this message. This email is an automated notification and is unable to receive replies. 
+				If you have questions please visit <a href="http://www.connect.pinkmantaray.com/help">connect.pinkmantaray.com/help</a>. 
+				You may also email us at admin@pinkmantaray.com.</i>`
 			var mailOptions = {
 				from: 'noreply@pinkmantaray.com',
 				to: req.session.email,
@@ -968,11 +972,19 @@ app.post('/new-user-auth', function(req, res) {
 									// send verification email
 									host = req.get('host');
 									var link = 'http://'+req.get('host')+'/verify?username='+req.session.username+'&id='+rand;
+									var html = `Hello `+name+ `,<br><br>
+										We’re so excited that you’ve signed up for Pinkmantaray Connect! <br><br>
+										Please click on the link here to verify your email address.<br>` + link + `<br><br>
+										Sincerely,<br>
+										The Pinkmantaray Connect Team<br><br>
+										<i>Please do not reply to this message. This email is an automated notification and is unable to receive replies. 
+										If you have questions please visit <a href="http://www.connect.pinkmantaray.com/help">connect.pinkmantaray.com/help</a>. 
+										You may also email us at admin@pinkmantaray.com.</i>`
 									var mailOptions = {
 										from: 'noreply@pinkmantaray.com',
 										to: email,
 										subject: 'Pinkmantaray Connect Email Verification',
-										html: 'Hello,<br> Please click on the link to verify your email address.<br><a href='+link+'>Click to verify</a>'
+										html: html
 									}
 									console.log(mailOptions);
 									smtpTransport.sendMail(mailOptions, function(error, response) {
@@ -980,11 +992,12 @@ app.post('/new-user-auth', function(req, res) {
 										if (error) {
 											console.log(error);
 
-											if (error.responseCode ==550) {
-												res.redirect('/?verified=false');
-											} 
+											// if (error.responseCode ==550) {
+											// 	res.redirect('/?verified=false');
+											// } 
 
-											else throw error; // idk what other errors there can be
+											// else throw error; // idk what other errors there can be
+											res.redirect('/?verified=false');
 
 											// do some other error handling TODO
 											// actually does it even matter if they provide invalid email?

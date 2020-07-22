@@ -6,13 +6,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://kit.fontawesome.com/07e3f56f33.js" crossorigin="anonymous"></script>
 <link href="../stylesheets/help-report.css" rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;800;900&family=Open+Sans&family=Poppins:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,500;0,900;1,900&display=swap"
+	rel="stylesheet">
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.reportBtn').click(function() {
+			console.log('ASDFKASDJG');
+			var user_id = $(this).val();
+			location.href = '/report?id='+user_id;
+		});
+	});
+</script>
+
 </head>
 
 <body>
 	
 	<%- include("../partials/header") %>
 	<h2>Report A User</h2>
-	<div>
+	<div id="divDesc">
 		<div>Your safety and privacy is a top priority. If someone has made you feel unsafe in any way, please let us know. If you’re unsure of the boundaries on this website, please visit our <a href="/guidelines">community guidelines</a>.</div>
 	
 		<div>If someone hasn’t violated community guidelines but you no longer want to be connected with them, you can simply DELETE them from your connections. Please keep in mind that if this person has already saved your contact information outside of Pinkmantaray Connect, deleting them here will not remove you from their devices. Pinkmantaray Connect cannot be responsible for information outside of its control.</div>
@@ -32,7 +47,6 @@
 		</table>
 F
 	</div>
-
 
 	
 
