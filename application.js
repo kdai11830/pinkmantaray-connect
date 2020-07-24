@@ -627,7 +627,7 @@ app.post('/edited', restrict, verifyRestrict, function(req, res) {
 	}
 	var race_ethnicity = [];
 	if (req.body.option_race) {
-		race_ethnicity = req.body.option_race;
+		race_ethnicity = req.body.option_race_ethnicity;
 	}
 	var religion = [];
 	if (req.body.option_religion) {
