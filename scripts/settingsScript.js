@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$('.dialog').css('position', 'absolute');
 	$(".dialog").css('z-index', 9999);
 	$('.dialog').css('background-color', 'white');
-	$('.dialog').css('border-style', 'outset');
+	// $('.dialog').css('border-style', 'outset');
 
 	$(".dialog").dialog({
 		autoOpen: false,

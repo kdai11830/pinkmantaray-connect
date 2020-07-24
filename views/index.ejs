@@ -47,14 +47,14 @@
 						<img border="0" alt="www.instagram.com/<%=results[i].instagram %>" 
 						src="/views/imgs/instagram_logo.png" width="20vh" height="20vh"></a>
 					</td> -->
-					<td><a href="https://www.instagram.com/<%= results[i].instagram %>">
+					<td class='iconButton'><div class='iconButtonText'>IG</div><a href="https://www.instagram.com/<%= results[i].instagram %>">
 						<i class="fab fa-instagram fa-2x"></i></a>
 					</td>
 					
-					<td><a href="mailto:<%= results[i].email %>"><i class="far fa-envelope fa-2x"></i></a></td>
+					<td class='iconButton'><div class='iconButtonText'>Email</div><a href="mailto:<%= results[i].email %>"><i class="far fa-envelope fa-2x"></i></a></td>
 		
 
-					<td><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
+					<td class='iconButton'><div class='iconButtonText'>Report</div><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
 				</tr>
 			<% } %>
 		<% } %>

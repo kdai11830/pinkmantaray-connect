@@ -95,11 +95,11 @@ $(document).ready(function() {
 	})
 
 	// dialog css stuff, can be replaced in future css styles file
-	$('#confirmationDialog').css('position', 'absolute');
-	$("#confirmationDialog").css('z-index', 9999);
-	$('#confirmationDialog').css('background-color', 'white');
-	$('#confirmationDialog').css('border-style', 'outset');
-	$('#confirmationDialog').css('padding', '4vh');
+	// $('#confirmationDialog').css('position', 'absolute');
+	// $("#confirmationDialog").css('z-index', 9999);
+	// $('#confirmationDialog').css('background-color', 'white');
+	// $('#confirmationDialog').css('border-style', 'outset');
+	// $('#confirmationDialog').css('padding', '4vh');
 
 
 	$("#confirmationDialog").dialog({

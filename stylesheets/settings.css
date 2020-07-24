@@ -51,6 +51,7 @@ body > div > div {
 
 body > div > div > div {
     display: flex;
+    justify-content: space-between;
 }
 
 body > div > div button {
@@ -102,11 +103,24 @@ p {
     width: 40vh;
 }
 
-#changeUsernameDiv, #passwordForm, #changeEmailDiv, #changeInstagramDiv {
+#changeUsernameDiv, #changePasswordDiv, #changeEmailDiv, #changeInstagramDiv {
     display: flex;
     flex-direction: column;
     padding: 2vh;
     justify-content: space-evenly;
+    height: 41vh !important;
+}
+
+#usernameForm, #passwordForm, #emailForm, #instagramForm {
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    padding: 5vh;
+    justify-content: space-between;
+}
+
+.ui-dialog{
+    outline:none;
 }
 
 .buttons {
@@ -116,22 +130,20 @@ p {
 }
 
 .submitBtn {
-    height: 5vh;
-    width: 10vh;
-
+    /* height: 5vh; */
+    /* width: 10vh; */
     color: white;
     background: rgb(139, 218, 247);
-
     /* font-size: 2vh; */
     font-weight: 800;
     text-transform: uppercase;
-
     outline: none;
     border: none;
-	text-align: center;
+    text-align: center;
     cursor: pointer;
-    border-radius: 43px;
+    border-radius: 4vh;
     /* margin-left: 79vh; */
+    padding: 2vh 3vh;
 }
 
 /* connect button active */
@@ -150,4 +162,29 @@ p {
 .ui-corner-all {
     display: none;
 
+}
+
+/* input fields */
+#usernameForm > input, #passwordForm > input, #emailForm > input, #instagramForm > input {
+    width: 34vh;
+    height: 7vh;
+    border: none;
+    border-radius: 1rem;
+    font-size: 2.5vh;
+    padding-left: 1.4rem;
+    box-shadow: inset .2rem .2rem .5rem rgb(218, 218, 218), 
+                inset -.2rem -.2rem .5rem rgb(206, 203, 203);
+    background: none;
+    color: black;
+}
+
+
+#usernameForm input::placeholder, #passwordForm > input::placeholder, #emailForm > input::placeholder, #instagramForm > input::placeholder { 
+    color: gray;
+}
+
+#usernameForm input:focus, #passwordForm > input:focus, #emailForm > input:focus, #instagramForm > input:focus { 
+    outline: none; 
+    /* box-shadow: .3rem .3rem .6rem rgb(165, 163, 163), 
+                -.2rem -.2rem .5rem rgb(223, 219, 219); */
 }

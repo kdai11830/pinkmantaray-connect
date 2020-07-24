@@ -175,7 +175,7 @@ body > form > h1:first-child {
 }
 
 #move-buttons {
-    position: fixed;
+    float:right;
     right: 4vh;
     bottom: 5vh;
 }
