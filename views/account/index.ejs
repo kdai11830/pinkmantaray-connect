@@ -21,7 +21,7 @@
 			$('.dialog').css('position', 'absolute');
 			$(".dialog").css('z-index', 9999);
 			$('.dialog').css('background-color', 'white');
-			$('.dialog').css('border-style', 'outset');
+			// $('.dialog').css('border-style', 'outset');
 			$(".dialog").dialog({
 				autoOpen: false,
 				modal: true,
@@ -120,9 +120,9 @@
 			<% } else { %>
 			<div id="myProfileOptions">
 				<form id="profileForm" action="/profile?edit=" method="GET">
-					<div id="reportDiv">
+					<!-- <div id="reportDiv"> -->
 						<button type="submit" name="edit">Edit Profile</button>
-					</div>
+					<!-- </div> -->
 				</form>
 			</div>
 			<% } %>
@@ -132,12 +132,12 @@
 	<div id="hideDialog" class="dialog">
 		<p>Are you sure you want to hide your profile? Doing so will remove you from the connection pool; you will not
 			be presented when your profile matches others' search queries.</p>
-		<button class='closeBtn'>Close</button>
+		<!-- <button class='closeBtn'>Close</button> -->
 		<button id="hideConfirmBtn">Hide my profile</button>
 	</div>
 	<div id="unhideDialog" class="dialog">
 		<p>Unhide your profile and make yourself visible to others' search queries?</p>
-		<button class='closeBtn'>Close</button>
+		<!-- <button class='closeBtn'>Close</button> -->
 		<button id="unhideConfirmBtn">Unhide my profile</button>
 	</div>
 	<% } %>

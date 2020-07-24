@@ -84,6 +84,10 @@ body > form > h1:first-child {
     border-radius: 43px;
 }
 
+#nextBtn {
+    background-color: rgb(105, 204, 240);
+}
+
 /* login button active */
 #nextBtn:active, #prevBtn:active {
     background-color: rgb(147, 220, 247);
@@ -100,6 +104,10 @@ body > form > h1:first-child {
     padding-top: 9vh;
 }
 
+.first-tab {
+    padding-top: 85vh;
+}
+
 .further-signup-info {
     margin-top: -4vh;
 }
@@ -111,9 +119,10 @@ body > form > h1:first-child {
     /* padding: 10vh; */
 }
 
-.signup-info > div > label, .further-signup-info div label {
+.signup-info > div > label, .further-signup-info div label, .signup-id-info label, #interests, #div_interests label {
     font-weight: bolder;
     color: rgb(244, 156, 224);
+    padding-right: 1vh;
 }
 
 .further-signup-info > div {
@@ -121,7 +130,7 @@ body > form > h1:first-child {
     flex-direction: column;
 }
 
-.further-signup-info div label {
+.further-signup-info div label{
     margin: 4vh 0 2vh 0;
 }
 
@@ -141,7 +150,7 @@ body > form > h1:first-child {
     left: 50%;
 }
 
-.required, #select_state, #select_lang {
+.required, #select_state, .select_list, datalist {
     width: 34vh;
     height: 7vh;
     border: 0.1vh solid rgba(255, 255, 255, 0);
@@ -154,21 +163,21 @@ body > form > h1:first-child {
     color: white;
 }
 
-#select_state, #select_lang, #select_year, #select_country {
+#select_state, #language_datalist, #select_year, #select_country {
     width: 38vh;
 }
 
 /* .signup-info input:focus {  */
-.required:focus { 
+.required:focus, .signup-id-info input:focus, .looking-for input:focus { 
     outline: none; 
     box-shadow: .3rem .3rem .6rem darkgrey, 
                 -.2rem -.2rem .5rem white;
 }
 
 #move-buttons {
-    /* position: fixed;
+    float:right;
     right: 4vh;
-    bottom: 5vh; */
+    bottom: 5vh;
 }
 
 #pwd-notMatched {
@@ -195,16 +204,27 @@ body > form > h1:first-child {
     padding-top: 22vh;
 }  */
 
-#select_state:focus, #select_lang:focus {
+#select_state:focus, #language_datalist:focus {
     border-color: rgb(244, 156, 224);
 }
 
 .signup-id-info {
     display: flex;
     flex-direction: column;
-    padding-top: 15vh;
+    padding-top: 16vh;
     /* padding: 0 0vh 10vh 0; */
+    height: 31vh;
+    justify-content: space-evenly;
 }
+
+#entry_gender_div {
+    display: flex;
+}
+
+#gender_list {
+    display: flex;
+}
+
 
 .culture-page {
     padding-top: 25vh;
@@ -224,9 +244,11 @@ label h3 {
 
 .consent-checkbox {
     border-radius: none;
-    width: 4vh;
+    width: 3vh;
     height: 3vh;
     box-shadow: none;
+    padding: 0;
+    margin: 0 2vh 0 0;
 }
 
 .consent-checkbox:focus {
@@ -237,8 +259,20 @@ label h3 {
     width: 38vh;
     height: 4vh;
     font-family: 'Century Gothic', sans-serif;
-    padding-left: 1vh;
-    
+    padding-left: 1vh; 
+}
+
+.signup-id-info input, #interests {
+    width: 34vh;
+    height: 7vh;
+    border: 0.1vh solid rgba(255, 255, 255, 0);
+    border-radius: 1rem;
+    font-size: 2.5vh;
+    padding-left: 1.4rem;
+    box-shadow: inset 0.2rem 0.2rem 0.5rem black, inset -0.2rem -0.2rem 0.5rem grey;
+    background: none;
+    color: white;
+    margin: 2vh 0 3vh 0;
 }
 
 /* .signup-id-info div {
@@ -246,11 +280,11 @@ label h3 {
     padding: 0 1vh 0vh 0;
 } */
 
-.signup-id-info div div, .culture-page div div {
+/* .culture-page div div {
     display: flex;
     flex-direction: column;
     width: 62vh;
-}
+} */
 
 #notRead {
     /* position: absolute;
@@ -259,7 +293,9 @@ label h3 {
 
 
 #resource_div {
-    display: inline-block;
+        display: flex;
+    /* justify-content: center; */
+    align-items: center;
 }
 
 .close {
@@ -270,6 +306,7 @@ label h3 {
     color: rgb(147, 220, 247);
     /* padding-top: 12vh; */
     display: block;
+    padding-bottom: 6vh;
 }
 
 .blurb a {
@@ -277,5 +314,47 @@ label h3 {
 }
 
 .looking-for {
-    width: 124vh
+    width: 124vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10vh;
+    height: 49vh;
+}
+
+#div_interests, #entry_interest_div, #interests_list, #entry_sexuality_div, #sexuality_list, .results, ul {
+    display: flex;
+    align-items: center;
+}
+
+li {
+    padding: 1vh 0 1vh 2vh;
+    margin: 0 2vh;
+    border-color: royalblue;
+    background-color: royalblue;
+    border-radius: 1vh;
+    list-style-type: none;
+    align-items: center;
+    display: flex;
+}
+
+li:hover {
+    color: white;
+}
+
+.close:hover {
+    cursor: pointer;
+    color: red;
+}
+
+.close {
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+    width: 8vh;
+    text-align: center;
+    /* background-color: whitesmoke; */
+    border: none;
+    color: rgb(243, 98, 98);
+        font-size: 4vh;
+    width: 5vh;
 }

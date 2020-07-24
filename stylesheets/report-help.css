@@ -1,0 +1,33 @@
+body {
+    background-color: rgb(4, 4, 46);
+    color: white;
+    font-family: 'Century Gothic', sans-serif
+}
+
+#divDesc {
+    display: inline;
+    width: 120vh;
+}
+
+h2 {
+    color: rgb(244, 156, 224);
+    font-family: 'Poppins', sans-serif;
+    font-size: 8vh;
+
+    margin: 0;
+    text-align: left;
+    padding-left: 8vh;
+}
+
+p {
+    font-weight: bolder;
+    font-size: 2vh;
+    display: inline-flex;
+}
+
+p a {
+    color: rgb(244, 156, 224);
+    display: inline-block;
+    padding-left: 1vh;
+    padding-right: .8vh;
+}

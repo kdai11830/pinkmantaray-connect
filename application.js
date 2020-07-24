@@ -476,8 +476,9 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 /** REPORT PAGE **/
 app.get('/report', restrict, verifyRestrict, function(req, res) {
 	if (!('id' in req.query)) {
-		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram 
-			FROM user_info info WHERE info.id = ?`;
+		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram FROM user_info info 
+			LEFT JOIN connections conn ON conn.user_id = info.id 
+			WHERE conn.connection_id = ?`;
 		connection.query(sql, req.session.user_id, function(error, results, fields) {
 			if (error) throw error;
 			console.log(results);
@@ -991,11 +992,12 @@ app.post('/new-user-auth', function(req, res) {
 										if (error) {
 											console.log(error);
 
-											if (error.responseCode ==550) {
-												res.redirect('/?verified=false');
-											} 
+											// if (error.responseCode ==550) {
+											// 	res.redirect('/?verified=false');
+											// } 
 
-											else throw error; // idk what other errors there can be
+											// else throw error; // idk what other errors there can be
+											res.redirect('/?verified=false');
 
 											// do some other error handling TODO
 											// actually does it even matter if they provide invalid email?

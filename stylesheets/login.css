@@ -169,3 +169,8 @@ body {
     font-weight: 300;
     color: gray;
 }
+
+.loginFail {
+    color: red;
+    font-size: 2vh;
+}

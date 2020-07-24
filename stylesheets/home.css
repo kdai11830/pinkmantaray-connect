@@ -83,3 +83,10 @@ tr > td:nth-child(3) {
     font-size: 3vh;
     color: rgb(168, 224, 249);
 }
+.iconButton:hover .iconButtonText {
+  visibility: visible;
+  padding: 0.5vh;
+}
+.iconButtonText{
+  visibility: hidden;
+}

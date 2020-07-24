@@ -98,7 +98,17 @@ form div ul > li:hover {
     background: none;
     border: none;
     outline: none;
+    /* margin-bottom: 4vh; */
     margin-left: 2vh;
+}
+
+#closeBtn {
+    margin: 4vh 0 4vh 0;
+}
+
+#closeBtn:hover, #cancelButton:hover {
+    cursor: pointer;
+    /* color: rgb(173, 227, 247); */
 }
 
 /* connect button active */
@@ -122,4 +132,34 @@ form div ul > li:hover {
 /* ui-widget-content */
 .ui-dialog-content {
     color: black;
+}
+
+#confirmationDialog {
+    position: absolute;
+    z-index: 9999;
+    background-color: rgb(244, 156, 224);
+    padding: 4vh;
+    border-radius: 3vh 0 3vh 3vh;
+    height: 30vh !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#confirmationDialog p {
+    padding-bottom: 4vh;
+}
+
+.ui-dialog-titlebar-close {
+    color: black;
+    margin-top: -3vh;
+    background-color: rgb(244, 156, 224);
+    border:none;
+    border-radius: 2vh 2vh 0 0vh;
+    padding: 1vh;
+    margin-left: 40.2vh;
+}
+
+.ui-dialog-titlebar-close:hover {
+    color: white;
 }

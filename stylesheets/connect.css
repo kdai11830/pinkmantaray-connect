@@ -323,3 +323,8 @@ h2 {
     background-color: #202033;
     padding-top: 2vh;
 }
+
+#select_location {
+    width: 28vh;
+    height: 5vh;
+}
