@@ -150,7 +150,7 @@ body > form > h1:first-child {
     left: 50%;
 }
 
-.required, #select_state, .select_list, datalist {
+.required, #select_country, #select_state, .select_list, datalist {
     width: 34vh;
     height: 7vh;
     border: 0.1vh solid rgba(255, 255, 255, 0);
@@ -180,7 +180,7 @@ body > form > h1:first-child {
     bottom: 5vh;
 }
 
-#pwd-notMatched {
+#pwd-notMatched #email-notValid {
     color: red;
     position: absolute;
     width: 42vh;

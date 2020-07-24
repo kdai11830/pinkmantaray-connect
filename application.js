@@ -30,13 +30,13 @@ app.set('view engine', 'ejs');
 // establish mysql connection and promisify
 
 //kevin's (old?) mysql connection
-// var connection = mysql.createConnection({
-// 	host     : 'localhost',
-// 	user     : 'root',
-// 	password : 'Jkmrhi11830!',
-// 	database : 'pinkmantaray_connect',
-// 	multipleStatements: 'true'
-// });
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : 'Jkmrhi11830!',
+	database : 'pinkmantaray_connect',
+	multipleStatements: 'true'
+});
 
 // var pool = mysql.createPool({
 // 	connectionLimit : 10,
@@ -51,13 +51,13 @@ app.set('view engine', 'ejs');
 // vic's mysql connection
 // establish mysql connection
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "bearbear",
-  database: "new_schema2",
-  multipleStatements: "true",
-})
+// var connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "bearbear",
+//   database: "new_schema2",
+//   multipleStatements: "true",
+// })
 
 
 // var connection = mysql.createConnection({
@@ -1080,15 +1080,19 @@ io.sockets.on('connection', function(socket) {
 			LEFT JOIN user_language language ON
 			language.user_id = info.id
 			LEFT JOIN connections conn ON
-			conn.user_id = info.id WHERE 
-			(info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
+			conn.user_id = info.id 
+			WHERE (info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
 			OR ((info.id NOT IN (SELECT conn.connection_id FROM connections conn)) AND (info.id NOT IN (SELECT conn.user_id FROM connections conn)))) 
-			AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND `;
+			AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND (info.on_hold != 1) AND `;
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
 		if (vals["location"] != '') {
 			sql += '(info.country = ?) AND ';
 			insertVals.push(vals["location"]);
+		}
+		if (vals["state"] != '') {
+			sql += '(info.state = ?) AND ';
+			insertVals.push(vals["state"]);
 		}
 		if (vals["ageRange"][0] != null && vals["ageRange"][1] != null) {
 			sql += '(info.year BETWEEN ? AND ?) AND ';

@@ -6,6 +6,66 @@ $(document).ready(function() {
 
 	var socket = io();
 
+	var bannedWords = [
+		"ass",
+		"asshole",
+		"bikinibody",
+		"bitch",
+		"boho",
+		"curvygirls",
+		"date",
+		"dating",
+		"dm",
+		"graffitiigers",
+		"humpday",
+		"killingit",
+		"kill",
+		"killing",
+		"kissing",
+		"kiss",
+		"kiser",
+		"master",
+		"motherfucker",
+		"nasty",
+		"nigger",
+		"nigga",
+		"petite",
+		"porn",
+		"pornhub",
+		"shit",
+		"shower",
+		"single",
+		"thot",
+		"undies",
+		"underwear",
+		"vagina",
+		"vag",
+		"cunt",
+		"dick",
+		"penis",
+		"bulge",
+		"fag",
+		"faggot",
+		"fuck",
+		"fucker",
+		"fucking",
+		"fucked",
+		"twink",
+		"hunk",
+		"daddy",
+		"daddies",
+		"zaddy",
+		"zaddies",
+		"pussy",
+		"pussies",
+		"twat",
+		"whore",
+		"bastard",
+		"cock",
+		"retard",
+		"retarded",
+		"schizo"];
+
 	var emailDupe = false;
 	var usernameDupe = false;
 	var instagramDupe = false;
@@ -60,6 +120,7 @@ $(document).ready(function() {
 		//var reqInputs = $(".tab:eq("+currentTab+")").find(".required");
 
 		$('#pwd-notMatched').remove();
+		$('#email-notValid').remove();
 		$('#notRead').remove();
 
 		$(".tab:eq("+currentTab+")").find(".required").each(function(idx) {
@@ -78,7 +139,7 @@ $(document).ready(function() {
 			}
 		});
 
-		// validate password equality on second tab
+		// validate password equality and email validity on second tab
 		if (currentTab === 1) {
 			if ($('#pwd').val() !== $('#confirm').val()) {
 				valid = false;
@@ -86,6 +147,13 @@ $(document).ready(function() {
 				$('#confirm').css('border-color','red');
 				$(".tab:eq("+currentTab+")").append('<p id="pwd-notMatched">Passwords do not match!</p>');
 				$('#pwd-notMatched').css('color', 'red');
+			}
+
+			if (!($('#entry_email').val().includes('@'))) {
+				valid = false;
+				$('#entry_email').css('border-color', 'red');
+				$(".tab:eq("+currentTab+")").append('<p id="email-notValid">Please enter a valid email!</p>');
+				$('#email-notValid').css('color', 'red');
 			}
 
 			// check if username and email already exist
@@ -125,13 +193,13 @@ $(document).ready(function() {
 
 	// controller for selecting state in USA
 	// hide state by default
-	$("#state_div").hide();
+	$("#select_state").prop('disabled','disabled');
 	$("#select_country").change(function() {
 		if ($("#select_country").val() == "USA") {
-			$("#state_div").show();
+			$("#select_state").prop('disabled', false);
 		} else {
 			$('#select_state option')[0].selected = true;
-			$("#state_div").hide();
+			$("#select_state").prop('disabled','disabled');
 		}
 	});
 
@@ -177,9 +245,39 @@ $(document).ready(function() {
 	});
 
 
+	// $(".list_input").on('input', function () {
+	//     var val = this.value;
+	//     if($(this).siblings('.select_list').children().filter(function(){
+	//         return this.value.toUpperCase() === val.toUpperCase();        
+	//     }).length) {
+	//         var exists = false;
+	// 		for (let li of $(this).siblings('.variable_list').children('li')) {
+	// 			var liTxt = $(li).clone().children().remove().end().text();
+	// 			if (value === liTxt) {
+	// 				exists = true;
+	// 			}
+	// 		}
+	// 		// if new interest, add to list
+	// 		if (!exists) {
+	// 			var li = $("<li>" + value + '<span class="close"> ×</span></li>');
+	// 			$(this).siblings('.variable_list').append(li);
+	// 			$(this).val('');
+	// 			// insert interest as hidden input with list attribute
+	// 			$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'" value="'+value+'">');
+	// 		// otherwise, show message
+	// 		} else {
+	// 			$(this).after('<div class="duplicate_msg">Interest already added!</div>');
+	// 			$(this).siblings('.duplicate_msg').css("color", "red");
+	// 			$(this).val('');
+	// 		}
+	//     }
+	// });
+
+
 	$('.list_input').bind('keydown', function(e) {
 		// clear error message if start typing
 		$(this).siblings('.duplicate_msg').remove();
+		$(this).siblings('#bannedWordMsg').remove();
 
 		var datatype = $(this).attr('id');
 
@@ -189,6 +287,13 @@ $(document).ready(function() {
 			if (value != '') {
 				// prevent from submitting form
 				e.preventDefault();
+				
+				// prevent user from entering banned words
+				if (bannedWords.includes(value.toLowerCase())) {
+					$(this).after('<p id="bannedWordMsg">You cannot enter this value</p>');
+					$(this).val('');
+					return false;
+				}
 
 				// replace with capitalized version if exists
 				var self = $(this);
@@ -213,7 +318,7 @@ $(document).ready(function() {
 					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'" value="'+value+'">');
+					$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'[]" value="'+value+'">');
 
 				// otherwise, show message
 				} else {
