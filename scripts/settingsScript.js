@@ -107,6 +107,17 @@ $(document).ready(function() {
 		$('#successMsg').empty();
 	});
 
+
+	$('#deleteBtn').click(function() {
+		$('#deleteDiv').dialog('open');
+		currentDialog = $('#deleteDiv');
+	});
+
+	$('#deleteSubmit').click(function() {
+		$('#confirmDeleteForm').submit();
+	});
+
+
 	socket.on('updateInfoResult', function(d) {
 		if (d['success'] === 'true') {
 			// $('#successMsg').append('<h3>User information successfully updated!</h3>');

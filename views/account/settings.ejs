@@ -87,6 +87,22 @@
 				</form>
 			</div>
 		</div>
+
+		<div>
+			<button id="deleteBtn">DELETE ACCOUNT</button>
+			<div id="deleteDiv" class='dialog'>
+				<form id="confirmDeleteForm" action='/delete' method='POST'>
+					<h3>Are you sure you want to delete your account?</h3>
+					<p>This action is irreversible and all connections to your account will be lost.</p>
+					<p>Continue?</p>
+					<div class="buttons">
+						<button class='cancelBtn'>Cancel</button>
+						<button class='submitBtn' id='deleteSubmit'>Confirm</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
 	</div>
 
 </body>

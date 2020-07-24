@@ -1021,6 +1021,30 @@ app.post('/new-user-auth', function(req, res) {
 });
 
 
+/** DELETE AN ACCOUNT **/
+app.post('/delete', restrict, function(req, res) {
+	// delete everywhere except report logs
+	var sql = `DELETE FROM user_info WHERE id = ?;
+		DELETE FROM user_gender WHERE user_id = ?;
+		DELETE FROM user_interests WHERE user_id = ?;
+		DELETE FROM user_sexuality WHERE user_id = ?;
+		DELETE FROM user_language WHERE user_id = ?;
+		DELETE FROM user_race_ethnicity WHERE user_id = ?;
+		DELETE FROM user_religion WHERE user_id = ?;
+		DELETE FROM connections WHERE (user_id = ?) OR (connection_id = ?);`
+
+	var insertVals = [];
+	for (var i = 0; i < 9; i++) {
+		insertVals.push(req.session.user_id);
+	}
+
+	connection.query(sql, insertVals, function(errors, results, fields) {
+		if (errors) throw errors;
+		res.redirect('/welcome?deleted=success')
+	});
+})
+
+
 /** SOCKET.IO LISTEN AND EMIT FUNCTIONS **/
 io.sockets.on('connection', function(socket) {
 	console.log('socket connected...');
