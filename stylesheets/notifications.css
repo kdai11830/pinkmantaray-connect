@@ -11,6 +11,18 @@ body > div {
 
 }
 
+/* middle line */
+body > div:after {
+         content: "";
+    background-color: #ffffff2b;
+    position: absolute;
+    width: 0.4vh;
+    height: 66vh;
+    top: 32vh;
+    left: 99.7vh;
+    display: block;
+}
+
 /* each section (notif / pending) */
 .postcard {
     display: flex;
@@ -71,7 +83,7 @@ body > div {
 
 /* invitations list  */
 #pendingTable, #invitationsTable {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: center;
 
@@ -88,7 +100,11 @@ body > div {
     box-shadow:  7px 7px 14px #000000, 
                 -7px -7px 14px #455259;
 
-    overflow-y:auto;
+    overflow-y:auto; */
+
+    display: flex;
+    margin-top: 3vh;
+    overflow-y: auto;
 }
 
 #invitationsTable td {
@@ -104,8 +120,8 @@ tbody {
     border-collapse: collapse;
 }
 
-tbody tr:nth-child(even) {
-    background-color: rgb(49, 50, 85);
+tbody tr:nth-child(odd) {
+    background-color: rgb(31, 31, 53);;
 }
 
 

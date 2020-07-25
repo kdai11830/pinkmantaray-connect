@@ -165,9 +165,10 @@ body {
 #login-form label{
     font-family: 'Century Gothic', sans-serif;
     text-align: center;
-    font-size: small;
+    /* font-size: small; */
     font-weight: 300;
     color: gray;
+    font-size: 2.2vh;
 }
 
 .loginFail {

@@ -60,13 +60,15 @@ h2 {
 
 /* middle line */
 #reportForm > div:first-child:after {
-    content: "";
-    background-color: #e1e4e6;
+
+
+        content: "";
+    background-color: #ffffff2b;
     position: absolute;
-    width: 0.3vh;
-    height: 51vh;
-    top: 6vh;
-    left: 54.5%;
+    width: 0.4vh;
+    height: 47vh;
+    top: 8vh;
+    left: 59.7vh;
     display: block;
 }
 
