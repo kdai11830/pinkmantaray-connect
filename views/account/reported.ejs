@@ -4,11 +4,8 @@
 <title>Reported | Pinkmantaray Connect</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-</style>
+<link rel="stylesheet" href="stylesheets/reported.css">
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -16,20 +13,21 @@ body {
 
 <body>
 	<%- include("../partials/header") %>
+	<div>
 
-	<% if (success) { %>
-		<h2>REPORTED</h2>
-		<img border="0" alt="Successfully reported." src="/views/imgs/check.png" width="60" height="60">		
-		<p>Thank you for reporting. Your safety is very important to us. If you have any further concerns, please reach out to Schuyler directly at schuyler@pinkmantaray.com.</p>
+		<% if (success) { %>
+			<img border="0" alt="Successfully reported." src="../../images/pink-check.png" width="60" height="60">		
+			<h2>Successfully reported.</h2>
+			<div>Thank you for reporting. Your safety is very important to us. If you have any further concerns, please reach out to Schuyler directly at schuyler@pinkmantaray.com.</div>
 
-	<% } else { %>
-		<h2>SOMETHING WENT WRONG</h2>
-		<p>We apologize for the inconvenience. Please try again later.</p>
-	<% } %>
+		<% } else { %>
+			<h2>SOMETHING WENT WRONG</h2>
+			<div>We apologize for the inconvenience. Please try again later.</div>
+		<% } %>
 
-	<form action="/" method="GET">
-		<input type="submit" name="returnHome" value="Return to Home">
-	</form>
-
+		<form action="/" method="GET">
+			<input type="submit" name="returnHome" value="Return to Home">
+		</form>
+	</div>
 
 </body>

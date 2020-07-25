@@ -13,13 +13,13 @@ body > div {
 
 /* middle line */
 body > div:after {
-         content: "";
-    background-color: #ffffff2b;
+    content: "";
+    background-color: #59e9f6;
     position: absolute;
-    width: 0.4vh;
-    height: 66vh;
-    top: 32vh;
-    left: 99.7vh;
+    width: 0.7vh;
+    height: 77vh;
+    top: 19vh;
+    left: 99.6vh;
     display: block;
 }
 

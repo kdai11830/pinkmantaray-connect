@@ -141,7 +141,7 @@ h2 {
 }
 
 /* connect button active */
-#submitButton:active {
+#submitButton:active, #submitButton:hover {
     background-color: rgb(147, 220, 247);
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
@@ -168,18 +168,8 @@ h2 {
 }
 
 
-#closeBtn, #confirmBtn {
-    padding: 0;
-    outline: none;
-    cursor: pointer;
-    width: 8vh;
-    text-align: center;
-    background: none;
-    border: none;
-    font-size: 4vh;
-}
 
-#confirmBtn {
+/* #confirmBtn {
     color: rgb(130, 247, 130);
 }
 
@@ -189,14 +179,12 @@ h2 {
 
 #confirmBtn:hover {
     color: rgb(8, 238, 8);
-    /* font-size: 4.5vh */
 
 }
 
 #closeBtn:hover {
     color: rgb(211, 5, 5);
-    /* font-size: 4.5vh */
-}
+} */
 
 #confirmationDialog {
     padding-bottom: 3vh;
@@ -204,35 +192,28 @@ h2 {
     /* background: #fefefe; */
     box-shadow:  7px 7px 14px #b9bcbe, 
     -7px -7px 14px #f2f4f5;
-
-    background: linear-gradient(270deg, #63d3fa, #ec48f8, #f8a7fe, #a7c5fe, #75c5f0);
-    background-size: 1000% 1000%;
-
-    -webkit-animation: AnimationName 30s ease infinite;
-    -moz-animation: AnimationName 30s ease infinite;
-    animation: AnimationName 30s ease infinite;
+    
+    background: #ec48f8;
 }
 
 #confirmationDialog p {
-    /* position: absolute;
-    background-color: white;
-    border-style: outset; */
-    
     font-size: 2vh;
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: "Century Gothic", sans-serif;
     padding: 0 1vh;
-    width: 37vh;
+    width: 44vh;
     color: black;
+    padding: 4vh;
 }
 
 #confirmationDialog span a {
-    color: rgb(240, 128, 214);
+    color: rgb(139, 218, 247);
     font-weight: bolder;
     font-family: "Century Gothic", sans-serif
 }
 
 #confirmationDialog span a:hover {
-    color: rgb(221, 42, 239);
+    color: rgb(42, 193, 239);
 }
 
 #confirmationDialog span:first-child {
@@ -312,7 +293,7 @@ h2 {
     height: 5vh;
 }
 
-.connectBtn{
+/* #closeBtn, #confirmBtn {
     white-space: nowrap;
     top: 0px;
     border-radius: 2vh;
@@ -325,67 +306,49 @@ h2 {
     cursor: pointer;
     transition: 0.1s all ease;
     font-size: 2vh;
-    color: rgb(14, 16, 16);
-    border-bottom: 1px solid #ccc;
-    box-shadow: 0px 0px 0px 0px #B8B8B8;
-    background:#f0f0f0;
-}
+    
+    color:black;
+    top:-2px;
+    height: 6vh;
+    border-bottom: 4px solid #ccc;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+} */
   
-.connectBtn:hover{ 
-color:#f5f5f5;
-top:-2px;
-height:52px;
-border-bottom: 4px solid #ccc;
-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
-}
-
-.connectBtn:hover.static{
-    top:0px;
-    height:50px;
-}
-  
-.connectBtn:active{
-    top:0px;
-    height:50px;
-    border: 1px solid #ccc;
-    background-color:#ededed;
-    box-shadow: inset 0px 0px 4px rgba(0,0,0,0.15);
-}
-
 .connectBtn {
-    background: linear-gradient(270deg, #63d3fa, #ec48f8, #f8a7fe, #a7c5fe, #e5e9f0);
-    background-size: 1000% 1000%;
-
-    -webkit-animation: AnimationName 7s ease infinite;
-    -moz-animation: AnimationName 7s ease infinite;
-    animation: AnimationName 7s ease infinite;
+    height: 5vh;
+    width: 16vh;
+    color: white;
+    background: rgb(147, 220, 247);
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+    outline: none;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 3vh;
+}
+/* login button active */
+.connectBtn:active, .connectBtn:hover {
+    background-color: rgb(147, 220, 247);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
 }
 
-.connectBtn:focus {
+#closeBtn {
+    color: rgba(255, 255, 255, 0.81);
+    text-decoration: underline;
+    background: none;
     border: none;
     outline: none;
+    /* margin-bottom: 4vh; */
+    /* margin-left: 2vh; */
+    margin: 4vh 0 4vh 0;
 }
 
-/* .ui-widget-content {
-    position: absolute;
-    width: 40vh;
-    height: 37vh;
-} */
 
-
-
-@-webkit-keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-@-moz-keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-}
-@keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+#closeBtn:hover{
+    cursor: pointer;
+    color: rgba(249, 249, 249, 0.452);
 }
