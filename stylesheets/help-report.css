@@ -31,7 +31,7 @@ h2 {
     width: 18vh;
 
     color: white;
-    background: rgb(139, 218, 247);
+    background: rgb(244, 0, 0);
 
     font-size: 2vh;
     font-weight: 800;
@@ -41,12 +41,12 @@ h2 {
     border: none;
 	text-align: center;
     cursor: pointer;
-    border-radius: 43px;
+    border-radius: 0.5vh;
 }
 
 /* login button active */
 .reportBtn:active {
-    background-color: rgb(147, 220, 247);
+    background-color: rgb(252, 99, 99);
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;
@@ -63,4 +63,6 @@ td {
 
 table {
     width: 74vh;
+    border-collapse: separate;
+  border-spacing: 0 2vh;
 }

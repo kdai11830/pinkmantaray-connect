@@ -54,12 +54,18 @@
 				$(this).parent().dialog('close');
 				$('#hideProfile').remove();
 				$("#profileForm").after('<button id="unhideProfile">Unhide my profile</button>');
+				$('#myProfileOptions').on('click', '#hideProfile', function () {
+					$('#hideDialog').dialog('open');
+				});
 			});
 			$('#unhideConfirmBtn').click(function () {
 				socket.emit('hideProfile', { 'hide': false });
 				$(this).parent().dialog('close');
 				$('#unhideProfile').remove();
 				$("#profileForm").after('<button id="hideProfile">Hide my profile</button>');
+					$('#myProfileOptions').on('click', '#unhideProfile', function () {
+					$('#unhideDialog').dialog('open');
+				});
 			});
 		})
 	</script>
@@ -83,10 +89,9 @@
 				<td class="name"><%= data.name %></td>
 				<td><%= new Date().getFullYear() - data.year %></td>
 				<td><%= data.pronouns %></td>
-				<td><a href="https://instagram.com/<%= data.instagram %>">
+				<!-- <td><a href="https://instagram.com/<%= data.instagram %>">
 						<i class="fab fa-instagram fa-2x"></i></a></td>
-				<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a>
-				</td> <!-- TODO -->
+				<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>  -->
 			</tr>
 			<tr> 
 				<td><span>Gender: </span> <%= data.gender.join(', ') %></td>
@@ -110,24 +115,33 @@
 				<td><span>Interests:</span> <%= data.interest.join(', ') %></td>
 			</tr>
 		</table>
-		<% if (!data.myProfile) { %>
-		<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
-			<input type="hidden" name="userId" value="<%= data.id %>">
-			<input type="hidden" name="username" value="<%= data.username %>">
-			<div id="reportDiv">
-				<input type="submit" name="reportBtn" value="Report">
-			</div>
-			<% } else { %>
-			<div id="myProfileOptions">
-				<form id="profileForm" action="/profile?edit=" method="GET">
-					<!-- <div id="reportDiv"> -->
-						<button type="submit" name="edit">Edit Profile</button>
-					<!-- </div> -->
+		<div>
+
+			<% if (!data.myProfile) { %>
+				<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
+					<input type="hidden" name="userId" value="<%= data.id %>">
+					<input type="hidden" name="username" value="<%= data.username %>">
+					<div id="reportDiv">
+						<input type="submit" name="reportBtn" value="Report">Report User</input>
+					</div>
 				</form>
-			</div>
+					<% } else { %>
+					<div id="myProfileOptions">
+						<form id="profileForm" action="/profile?edit=" method="GET">
+							<!-- <div id="reportDiv"> -->
+								<button type="submit" name="edit">Edit Profile</button>
+							<!-- </div> -->
+						</form>
+					</div>
 			<% } %>
-		</form>
+			<% if (data.hidden == 1) { %>
+			<button id="unhideProfile">Unhide my profile</button>
+			<% } else { %>
+			<button id="hideProfile">Hide my profile</button>
+			<% } %>
+		</div>
 	</div>
+
 
 	<div id="hideDialog" class="dialog">
 		<p>Are you sure you want to hide your profile? Doing so will remove you from the connection pool; you will not

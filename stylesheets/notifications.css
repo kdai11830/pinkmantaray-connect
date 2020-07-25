@@ -12,7 +12,7 @@ body > div {
 }
 
 /* each section (notif / pending) */
-body > div > div {
+.postcard {
     display: flex;
     flex-direction: column;
     width: 50%;
@@ -70,7 +70,7 @@ body > div > div {
 }
 
 /* invitations list  */
-#invitationsTable, #pendingTable {
+#pendingTable, #invitationsTable {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -91,6 +91,9 @@ body > div > div {
     overflow-y:auto;
 }
 
+#invitationsTable td {
+    width: 10vh;
+}
 tbody {
     /* border-collapse: separate; */
     border-spacing:0 15px;

@@ -70,7 +70,7 @@ tr {
 }
 
 /* edit button  */
-#myProfileOptions button {
+#myProfileOptions button, #unhideProfile, #hideProfile {
     height: 7vh;
     width: 18vh;
 
@@ -89,18 +89,40 @@ tr {
 }
 
 /* edit button active */
-#myProfileOptions button:active {
-    background-color: rgb(147, 220, 247);
+#myProfileOptions button:active, #unhideProfile:active, #hideProfile:active {
+    background-color: rgb(178, 229, 248);
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;
 }
+
+#hideProfile:active {
+    background-color: rgb(39, 138, 173);
+}
+
+#unhideProfile, #hideProfile {
+    font-size: 1.7vh;
+    background-color: rgb(8, 75, 99);
+    position: absolute;
+    z-index: 11;
+    left: 117vh;
+    top: 74vh;
+}
+
+#unhideProfile {
+    background-color: rgb(42, 171, 218);
+}
+
 #profileForm{
     position: absolute;
     z-index: 10;
     left:117vh;
     top:83vh;
+}
 
+#myProfileOptions button:hover, #unhideProfile:hover, #hideProfile:hover {
+    color: rgb(244, 156, 224);
+    transition-duration: 10ms;
 }
 /*
 

@@ -178,21 +178,7 @@ body > form > h1:first-child {
     float:right;
     right: 4vh;
     bottom: 5vh;
-}
-
-#pwd-notMatched {
-    color: red;
-    position: absolute;
-    width: 42vh;
-    height: 3.5vh;
-    top: 67.5vh;
-    right: 17vh;
-    /* z-index: 1; */
-    border-radius: 2vh;
-    /* background: rgba(236, 220, 226, 0.74); */
-    padding: 1vh;
-    text-align: center;
-    font-size: 2vh;
+        padding-top: 2vh;
 }
 
 /* .further-signup-info {
@@ -317,8 +303,9 @@ label h3 {
     width: 124vh;
     display: flex;
     flex-direction: column;
-    padding-top: 10vh;
+    /* padding-top: 10vh; */
     height: 49vh;
+    justify-content: space-evenly;
 }
 
 #div_interests, #entry_interest_div, #interests_list, #entry_sexuality_div, #sexuality_list, .results, ul {
@@ -357,4 +344,37 @@ li:hover {
     color: rgb(243, 98, 98);
         font-size: 4vh;
     width: 5vh;
+}
+
+
+#pwd-notMatched {
+    color: red;
+    position: absolute;
+    /* width: 42vh; */
+    height: 3.5vh;
+    top: 67.5vh;
+    right: 17vh;
+    padding: 2vh 15vh;
+}
+
+#duplicateUsername p, #pwd-notMatched {
+    padding: 0;
+    margin: 0;
+    color: red;
+    font-size: 2vh;
+    text-align: left;
+}
+
+.pdf {
+    color: rgb(244, 156, 224);
+
+}
+
+#div_interests label {
+    font-size: 3vh;
+}
+
+#interests_list {
+    display: flex;
+    flex-wrap: wrap;
 }
