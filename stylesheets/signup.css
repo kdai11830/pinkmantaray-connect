@@ -291,13 +291,14 @@ label h3 {
 
 .blurb {
     color: rgb(147, 220, 247);
-    /* padding-top: 12vh; */
+    padding-top: 0vh;
     display: block;
     padding-bottom: 6vh;
+    font-size: 2.2vh;
 }
 
 .blurb a {
-    color: rgb(19, 241, 255);
+    color: rgb(244, 156, 224);
 }
 
 .looking-for {
@@ -412,4 +413,10 @@ li:hover {
     margin: 0;
     color: red;
     font-size: 2vh;
+}
+
+.enter {
+    font-weight: bolder;
+    padding-top: 2vh;
+    color: white;
 }
