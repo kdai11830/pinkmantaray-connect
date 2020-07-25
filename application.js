@@ -1065,264 +1065,539 @@ io.sockets.on('connection', function(socket) {
 	socket.on('search', function(vals) {
 		console.log(vals);
 
-		// create initial query to find user ID
-		var sql = `SELECT info.id FROM user_info info
-			LEFT JOIN user_gender gender ON
-			gender.user_id = info.id
-			LEFT JOIN user_sexuality sexuality ON
-			sexuality.user_id = info.id
-			LEFT JOIN user_race_ethnicity race ON
-			race.user_id = info.id
-			LEFT JOIN user_religion religion ON
-			religion.user_id = info.id
-			LEFT JOIN user_interests interests ON
-			interests.user_id = info.id 
-			LEFT JOIN user_language language ON
-			language.user_id = info.id
-			LEFT JOIN connections conn ON
-			conn.user_id = info.id 
-			WHERE (info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
-			OR ((info.id NOT IN (SELECT conn.connection_id FROM connections conn)) AND (info.id NOT IN (SELECT conn.user_id FROM connections conn)))) 
-			AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND (info.on_hold != 1) AND `;
+		var sql = `SELECT info.id FROM user_info info 
+			WHERE info.id NOT IN (SELECT connection_id FROM connections WHERE user_id = ?)
+			AND info.id NOT IN (SELECT user_id FROM connections WHERE connection_id = ?)
+			AND info.id != ?;`
 
 		var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
-		if (vals["location"] != '') {
-			sql += '(info.country = ?) AND ';
-			insertVals.push(vals["location"]);
-		}
-		if (vals["state"] != '') {
-			sql += '(info.state = ?) AND ';
-			insertVals.push(vals["state"]);
-		}
-		if (vals["ageRange"][0] != null && vals["ageRange"][1] != null) {
-			sql += '(info.year BETWEEN ? AND ?) AND ';
-			insertVals.push(vals["ageRange"][0]);
-			insertVals.push(vals["ageRange"][1]);
-		}
-		if (vals["gender"].length > 0) {
-			sql += '(gender.gender IN (';
-			for (var i = 0; i < vals["gender"].length; i++) {
-				sql += '?,';
-				insertVals.push(vals["gender"][i]);
-			}
-			sql = sql.substring(0, sql.length-1);
-			sql += ')) AND ';
-		}
-		if (vals["sexuality"].length > 0) {
-			sql += '(sexuality.sexuality IN (';
-			for (var i = 0; i < vals["sexuality"].length; i++) {
-				sql += '?,';
-				insertVals.push(vals["sexuality"][i]);
-			}
-			sql = sql.substring(0, sql.length-1);
-			sql += ')) AND ';
-		}
-		if (vals["race"].length > 0) {
-			sql += '(race.race_ethnicity IN (';
-			for (var i = 0; i < vals["race"].length; i++) {
-				sql += '?,';
-				insertVals.push(vals["race"][i]);
-			}
-			sql = sql.substring(0, sql.length-1);
-			sql += ')) AND ';
-		}
-		if (vals["religion"].length > 0) {
-			sql += '(religion.religion IN (';
-			for (var i = 0; i < vals["religion"].length; i++) {
-				sql += '?,';
-				insertVals.push(vals["religion"][i]);
-			}
-			sql = sql.substring(0, sql.length-1);
-			sql += ')) AND ';
-		}
-		if (vals["interests"].length > 0) {
-			sql += '(interests.interest IN (';
-			for (var i = 0; i < vals["interests"].length; i++) {
-				sql += '?,';
-				insertVals.push(vals["interests"][i]);
-			}
-			sql = sql.substring(0, sql.length-1);
-			sql += ')) AND ';
-		}
-		if (vals["language"].length > 0) {
-			sql += '(language.language IN (';
-			for (var i = 0; i < vals["language"].length; i++) {
-				sql += '?,';
-				insertVals.push(vals["language"][i]);
-			}
-			sql = sql.substring(0, sql.length-1);
-			sql += ')) AND ';
-		}
 
-		// remove tailing AND
-		sql = sql.substring(0, sql.length - 4);
-		sql += 'GROUP BY info.id;';
-
-		console.log(sql);
-		console.log(insertVals);
-
-		// query database
-		connection.query(sql, insertVals, function(error, results, fields) {
-			if (error) throw error;
-
+		connection.query(sql, insertVals, function(errors, results, fields) {
+			if (errors) throw errors;
 			console.log(results);
 
-			if (results.length > 0) {
+			// create initial query to find user ID
+			var sql = `SELECT info.id FROM user_info info
+				LEFT JOIN user_gender gender ON
+				gender.user_id = info.id
+				LEFT JOIN user_sexuality sexuality ON
+				sexuality.user_id = info.id
+				LEFT JOIN user_race_ethnicity race ON
+				race.user_id = info.id
+				LEFT JOIN user_religion religion ON
+				religion.user_id = info.id
+				LEFT JOIN user_interests interests ON
+				interests.user_id = info.id 
+				LEFT JOIN user_language language ON
+				language.user_id = info.id
+				WHERE (info.id IN (`;
 
-				// TEST TO SEE IF THIS IS RIGHT
-				var insertIds = '(';
-
-				for (var i = 0; i < results.length; i++) {
-					insertIds += results[i].id + ',';
-				}
-				insertIds = insertIds.substring(0, insertIds.length - 1);
-				insertIds += '); ';
-				
-				// info sql
-				var sqlTemp = `SELECT id, name, pronouns, country, year FROM user_info
-					WHERE user_info.id IN `;
-				sqlTemp += insertIds;
-
-				// gender sql
-				sqlTemp += `SELECT user_id, gender FROM user_gender
-					WHERE user_id IN `;
-				sqlTemp += insertIds;
-
-				// sexuality sql
-				sqlTemp += `SELECT user_id, sexuality FROM user_sexuality
-					WHERE user_id IN `;
-				sqlTemp += insertIds;
-
-				// race sql
-				sqlTemp += `SELECT user_id, race_ethnicity FROM user_race_ethnicity
-					WHERE user_id IN `;
-				sqlTemp += insertIds;
-
-				// religion sql
-				sqlTemp += `SELECT user_id, religion FROM user_religion
-					WHERE user_id IN `;
-				sqlTemp += insertIds;
-
-				// interests sql
-				sqlTemp += `SELECT user_id, interest FROM user_interests
-					WHERE user_id IN `;
-				sqlTemp += insertIds;
-
-				// language sql
-				sqlTemp += `SELECT user_id, language FROM user_language
-					WHERE user_id IN `;
-				sqlTemp += insertIds;
-
-				console.log(sqlTemp);
-
-				// pass on results to inner query
-				connection.query(sqlTemp, function(error, results, fields) {
-					console.log(results);
-					// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
-					/* structure of results:
-						0: info (name, pronouns, country, year) 
-						1: gender
-						2: sexuality
-						3: race_ethnicity
-						4: religion
-						5: interest
-						6: language
-					*/
-					// goal: organize by id, nested array
-
-					var genderVals = {};
-					for (var i = 0; i < results[1].length; i++) {
-						var tempGender = results[1][i];
-						if (!(tempGender.user_id in genderVals)) 
-							genderVals[tempGender.user_id] = [];
-						genderVals[tempGender.user_id].push(tempGender.gender);
-					}
-
-					var sexualityVals = {};
-					for (var i = 0; i < results[2].length; i++) {
-						var tempSexuality = results[2][i];
-						if (!(tempSexuality.user_id in sexualityVals)) 
-							sexualityVals[tempSexuality.user_id] = [];
-						sexualityVals[tempSexuality.user_id].push(tempSexuality.sexuality);
-					}
-
-					var race_ethnicityVals = {};
-					for (var i = 0; i < results[3].length; i++) {
-						var tempRace_ethnicity = results[3][i];
-						if (!(tempRace_ethnicity.user_id in race_ethnicityVals)) 
-							race_ethnicityVals[tempRace_ethnicity.user_id] = [];
-						race_ethnicityVals[tempRace_ethnicity.user_id].push(tempRace_ethnicity.race_ethnicity);
-					}
-
-					var religionVals = {};
-					for (var i = 0; i < results[4].length; i++) {
-						var tempReligion = results[4][i];
-						if (!(tempReligion.user_id in religionVals)) 
-							religionVals[tempReligion.user_id] = [];
-						religionVals[tempReligion.user_id].push(tempReligion.religion);
-					}
-
-					var interestVals = {};
-					for (var i = 0; i < results[5].length; i++) {
-						var tempInterest = results[5][i];
-						if (!(tempInterest.user_id in interestVals)) 
-							interestVals[tempInterest.user_id] = [];
-						interestVals[tempInterest.user_id].push(tempInterest.interest);
-					}
-
-					var languageVals = {};
-					for (var i = 0; i < results[6].length; i++) {
-						var tempLanguage = results[6][i];
-						if (!(tempLanguage.user_id in languageVals)) 
-							languageVals[tempLanguage.user_id] = [];
-						languageVals[tempLanguage.user_id].push(tempLanguage.language);
-					}
-
-					// all information container
-					var infoVals = {};
-					for (var i = 0; i < results[0].length; i++) {
-						var tempInfo = results[0][i];
-						infoVals[tempInfo.id] = [];
-						infoVals[tempInfo.id].push(tempInfo.id);
-						infoVals[tempInfo.id].push(tempInfo.name);
-						infoVals[tempInfo.id].push(tempInfo.pronouns);
-						infoVals[tempInfo.id].push(tempInfo.country);
-						infoVals[tempInfo.id].push(tempInfo.year);
-						if (tempInfo.id in genderVals) 
-							infoVals[tempInfo.id].push(genderVals[tempInfo.id]);
-						else
-							infoVals[tempInfo.id].push([]);
-						if (tempInfo.id in sexualityVals) 
-							infoVals[tempInfo.id].push(sexualityVals[tempInfo.id]);
-						else
-							infoVals[tempInfo.id].push([]);
-						if (tempInfo.id in race_ethnicityVals)
-							infoVals[tempInfo.id].push(race_ethnicityVals[tempInfo.id]);
-						else
-							infoVals[tempInfo.id].push([]);
-						if (tempInfo.id in religionVals)
-							infoVals[tempInfo.id].push(religionVals[tempInfo.id]);
-						else
-							infoVals[tempInfo.id].push([]);
-						if (tempInfo.id in interestVals)
-							infoVals[tempInfo.id].push(interestVals[tempInfo.id]);
-						else
-							infoVals[tempInfo.id].push([]);
-						if (tempInfo.id in languageVals)
-							infoVals[tempInfo.id].push(languageVals[tempInfo.id]);
-						else
-							infoVals[tempInfo.id].push([]);
-					}
-
-					console.log(infoVals);
-
-					socket.emit('searchResults', {"data": infoVals});
-
-				});
-			} else {
-				socket.emit('searchResults', {"data": []});
+			var insertVals = [];
+			for (var i = 0; i < results.length; i++) {
+				insertVals.push(results[i]["id"]);
+				sql += '?,';
 			}
+			sql = sql.substring(0, sql.length-1);
+			sql += `)) AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND (info.on_hold != 1) AND `;
+
+			if (vals["location"] != '') {
+				sql += '(info.country = ?) AND ';
+				insertVals.push(vals["location"]);
+			}
+			if (vals["state"] != '') {
+				sql += '(info.state = ?) AND ';
+				insertVals.push(vals["state"]);
+			}
+			if (vals["ageRange"][0] != null && vals["ageRange"][1] != null) {
+				sql += '(info.year BETWEEN ? AND ?) AND ';
+				insertVals.push(vals["ageRange"][0]);
+				insertVals.push(vals["ageRange"][1]);
+			}
+			if (vals["gender"].length > 0) {
+				sql += '(gender.gender IN (';
+				for (var i = 0; i < vals["gender"].length; i++) {
+					sql += '?,';
+					insertVals.push(vals["gender"][i]);
+				}
+				sql = sql.substring(0, sql.length-1);
+				sql += ')) AND ';
+			}
+			if (vals["sexuality"].length > 0) {
+				sql += '(sexuality.sexuality IN (';
+				for (var i = 0; i < vals["sexuality"].length; i++) {
+					sql += '?,';
+					insertVals.push(vals["sexuality"][i]);
+				}
+				sql = sql.substring(0, sql.length-1);
+				sql += ')) AND ';
+			}
+			if (vals["race"].length > 0) {
+				sql += '(race.race_ethnicity IN (';
+				for (var i = 0; i < vals["race"].length; i++) {
+					sql += '?,';
+					insertVals.push(vals["race"][i]);
+				}
+				sql = sql.substring(0, sql.length-1);
+				sql += ')) AND ';
+			}
+			if (vals["religion"].length > 0) {
+				sql += '(religion.religion IN (';
+				for (var i = 0; i < vals["religion"].length; i++) {
+					sql += '?,';
+					insertVals.push(vals["religion"][i]);
+				}
+				sql = sql.substring(0, sql.length-1);
+				sql += ')) AND ';
+			}
+			if (vals["interests"].length > 0) {
+				sql += '(interests.interest IN (';
+				for (var i = 0; i < vals["interests"].length; i++) {
+					sql += '?,';
+					insertVals.push(vals["interests"][i]);
+				}
+				sql = sql.substring(0, sql.length-1);
+				sql += ')) AND ';
+			}
+			if (vals["language"].length > 0) {
+				sql += '(language.language IN (';
+				for (var i = 0; i < vals["language"].length; i++) {
+					sql += '?,';
+					insertVals.push(vals["language"][i]);
+				}
+				sql = sql.substring(0, sql.length-1);
+				sql += ')) AND ';
+			}
+
+			// remove tailing AND
+			sql = sql.substring(0, sql.length - 4);
+			sql += 'GROUP BY info.id;';
+
+			console.log(sql);
+			console.log(insertVals);
+
+			// query database
+			connection.query(sql, insertVals, function(error, results, fields) {
+				if (error) throw error;
+
+				console.log(results);
+
+				if (results.length > 0) {
+
+					// TEST TO SEE IF THIS IS RIGHT
+					var insertIds = '(';
+
+					for (var i = 0; i < results.length; i++) {
+						insertIds += results[i].id + ',';
+					}
+					insertIds = insertIds.substring(0, insertIds.length - 1);
+					insertIds += '); ';
+					
+					// info sql
+					var sqlTemp = `SELECT id, name, pronouns, country, year FROM user_info
+						WHERE user_info.id IN `;
+					sqlTemp += insertIds;
+
+					// gender sql
+					sqlTemp += `SELECT user_id, gender FROM user_gender
+						WHERE user_id IN `;
+					sqlTemp += insertIds;
+
+					// sexuality sql
+					sqlTemp += `SELECT user_id, sexuality FROM user_sexuality
+						WHERE user_id IN `;
+					sqlTemp += insertIds;
+
+					// race sql
+					sqlTemp += `SELECT user_id, race_ethnicity FROM user_race_ethnicity
+						WHERE user_id IN `;
+					sqlTemp += insertIds;
+
+					// religion sql
+					sqlTemp += `SELECT user_id, religion FROM user_religion
+						WHERE user_id IN `;
+					sqlTemp += insertIds;
+
+					// interests sql
+					sqlTemp += `SELECT user_id, interest FROM user_interests
+						WHERE user_id IN `;
+					sqlTemp += insertIds;
+
+					// language sql
+					sqlTemp += `SELECT user_id, language FROM user_language
+						WHERE user_id IN `;
+					sqlTemp += insertIds;
+
+					console.log(sqlTemp);
+
+					// pass on results to inner query
+					connection.query(sqlTemp, function(error, results, fields) {
+						console.log(results);
+						// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
+						/* structure of results:
+							0: info (name, pronouns, country, year) 
+							1: gender
+							2: sexuality
+							3: race_ethnicity
+							4: religion
+							5: interest
+							6: language
+						*/
+						// goal: organize by id, nested array
+
+						var genderVals = {};
+						for (var i = 0; i < results[1].length; i++) {
+							var tempGender = results[1][i];
+							if (!(tempGender.user_id in genderVals)) 
+								genderVals[tempGender.user_id] = [];
+							genderVals[tempGender.user_id].push(tempGender.gender);
+						}
+
+						var sexualityVals = {};
+						for (var i = 0; i < results[2].length; i++) {
+							var tempSexuality = results[2][i];
+							if (!(tempSexuality.user_id in sexualityVals)) 
+								sexualityVals[tempSexuality.user_id] = [];
+							sexualityVals[tempSexuality.user_id].push(tempSexuality.sexuality);
+						}
+
+						var race_ethnicityVals = {};
+						for (var i = 0; i < results[3].length; i++) {
+							var tempRace_ethnicity = results[3][i];
+							if (!(tempRace_ethnicity.user_id in race_ethnicityVals)) 
+								race_ethnicityVals[tempRace_ethnicity.user_id] = [];
+							race_ethnicityVals[tempRace_ethnicity.user_id].push(tempRace_ethnicity.race_ethnicity);
+						}
+
+						var religionVals = {};
+						for (var i = 0; i < results[4].length; i++) {
+							var tempReligion = results[4][i];
+							if (!(tempReligion.user_id in religionVals)) 
+								religionVals[tempReligion.user_id] = [];
+							religionVals[tempReligion.user_id].push(tempReligion.religion);
+						}
+
+						var interestVals = {};
+						for (var i = 0; i < results[5].length; i++) {
+							var tempInterest = results[5][i];
+							if (!(tempInterest.user_id in interestVals)) 
+								interestVals[tempInterest.user_id] = [];
+							interestVals[tempInterest.user_id].push(tempInterest.interest);
+						}
+
+						var languageVals = {};
+						for (var i = 0; i < results[6].length; i++) {
+							var tempLanguage = results[6][i];
+							if (!(tempLanguage.user_id in languageVals)) 
+								languageVals[tempLanguage.user_id] = [];
+							languageVals[tempLanguage.user_id].push(tempLanguage.language);
+						}
+
+						// all information container
+						var infoVals = {};
+						for (var i = 0; i < results[0].length; i++) {
+							var tempInfo = results[0][i];
+							infoVals[tempInfo.id] = [];
+							infoVals[tempInfo.id].push(tempInfo.id);
+							infoVals[tempInfo.id].push(tempInfo.name);
+							infoVals[tempInfo.id].push(tempInfo.pronouns);
+							infoVals[tempInfo.id].push(tempInfo.country);
+							infoVals[tempInfo.id].push(tempInfo.year);
+							if (tempInfo.id in genderVals) 
+								infoVals[tempInfo.id].push(genderVals[tempInfo.id]);
+							else
+								infoVals[tempInfo.id].push([]);
+							if (tempInfo.id in sexualityVals) 
+								infoVals[tempInfo.id].push(sexualityVals[tempInfo.id]);
+							else
+								infoVals[tempInfo.id].push([]);
+							if (tempInfo.id in race_ethnicityVals)
+								infoVals[tempInfo.id].push(race_ethnicityVals[tempInfo.id]);
+							else
+								infoVals[tempInfo.id].push([]);
+							if (tempInfo.id in religionVals)
+								infoVals[tempInfo.id].push(religionVals[tempInfo.id]);
+							else
+								infoVals[tempInfo.id].push([]);
+							if (tempInfo.id in interestVals)
+								infoVals[tempInfo.id].push(interestVals[tempInfo.id]);
+							else
+								infoVals[tempInfo.id].push([]);
+							if (tempInfo.id in languageVals)
+								infoVals[tempInfo.id].push(languageVals[tempInfo.id]);
+							else
+								infoVals[tempInfo.id].push([]);
+						}
+
+						console.log(infoVals);
+
+						socket.emit('searchResults', {"data": infoVals});
+
+					});
+				} else {
+					socket.emit('searchResults', {"data": []});
+				}
+			});
+
 		});
+
+		// // create initial query to find user ID
+		// var sql = `SELECT info.id FROM user_info info
+		// 	LEFT JOIN user_gender gender ON
+		// 	gender.user_id = info.id
+		// 	LEFT JOIN user_sexuality sexuality ON
+		// 	sexuality.user_id = info.id
+		// 	LEFT JOIN user_race_ethnicity race ON
+		// 	race.user_id = info.id
+		// 	LEFT JOIN user_religion religion ON
+		// 	religion.user_id = info.id
+		// 	LEFT JOIN user_interests interests ON
+		// 	interests.user_id = info.id 
+		// 	LEFT JOIN user_language language ON
+		// 	language.user_id = info.id
+		// 	LEFT JOIN connections conn ON
+		// 	conn.user_id = info.id 
+		// 	WHERE (info.id != ?) AND (((conn.connection_id != ?) AND (conn.user_id != ?))
+		// 	OR ((info.id NOT IN (SELECT conn.connection_id FROM connections conn)) AND (info.id NOT IN (SELECT conn.user_id FROM connections conn)))) 
+		// 	AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND (info.on_hold != 1) AND `;
+
+		// var insertVals = [socket.request.session.user_id, socket.request.session.user_id, socket.request.session.user_id];
+		// if (vals["location"] != '') {
+		// 	sql += '(info.country = ?) AND ';
+		// 	insertVals.push(vals["location"]);
+		// }
+		// if (vals["state"] != '') {
+		// 	sql += '(info.state = ?) AND ';
+		// 	insertVals.push(vals["state"]);
+		// }
+		// if (vals["ageRange"][0] != null && vals["ageRange"][1] != null) {
+		// 	sql += '(info.year BETWEEN ? AND ?) AND ';
+		// 	insertVals.push(vals["ageRange"][0]);
+		// 	insertVals.push(vals["ageRange"][1]);
+		// }
+		// if (vals["gender"].length > 0) {
+		// 	sql += '(gender.gender IN (';
+		// 	for (var i = 0; i < vals["gender"].length; i++) {
+		// 		sql += '?,';
+		// 		insertVals.push(vals["gender"][i]);
+		// 	}
+		// 	sql = sql.substring(0, sql.length-1);
+		// 	sql += ')) AND ';
+		// }
+		// if (vals["sexuality"].length > 0) {
+		// 	sql += '(sexuality.sexuality IN (';
+		// 	for (var i = 0; i < vals["sexuality"].length; i++) {
+		// 		sql += '?,';
+		// 		insertVals.push(vals["sexuality"][i]);
+		// 	}
+		// 	sql = sql.substring(0, sql.length-1);
+		// 	sql += ')) AND ';
+		// }
+		// if (vals["race"].length > 0) {
+		// 	sql += '(race.race_ethnicity IN (';
+		// 	for (var i = 0; i < vals["race"].length; i++) {
+		// 		sql += '?,';
+		// 		insertVals.push(vals["race"][i]);
+		// 	}
+		// 	sql = sql.substring(0, sql.length-1);
+		// 	sql += ')) AND ';
+		// }
+		// if (vals["religion"].length > 0) {
+		// 	sql += '(religion.religion IN (';
+		// 	for (var i = 0; i < vals["religion"].length; i++) {
+		// 		sql += '?,';
+		// 		insertVals.push(vals["religion"][i]);
+		// 	}
+		// 	sql = sql.substring(0, sql.length-1);
+		// 	sql += ')) AND ';
+		// }
+		// if (vals["interests"].length > 0) {
+		// 	sql += '(interests.interest IN (';
+		// 	for (var i = 0; i < vals["interests"].length; i++) {
+		// 		sql += '?,';
+		// 		insertVals.push(vals["interests"][i]);
+		// 	}
+		// 	sql = sql.substring(0, sql.length-1);
+		// 	sql += ')) AND ';
+		// }
+		// if (vals["language"].length > 0) {
+		// 	sql += '(language.language IN (';
+		// 	for (var i = 0; i < vals["language"].length; i++) {
+		// 		sql += '?,';
+		// 		insertVals.push(vals["language"][i]);
+		// 	}
+		// 	sql = sql.substring(0, sql.length-1);
+		// 	sql += ')) AND ';
+		// }
+
+		// // remove tailing AND
+		// sql = sql.substring(0, sql.length - 4);
+		// sql += 'GROUP BY info.id;';
+
+		// console.log(sql);
+		// console.log(insertVals);
+
+		// // query database
+		// connection.query(sql, insertVals, function(error, results, fields) {
+		// 	if (error) throw error;
+
+		// 	console.log(results);
+
+		// 	if (results.length > 0) {
+
+		// 		// TEST TO SEE IF THIS IS RIGHT
+		// 		var insertIds = '(';
+
+		// 		for (var i = 0; i < results.length; i++) {
+		// 			insertIds += results[i].id + ',';
+		// 		}
+		// 		insertIds = insertIds.substring(0, insertIds.length - 1);
+		// 		insertIds += '); ';
+				
+		// 		// info sql
+		// 		var sqlTemp = `SELECT id, name, pronouns, country, year FROM user_info
+		// 			WHERE user_info.id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		// gender sql
+		// 		sqlTemp += `SELECT user_id, gender FROM user_gender
+		// 			WHERE user_id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		// sexuality sql
+		// 		sqlTemp += `SELECT user_id, sexuality FROM user_sexuality
+		// 			WHERE user_id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		// race sql
+		// 		sqlTemp += `SELECT user_id, race_ethnicity FROM user_race_ethnicity
+		// 			WHERE user_id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		// religion sql
+		// 		sqlTemp += `SELECT user_id, religion FROM user_religion
+		// 			WHERE user_id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		// interests sql
+		// 		sqlTemp += `SELECT user_id, interest FROM user_interests
+		// 			WHERE user_id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		// language sql
+		// 		sqlTemp += `SELECT user_id, language FROM user_language
+		// 			WHERE user_id IN `;
+		// 		sqlTemp += insertIds;
+
+		// 		console.log(sqlTemp);
+
+		// 		// pass on results to inner query
+		// 		connection.query(sqlTemp, function(error, results, fields) {
+		// 			console.log(results);
+		// 			// TODO: PREPROCESS THIS INFO A BIT TO MAKE IT EASIER TO READ INTO EJS
+		// 			/* structure of results:
+		// 				0: info (name, pronouns, country, year) 
+		// 				1: gender
+		// 				2: sexuality
+		// 				3: race_ethnicity
+		// 				4: religion
+		// 				5: interest
+		// 				6: language
+		// 			*/
+		// 			// goal: organize by id, nested array
+
+		// 			var genderVals = {};
+		// 			for (var i = 0; i < results[1].length; i++) {
+		// 				var tempGender = results[1][i];
+		// 				if (!(tempGender.user_id in genderVals)) 
+		// 					genderVals[tempGender.user_id] = [];
+		// 				genderVals[tempGender.user_id].push(tempGender.gender);
+		// 			}
+
+		// 			var sexualityVals = {};
+		// 			for (var i = 0; i < results[2].length; i++) {
+		// 				var tempSexuality = results[2][i];
+		// 				if (!(tempSexuality.user_id in sexualityVals)) 
+		// 					sexualityVals[tempSexuality.user_id] = [];
+		// 				sexualityVals[tempSexuality.user_id].push(tempSexuality.sexuality);
+		// 			}
+
+		// 			var race_ethnicityVals = {};
+		// 			for (var i = 0; i < results[3].length; i++) {
+		// 				var tempRace_ethnicity = results[3][i];
+		// 				if (!(tempRace_ethnicity.user_id in race_ethnicityVals)) 
+		// 					race_ethnicityVals[tempRace_ethnicity.user_id] = [];
+		// 				race_ethnicityVals[tempRace_ethnicity.user_id].push(tempRace_ethnicity.race_ethnicity);
+		// 			}
+
+		// 			var religionVals = {};
+		// 			for (var i = 0; i < results[4].length; i++) {
+		// 				var tempReligion = results[4][i];
+		// 				if (!(tempReligion.user_id in religionVals)) 
+		// 					religionVals[tempReligion.user_id] = [];
+		// 				religionVals[tempReligion.user_id].push(tempReligion.religion);
+		// 			}
+
+		// 			var interestVals = {};
+		// 			for (var i = 0; i < results[5].length; i++) {
+		// 				var tempInterest = results[5][i];
+		// 				if (!(tempInterest.user_id in interestVals)) 
+		// 					interestVals[tempInterest.user_id] = [];
+		// 				interestVals[tempInterest.user_id].push(tempInterest.interest);
+		// 			}
+
+		// 			var languageVals = {};
+		// 			for (var i = 0; i < results[6].length; i++) {
+		// 				var tempLanguage = results[6][i];
+		// 				if (!(tempLanguage.user_id in languageVals)) 
+		// 					languageVals[tempLanguage.user_id] = [];
+		// 				languageVals[tempLanguage.user_id].push(tempLanguage.language);
+		// 			}
+
+		// 			// all information container
+		// 			var infoVals = {};
+		// 			for (var i = 0; i < results[0].length; i++) {
+		// 				var tempInfo = results[0][i];
+		// 				infoVals[tempInfo.id] = [];
+		// 				infoVals[tempInfo.id].push(tempInfo.id);
+		// 				infoVals[tempInfo.id].push(tempInfo.name);
+		// 				infoVals[tempInfo.id].push(tempInfo.pronouns);
+		// 				infoVals[tempInfo.id].push(tempInfo.country);
+		// 				infoVals[tempInfo.id].push(tempInfo.year);
+		// 				if (tempInfo.id in genderVals) 
+		// 					infoVals[tempInfo.id].push(genderVals[tempInfo.id]);
+		// 				else
+		// 					infoVals[tempInfo.id].push([]);
+		// 				if (tempInfo.id in sexualityVals) 
+		// 					infoVals[tempInfo.id].push(sexualityVals[tempInfo.id]);
+		// 				else
+		// 					infoVals[tempInfo.id].push([]);
+		// 				if (tempInfo.id in race_ethnicityVals)
+		// 					infoVals[tempInfo.id].push(race_ethnicityVals[tempInfo.id]);
+		// 				else
+		// 					infoVals[tempInfo.id].push([]);
+		// 				if (tempInfo.id in religionVals)
+		// 					infoVals[tempInfo.id].push(religionVals[tempInfo.id]);
+		// 				else
+		// 					infoVals[tempInfo.id].push([]);
+		// 				if (tempInfo.id in interestVals)
+		// 					infoVals[tempInfo.id].push(interestVals[tempInfo.id]);
+		// 				else
+		// 					infoVals[tempInfo.id].push([]);
+		// 				if (tempInfo.id in languageVals)
+		// 					infoVals[tempInfo.id].push(languageVals[tempInfo.id]);
+		// 				else
+		// 					infoVals[tempInfo.id].push([]);
+		// 			}
+
+		// 			console.log(infoVals);
+
+		// 			socket.emit('searchResults', {"data": infoVals});
+
+		// 		});
+		// 	} else {
+		// 		socket.emit('searchResults', {"data": []});
+		// 	}
+		// });
 	});
 
 	socket.on('connectSend', function(vals) {
