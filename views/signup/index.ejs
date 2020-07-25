@@ -330,8 +330,16 @@
 				<option value="ZWE">Zimbabwe</option>
 			</select>
 
+			<!-- <script>
+				if (document.getElementById('select_country').value !== "USA") {
+						let stateLabel = document.getElementById("state_label");
+						stateLabel.classList.add("no_state");
+						document.getElementById("select_state").innerHTML = "No state selection.";
+					}
+			</script> -->
+			
 			<!-- <div id="state_div"> -->
-			<label for="entry_state">State: </label>
+			<label id="state_label" for="entry_state">State: </label>
 			<select name="entry_state" id="select_state" data-placeholder="--Select state--">
 
 			</select>

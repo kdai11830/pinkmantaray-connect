@@ -358,7 +358,7 @@ li:hover {
 }
 
 #duplicateUsername p, #pwd-notMatched {
-    padding: 0;
+    /* padding: 0; */
     margin: 0;
     color: red;
     font-size: 2vh;
@@ -377,4 +377,13 @@ li:hover {
 #interests_list {
     display: flex;
     flex-wrap: wrap;
+}
+
+#instagram_message {
+    font-size: 2vh;
+    padding-top: 3vh;
+}
+
+.no_state {
+    color: gray;
 }
