@@ -4,7 +4,7 @@
 
 body {
     margin: 0px;
-    background-color: rgb(4, 4, 46);
+    background-color: rgb(1, 1, 19);
     color: white;
 }
 
@@ -150,7 +150,7 @@ body > form > h1:first-child {
     left: 50%;
 }
 
-.required, #select_state, .select_list, datalist {
+.required, #select_country, #select_state, .select_list, datalist {
     width: 34vh;
     height: 7vh;
     border: 0.1vh solid rgba(255, 255, 255, 0);
@@ -178,8 +178,9 @@ body > form > h1:first-child {
     float:right;
     right: 4vh;
     bottom: 5vh;
-        padding-top: 2vh;
+    padding-top: 2vh;
 }
+
 
 /* .further-signup-info {
     display: flex;
@@ -199,7 +200,7 @@ body > form > h1:first-child {
     flex-direction: column;
     padding-top: 16vh;
     /* padding: 0 0vh 10vh 0; */
-    height: 31vh;
+    height: 44vh;
     justify-content: space-evenly;
 }
 
@@ -213,7 +214,7 @@ body > form > h1:first-child {
 
 
 .culture-page {
-    padding-top: 25vh;
+    padding-top: 17vh;
 }
 
 .signup-row {
@@ -346,23 +347,41 @@ li:hover {
     width: 5vh;
 }
 
-
-#pwd-notMatched {
+#email-notValid {
     color: red;
     position: absolute;
     /* width: 42vh; */
     height: 3.5vh;
-    top: 67.5vh;
-    right: 17vh;
-    padding: 2vh 15vh;
+    top: 34vh;
+    left: 27vh;
+    padding: 1vh;
+    font-size: 2vh;
+    margin: 0;
+    text-align: left;
 }
 
-#duplicateUsername p, #pwd-notMatched {
-    /* padding: 0; */
+
+#pwd-notMatched {
+    color: red;
+    position: absolute;
+    height: 3.5vh;
+    top: 53.5vh;
+    right: 7vh;
+    /* padding: 2vh 15vh; */
+    margin: 0;
+    font-size: 2vh;
+    text-align: left;
+}
+
+#duplicateUsername p{
+    padding: 0;
     margin: 0;
     color: red;
     font-size: 2vh;
     text-align: left;
+    position: absolute;
+    top: 16.5vh;
+    right: 13vh;
 }
 
 .pdf {
@@ -386,4 +405,11 @@ li:hover {
 
 .no_state {
     color: gray;
+}
+
+#duplicateInstagram p {
+    padding: 2vh 0 0 0;
+    margin: 0;
+    color: red;
+    font-size: 2vh;
 }

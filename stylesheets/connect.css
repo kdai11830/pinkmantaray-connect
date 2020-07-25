@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(4, 4, 46);
+    background-color: rgb(1, 1, 19);
     color: white;
 }
 
@@ -163,43 +163,10 @@ h2 {
     height: 8vh;
 }
 
-#confirmationDialog {
-    padding: 2vh;
+#resultsDisplay th {
+    color: rgb(244, 156, 224);
 }
 
-.connectBtn {
-    height: 4vh;
-    /* width: 7vh; */
-
-    color: white;
-    background: rgb(244, 156, 224);
-
-    font-size: 1vh;
-    font-weight: 800;
-    text-transform: uppercase;
-
-    outline: none;
-    /* border: 0.1vh solid rgb(139, 218, 247); */
-    border: none;
-	text-align: center;
-    cursor: pointer;
-    border-radius: 43px;
-    margin-left: 3vh;
-    margin-right: 1vh;
-}
-
-.connectBtn:active {
-    /* background-color: rgb(147, 220, 247); */
-	/* box-shadow: 
-		inset rgba(70,70,70,0.4) 2px 2px 4px,
-		inset rgb(208, 210, 211) -2px -2px 4px; */
-}
-
-.connectBtn:hover {
-    color: rgb(221, 42, 239);
-    /* border: 0.1vh solid rgb(112, 208, 243); */
-
-}
 
 #closeBtn, #confirmBtn {
     padding: 0;
@@ -207,8 +174,9 @@ h2 {
     cursor: pointer;
     width: 8vh;
     text-align: center;
-    /* background-color: whitesmoke; */
+    background: none;
     border: none;
+    font-size: 4vh;
 }
 
 #confirmBtn {
@@ -216,15 +184,18 @@ h2 {
 }
 
 #closeBtn {
-    color: rgb(243, 98, 98);
+    color: rgb(245, 7, 7);
 }
 
 #confirmBtn:hover {
     color: rgb(8, 238, 8);
+    /* font-size: 4.5vh */
+
 }
 
 #closeBtn:hover {
-    color: red;
+    color: rgb(211, 5, 5);
+    /* font-size: 4.5vh */
 }
 
 #confirmationDialog {
@@ -232,20 +203,26 @@ h2 {
     border-radius: 1vh;
     /* background: #fefefe; */
     box-shadow:  7px 7px 14px #b9bcbe, 
-                -7px -7px 14px #f2f4f5;
+    -7px -7px 14px #f2f4f5;
+
+    background: linear-gradient(270deg, #63d3fa, #ec48f8, #f8a7fe, #a7c5fe, #75c5f0);
+    background-size: 1000% 1000%;
+
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
 }
 
 #confirmationDialog p {
     /* position: absolute;
     background-color: white;
     border-style: outset; */
-
     
-
     font-size: 2vh;
     font-family: 'Open Sans', sans-serif;
     padding: 0 1vh;
     width: 37vh;
+    color: black;
 }
 
 #confirmationDialog span a {
@@ -259,10 +236,11 @@ h2 {
 }
 
 #confirmationDialog span:first-child {
-    color: rgb(147, 220, 247);
+    color: rgb(246, 243, 247);
     /* font-weight: bolder; */
     font-size: 4vh;
     padding: 1vh;
+    font-weight: bolder;
 }
 
 .ui-dialog-titlebar {
@@ -270,7 +248,7 @@ h2 {
 }
 
 .dropdown-check-list {
-  display: inline-block;
+    display: inline-block;
 }
 .dropdown-check-list .anchor {
   position: relative;
@@ -294,8 +272,8 @@ h2 {
   transform: rotate(-135deg);
 }
 .dropdown-check-list .anchor:active:after {
-  right: 8px;
-  top: 21%;
+    right: 8px;
+    top: 21%;
 }
 .dropdown-check-list ul.items {
   padding: 2px;
@@ -327,4 +305,87 @@ h2 {
 #select_location {
     width: 28vh;
     height: 5vh;
+}
+
+#select_state {
+    width: 28vh;
+    height: 5vh;
+}
+
+.connectBtn{
+    white-space: nowrap;
+    top: 0px;
+    border-radius: 2vh;
+    position: relative;
+    border: none;
+    background: none;
+    font-family: 'Roboto', sans-serif;
+    height: 6vh;
+    width: 13vh;
+    cursor: pointer;
+    transition: 0.1s all ease;
+    font-size: 2vh;
+    color: rgb(14, 16, 16);
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0px 0px 0px 0px #B8B8B8;
+    background:#f0f0f0;
+}
+  
+.connectBtn:hover{ 
+color:#f5f5f5;
+top:-2px;
+height:52px;
+border-bottom: 4px solid #ccc;
+box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+}
+
+.connectBtn:hover.static{
+    top:0px;
+    height:50px;
+}
+  
+.connectBtn:active{
+    top:0px;
+    height:50px;
+    border: 1px solid #ccc;
+    background-color:#ededed;
+    box-shadow: inset 0px 0px 4px rgba(0,0,0,0.15);
+}
+
+.connectBtn {
+    background: linear-gradient(270deg, #63d3fa, #ec48f8, #f8a7fe, #a7c5fe, #e5e9f0);
+    background-size: 1000% 1000%;
+
+    -webkit-animation: AnimationName 7s ease infinite;
+    -moz-animation: AnimationName 7s ease infinite;
+    animation: AnimationName 7s ease infinite;
+}
+
+.connectBtn:focus {
+    border: none;
+    outline: none;
+}
+
+/* .ui-widget-content {
+    position: absolute;
+    width: 40vh;
+    height: 37vh;
+} */
+
+
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }

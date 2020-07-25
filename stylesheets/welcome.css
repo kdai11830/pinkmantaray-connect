@@ -34,7 +34,7 @@ body {
 
     /* padding-bottom: 4vh; */
     font-family: "Century Gothic", sans-serif !important;
-    background-color: rgb(4, 4, 46);
+    background-color: rgb(1, 1, 19);
     color: white;
 }
 
@@ -376,7 +376,16 @@ div.reflections {
   .container{padding-left: 0px;}
 }
 
-
-
-
-
+#welcome-description {
+    font-size: 3vh;
+    font-family: 'Roboto', sans-serif;
+    /* letter-spacing: 0.2vh; */
+    word-spacing: 0.5vh;
+    font-weight: 300;
+    color: #dddeed;
+    text-align: center;
+    /* width: 60vh; */
+    /* background-color: rgb(237, 162, 232); */
+    /* padding: 0 4vh 0 28vh; */
+    border-radius: 1vh;
+    /* font-style: oblique;

@@ -2,83 +2,102 @@
 
 $(document).ready(function() {
 
-	$('#interests').bind('keydown', function(e) {
-		// clear error message if start typing
-		$('#interests_message').remove();
-
-		// only do something if user pressed enter when not selecting from datalist
-		if (e.keyCode==13) {
-			var interest = $(this).val();
-			if (interest != '') {
-				// prevent from submitting form
-				e.preventDefault();
-
-				// check to see if already entered interest
-				var exists = false;
-				for (let li of $("#interests_list li")) {
-					var liTxt = $(li).clone().children().remove().end().text();
-					if (interest + ' ' === liTxt) {
-						exists = true;
-					}
-				}
-
-				// if new interest, add to list
-				if (!exists) {
-					var li = $("<li>" + interest + ' <span class="close">×</span></li>');
-					$("#interests_list").append(li);
-					$(this).val('');
-					// insert interest as hidden input with list attribute
-					$("#interests_list").after('<input type="hidden" id="option_interest" name="option_interest[]" value="' + interest + '">');
-
-				// otherwise, show message
-				} else {
-					$(this).after('<div id="interests_message">Interest already added!</div>');
-					$("#interests_message").css("color", "red");
-					$(this).val('');
-				}
-				
-			}
-		}
-	});
+	var bannedWords = [
+		"ass",
+		"asshole",
+		"bikinibody",
+		"bitch",
+		"boho",
+		"curvygirls",
+		"date",
+		"dating",
+		"dm",
+		"graffitiigers",
+		"humpday",
+		"killingit",
+		"kill",
+		"killing",
+		"kissing",
+		"kiss",
+		"kiser",
+		"master",
+		"motherfucker",
+		"nasty",
+		"nigger",
+		"nigga",
+		"petite",
+		"porn",
+		"pornhub",
+		"shit",
+		"shower",
+		"single",
+		"thot",
+		"undies",
+		"underwear",
+		"vagina",
+		"vag",
+		"cunt",
+		"dick",
+		"penis",
+		"bulge",
+		"fag",
+		"faggot",
+		"fuck",
+		"fucker",
+		"fucking",
+		"fucked",
+		"twink",
+		"hunk",
+		"daddy",
+		"daddies",
+		"zaddy",
+		"zaddies",
+		"pussy",
+		"pussies",
+		"twat",
+		"whore",
+		"bastard",
+		"cock",
+		"retard",
+		"retarded",
+		"schizo"];
 
 	// add language to list when user selects language
-	$("#select_language").change(function() {
-		var language = $(this).val();
-		console.log(language);
-		var exists = false;
-		for (let li of $("#language_list li")) {
-			var liTxt = $(li).clone().children().remove().end().text();
-			if (language + ' ' === liTxt) {
-				exists = true;
-			}
-		}
+	// $("#select_language").change(function() {
+	// 	var language = $(this).val();
+	// 	console.log(language);
+	// 	var exists = false;
+	// 	for (let li of $("#language_list li")) {
+	// 		var liTxt = $(li).clone().children().remove().end().text();
+	// 		if (language + ' ' === liTxt) {
+	// 			exists = true;
+	// 		}
+	// 	}
 
-		if (!exists) {
-			var li = $("<li>" + language + ' <span class="close">×</span></li>');
-			$('#language_list').append(li);
-			$(this).val('');
+	// 	if (!exists) {
+	// 		var li = $("<li>" + language + ' <span class="close">×</span></li>');
+	// 		$('#language_list').append(li);
+	// 		$(this).val('');
 
-			$('#language_list').after('<input type="hidden" id="option_language" name="option_language[]" value="' + language + '">');
-		} else {
-			$(this).val('');
-		}
-	});
+	// 		$('#language_list').after('<input type="hidden" id="option_language" name="option_language[]" value="' + language + '">');
+	// 	} else {
+	// 		$(this).val('');
+	// 	}
+	// });
 
 	// allow for x "buttons" to close the parent element
 	$(".variable_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
-		liTxt = liTxt.substring(0, liTxt.length-1);
+		liTxt = liTxt.substring(0, liTxt.length - 1);
+		var listID = $(this).parent().parent().siblings('input').attr('id');
 		console.log(liTxt);
-		if (this.id == "language_list") {
-			$('#option_language[value="' + liTxt + '"]').remove();	
-		} else { // this is interest list
-			$('#option_interest[value="' + liTxt + '"]').remove();
-		}
+		console.log(listID);
+		$('#option_'+listID+'[value="' + liTxt + '"]').remove();	
 		// remove li item
 		$(this).parent().remove();
-		console.log($(this).parent().length);
 	});
+
 
 	$("#cancelButton").click(function(e) {
 		e.preventDefault();
@@ -93,6 +112,85 @@ $(document).ready(function() {
 		window.history.replaceState({}, document.title, '/profile');
 		location.reload();
 	})
+
+
+	$('.restrict_select').bind('keydown', function(e) {
+		if (e.keyCode==13) {
+			var value = $(this).val();
+			if (value != '') {
+				e.preventDefault();
+				var exists = false;
+				var self = $(this);
+				$(this).siblings('.select_list').children().each(function() {
+					if ($(this).val().toLowerCase() === value.toLowerCase()) {
+						exists = true;
+						self.val($(this).val());
+					}
+				});
+				if (!exists) {
+					e.stopImmediatePropagation();
+					return;
+				}
+			}
+		}
+	});
+
+
+	$('.list_input').bind('keydown', function(e) {
+		// clear error message if start typing
+		$(this).siblings('.duplicate_msg').remove();
+		$(this).siblings('#bannedWordMsg').remove();
+
+		var datatype = $(this).attr('id');
+
+		// only do something if user pressed enter when not selecting from datalist
+		if (e.keyCode==13) {
+			var value = $(this).val();
+			if (value != '') {
+				// prevent from submitting form
+				e.preventDefault();
+
+				// replace with capitalized version if exists
+				var self = $(this);
+				$(this).siblings('.select_list').children().each(function() {
+					if ($(this).val().toLowerCase() === value.toLowerCase()) {
+						value = $(this).val();
+					}
+				});
+
+				if (bannedWords.includes(value.toLowerCase())) {
+					$(this).after('<p id="bannedWordMsg">You cannot enter this value</p>');
+					$(this).val('');
+					return false;
+				}
+
+				// check to see if already entered interest
+				var exists = false;
+				for (let li of $(this).siblings('.variable_list').children('li')) {
+					var liTxt = $(li).clone().children().remove().end().text();
+					if (value === liTxt.substring(0, liTxt.length-1)) {
+						exists = true;
+					}
+				}
+
+				// if new interest, add to list
+				if (!exists) {
+					var li = $("<li>" + value + '<span class="close"> ×</span></li>');
+					$(this).siblings('.variable_list').append(li);
+					$(this).val('');
+					// insert interest as hidden input with list attribute
+					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'[]" value="'+value+'">');
+
+				// otherwise, show message
+				} else {
+					$(this).after('<div class="duplicate_msg">Interest already added!</div>');
+					$(this).siblings('.duplicate_msg').css("color", "red");
+					$(this).val('');
+				}
+				
+			}
+		}
+	});
 
 	// dialog css stuff, can be replaced in future css styles file
 	// $('#confirmationDialog').css('position', 'absolute');

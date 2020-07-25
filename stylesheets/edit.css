@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(4, 4, 46);
+    background-color: rgb(1, 1, 19);
     color: white;
     font-size: 1vh;
 }
@@ -93,7 +93,7 @@ form div ul > li:hover {
 }
 
 #cancelButton, #closeBtn {
-    color: rgb(139, 218, 247);
+    color: rgba(255, 255, 255, 0.81);
     text-decoration: underline;
     background: none;
     border: none;
@@ -134,7 +134,7 @@ form div ul > li:hover {
     color: black;
 }
 
-#confirmationDialog {
+/* #confirmationDialog {
     position: absolute;
     z-index: 9999;
     background-color: rgb(244, 156, 224);
@@ -144,22 +144,78 @@ form div ul > li:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+} */
+
+
+#confirmationDialog {
+    border-radius: 1.5vh;
+    padding: 4vh;
+    /* background: #fefefe; */
+    box-shadow:  7px 7px 14px #b9bcbe, 
+    -7px -7px 14px #f2f4f5;
+
+    background: linear-gradient(270deg, #63d3fa, #ec48f8, #f8a7fe, #a7c5fe, #75c5f0);
+    background-size: 1000% 1000%;
+
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
 }
 
-#confirmationDialog p {
-    padding-bottom: 4vh;
+#confirmationDialog p:first-child {
+    font-weight: bolder;
+}
+
+.ui-front:focus {
+    border: none;
+    outline: none;
+    /* color: red; */
 }
 
 .ui-dialog-titlebar-close {
-    color: black;
+    /* color: black;
     margin-top: -3vh;
     background-color: rgb(244, 156, 224);
     border:none;
     border-radius: 2vh 2vh 0 0vh;
     padding: 1vh;
-    margin-left: 40.2vh;
+    margin-left: 40.2vh; */
+    display: none;
 }
-
+/* 
 .ui-dialog-titlebar-close:hover {
     color: white;
+} */
+
+.connect-row{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+label {
+    width: 9%;
+    text-align: left;
+    color: rgb(244, 156, 224);
+    font-weight: bolder;
+}
+
+.results {
+    display: flex;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }

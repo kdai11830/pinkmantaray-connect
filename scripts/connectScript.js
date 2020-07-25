@@ -31,7 +31,7 @@ $(document).ready(function() {
 		"nigga",
 		"petite",
 		"porn",
-		"Pornhub",
+		"pornhub",
 		"shit",
 		"shower",
 		"single",
@@ -66,13 +66,19 @@ $(document).ready(function() {
 		"retarded",
 		"schizo"];
 
+	// controller for selecting state in USA
+	// hide state by default
+	$("#select_state").prop('disabled','disabled');
+	$("#select_location").change(function() {
+		if ($("#select_location").val() == "USA") {
+			$("#select_state").prop('disabled', false);
+		} else {
+			$('#select_state option')[0].selected = true;
+			$("#select_state").prop('disabled','disabled');
+		}
+	});
+
 	$("#connectForm").submit(function () {
-		// set all the custom values
-		$('.custom').each(function() {
-			if ($(this).is(':checked')) {
-				$(this).val($(this).siblings('.custom_text').val());
-			}
-		});
 
 		// put all grouped info in arrays
 		var gender = [];
@@ -107,6 +113,7 @@ $(document).ready(function() {
 		// get the information from form and add to dict to pass to socket
 		var emitVals = {
 			"location": $('[name=option_location]').val(),
+			"state": $('[name=option_state]').val(),
 			"ageRange": [age1, age2],
 			"gender": gender,
 			"sexuality": sexuality,
@@ -163,7 +170,8 @@ $(document).ready(function() {
 				var curRow = 'entry' + i;
 				$("#resultsDisplay").append('<tr id="' + curRow + '"></tr>');
 
-				var connectBtn = '<td><button class="connectBtn">Connect</button></td>;'
+				var connectBtn =
+          '<td><button class="connectBtn">Connect</button></td>;';
 				$("#" + curRow).append(connectBtn);
 				$("#" + curRow).append('<td>' + data[i][2] + '</td>'); // pronouns
 				$("#" + curRow).append('<td>' + data[i][3] + '</td>'); // country
@@ -293,7 +301,7 @@ $(document).ready(function() {
 					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'" value="'+value+'">');
+					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'[]" value="'+value+'">');
 
 				// otherwise, show message
 				} else {
@@ -305,6 +313,36 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	// $(".list_input").bind('input', function () {
+	// 	var datatype = $(this).attr('id');
+	//     var value = $(this).val();
+	//     if($(this).siblings('.select_list').children().filter(function(){
+	//     	if (value.toUpperCase() === "") return false;
+	//         else return $(this).val().toUpperCase() === value.toUpperCase();        
+	//     }).length) {
+	//         var exists = false;
+	// 		for (let li of $(this).siblings('.variable_list').children('li')) {
+	// 			var liTxt = $(li).clone().children().remove().end().text();
+	// 			if (value === liTxt) {
+	// 				exists = true;
+	// 			}
+	// 		}
+	// 		// if new interest, add to list
+	// 		if (!exists) {
+	// 			var li = $("<li>" + value + '<span class="close"> ×</span></li>');
+	// 			$(this).siblings('.variable_list').append(li);
+	// 			$(this).val('');
+	// 			// insert interest as hidden input with list attribute
+	// 			$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'" value="'+value+'">');
+	// 		// otherwise, show message
+	// 		} else {
+	// 			$(this).after('<div class="duplicate_msg">Interest already added!</div>');
+	// 			$(this).siblings('.duplicate_msg').css("color", "red");
+	// 			$(this).val('');
+	// 		}
+	//     }
+	// });
 
 	// allow for x "buttons" to close the parent element
 	$(".variable_list").delegate(".close", "click", function() {
