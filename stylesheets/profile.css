@@ -124,6 +124,32 @@ tr {
     color: rgb(244, 156, 224);
     transition-duration: 10ms;
 }
+
+#reportBtn {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(244, 0, 0);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 0.5vh;
+    margin-top: 2vh;
+}
+
+#reportBtn:active {
+    background-color: rgb(247, 68, 68);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
 /*
 
 #profileBody {
