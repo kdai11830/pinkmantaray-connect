@@ -179,6 +179,7 @@ $(document).ready(function() {
 					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
+					console.log(datatype);
 					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'[]" value="'+value+'">');
 
 				// otherwise, show message

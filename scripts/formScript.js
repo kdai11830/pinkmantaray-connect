@@ -273,6 +273,27 @@ $(document).ready(function() {
 	//     }
 	// });
 
+	$('#select_language').change(function() {
+		var value = $(this).val();
+
+		// check to see if already entered interest
+		var exists = false;
+		for (let li of $(this).siblings('.variable_list').children('li')) {
+			var liTxt = $(li).clone().children().remove().end().text();
+			if (value === liTxt) {
+				exists = true;
+			}
+		}		
+		// if new interest, add to list
+		if (!exists) {
+			var li = $("<li>" + value + '<span class="close"> ×</span></li>');
+			$(this).siblings('.variable_list').append(li);
+			$(this).val('');
+			// insert interest as hidden input with list attribute
+			$(this).siblings('.variable_list').after('<input type="hidden" id="entry_language" name="entry_language[]" value="'+value+'">');
+		}
+	})
+
 
 	$('.list_input').bind('keydown', function(e) {
 		// clear error message if start typing
@@ -322,11 +343,10 @@ $(document).ready(function() {
 
 				// otherwise, show message
 				} else {
-					$(this).after('<div class="duplicate_msg">Interest already added!</div>');
-					$(this).siblings('.duplicate_msg').css("color", "red");
+					// $(this).after('<div class="duplicate_msg">Interest already added!</div>');
+					// $(this).siblings('.duplicate_msg').css("color", "red");
 					$(this).val('');
 				}
-				
 			}
 		}
 	});

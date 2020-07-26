@@ -11,13 +11,30 @@
 	rel="stylesheet">
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script> 
 <script type="text/javascript">
 	$(document).ready(function() {
+		var socket = io();
+
 		$('.reportBtn').click(function() {
-			console.log('ASDFKASDJG');
 			var user_id = $(this).val();
 			location.href = '/report?id='+user_id;
 		});
+
+		$('.deleteBtn').click(function() {
+			var user_id = $(this).val();
+			// maybe add a dialog or something, do this later
+			// for now, just delete it
+			socket.emit('deleteConnection', {"id": user_id});
+		});
+
+		socket.on('deleteResult', function(vals) {
+			if (vals['success']) {
+				$('#connection'+vals['id']).replaceWith('<h4>Connection successfully removed!</h4>');
+			} else {
+				$('#connection'+vals['id']).before('<h4>Something went wrong!</h4>')
+			}
+		})
 	});
 </script>
 
@@ -40,8 +57,11 @@
 		<div>
 			<table>
 				<% for (var i = 0; i < data.length; i++) { %>
-					<tr>
-						<td><button class='reportBtn' value='<%= data[i].id %>'>Report</button></td>
+					<tr id='connection<%= data[i].id %>'>
+						<td>
+							<button class='reportBtn' value='<%= data[i].id %>'>Report</button>
+							<button class='deleteBtn' value='<%= data[i].id %>'>Delete Connection</button>
+						</td>
 						<td><%= data[i].name %></td>
 						<td><%= data[i].pronouns %></td>
 						<td><a href="https://www.instagram.com/<%= data[i].instagram %>"><i class="fab fa-instagram fa-2x"></i></a></td>

@@ -79,6 +79,8 @@ $(document).ready(function() {
 	});
 
 	$("#connectForm").submit(function () {
+		$('#emptySearchMsg').remove();
+		var empty = true;
 
 		// put all grouped info in arrays
 		var gender = [];
@@ -100,15 +102,40 @@ $(document).ready(function() {
 		var interests = [];
 		$('input[name="option_interest"]').each(function() {
 			interests.push($(this).val());
-		})
+		});
 		var language = [];
 		$('input[name="option_language"]').each(function() {
 			interests.push($(this).val());
-		})
+		});
+
+		// check if arrays are empty
+		if (gender.length > 0 ||
+			sexuality.length > 0 ||
+			race.length > 0 ||
+			religion.length > 0 ||
+			interests.length > 0 ||
+			language.length > 0) {
+			empty = false;
+		}
 
 		var ageArray = [parseInt($('[name=option_age1]').val()), parseInt($('[name=option_age2]').val())];
 		var age1 = Math.min.apply(null,ageArray);
 		var age2 = Math.max.apply(null,ageArray);
+		if ($('[name=option_age1]').val() != '' && $('[name=option_age2]').val() != '') {
+			empty = false;
+		}
+
+		if ($('[name=option_location]').val() != '' || $('[name=option_state]').val() != '') {
+			empty = false;
+		}
+
+		// if no values added, don't search and display message
+		if (empty) {
+			$("#resultsDisplay").empty();
+			$("#noResults").remove();
+			$('#resultsDiv').append('<h3 id="emptySearchMsg">Please enter search parameters!</h3>')
+			return false;
+		}
 
 		// get the information from form and add to dict to pass to socket
 		var emitVals = {
@@ -305,8 +332,8 @@ $(document).ready(function() {
 
 				// otherwise, show message
 				} else {
-					$(this).after('<div class="duplicate_msg">Interest already added!</div>');
-					$(this).siblings('.duplicate_msg').css("color", "red");
+					// $(this).after('<div class="duplicate_msg">Interest already added!</div>');
+					// $(this).siblings('.duplicate_msg').css("color", "red");
 					$(this).val('');
 				}
 				

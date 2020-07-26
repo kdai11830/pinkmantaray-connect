@@ -10,7 +10,34 @@
 	rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script> 
 <script src="https://kit.fontawesome.com/07e3f56f33.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var socket = io();
+
+		$('.viewProfileBtn').click(function() {
+			var id = $(this).attr('id');
+			window.location.href = '/profile?id='+id;
+		});
+
+		$('.deleteConnectionBtn').click(function() {
+			var id = $(this).attr('id');
+			console.log(id);
+			// some dialog popup here probably
+			socket.emit('deleteConnection', {'id': id});
+		});
+
+		socket.on('deleteResult', function(vals) {
+			if (vals['success']) {
+				$('#row'+vals['id']).replaceWith('<h4>Connection successfully removed</h4>');
+			} else {
+				// idk this should work so :shrug:
+			}
+		})
+
+	});
+</script>
 </head>
 
 <body>
@@ -40,7 +67,8 @@
 
 		<% if (results.length > 0) { %>
 			<% for(var i = 0; i < results.length; i++) { %>
-				<tr>
+				<tr id="row<%= results[i].id %>">
+					<td><button class="viewProfileBtn" id="<%= results[i].id %>">View Profile</button></td>
 					<td><%= results[i].name %> </td>
 					<td><%= results[i].pronouns %> </td>
 					<!-- <td><a href="https://www.instagram.com/<%= results[i].instagram %>">
@@ -55,6 +83,8 @@
 		
 
 					<td class='iconButton'><div class='iconButtonText'>Report</div><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
+
+					<td><button class='deleteConnectionBtn' id="<%= results[i].id %>">Delete</button></td>
 				</tr>
 			<% } %>
 		<% } %>

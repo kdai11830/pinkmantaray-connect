@@ -17,9 +17,10 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			var socket = io();
-			var userData = <% - JSON.stringify(data) %>
-				// dialog css stuff, can be replaced in future css styles file
-				$('.dialog').css('position', 'absolute');
+
+			var userData = <%- JSON.stringify(data) %>
+			// dialog css stuff, can be replaced in future css styles file
+			$('.dialog').css('position', 'absolute');
 			$(".dialog").css('z-index', 9999);
 			$('.dialog').css('background-color', 'white');
 			// $('.dialog').css('border-style', 'outset');
@@ -86,9 +87,9 @@
 	<% } else { %>
 	<div id="profileInfoDiv">
 		<% if (!data.myProfile) { %>
-		<h2><%= data.name %>'s Profile</h2>
+			<h2><%= data.name %>'s Profile</h2>
 		<% } else { %>
-		<h2>My Profile</h2>
+			<h2>My Profile</h2>
 		<% } %>
 
 		<table id="profileInfo">
@@ -97,9 +98,11 @@
 				<td><%= new Date().getFullYear() - data.year %></td>
 				<td><%= data.pronouns %></td>
 				<% if (!data.myProfile) { %>
-				<td><a href="https://instagram.com/<%= data.instagram %>">
-						<i class="fab fa-instagram fa-2x"></i></a></td>
-				<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>
+
+					<td><a href="https://instagram.com/<%= data.instagram %>">
+							<i class="fab fa-instagram fa-2x"></i></a></td>
+					<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>
+
 				<% } %>
 			</tr>
 			<tr>
@@ -128,27 +131,31 @@
 			​
 			<% if (!data.myProfile) { %>
 			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
-				<input type="hidden" name="userId" value="<%= data.id %>">
-				<input type="hidden" name="username" value="<%= data.username %>">
+				<!-- <input type="hidden" name="userId" value="<%= data.id %>">
+				<input type="hidden" name="username" value="<%= data.username %>"> -->
 				<div id="reportDiv">
-					<input type="submit" name="reportBtn" value="Report">Report User</input>
+					<button type="submit" name="reportBtn">Report User</button>
 				</div>
 			</form>
+
+			<!-- <button id="deleteConnectionBtn">Delete Connection</button> -->
+
 			<% } else { %>
-			<div id="myProfileOptions">
-				<form id="profileForm" action="/profile?edit=" method="GET">
-					<!-- <div id="reportDiv"> -->
-					<button type="submit" name="edit">Edit Profile</button>
-					<!-- </div> -->
-				</form>
-			</div>
-			​
-			<% if (data.hidden == 1) { %>
-			<button id="unhideProfile">Unhide my profile</button>
-			<% } else { %>
-			<button id="hideProfile">Hide my profile</button>
-			<% } %>
+					<div id="myProfileOptions">
+						<form id="profileForm" action="/profile?edit=" method="GET">
+							<!-- <div id="reportDiv"> -->
+								<button type="submit" name="edit">Edit Profile</button>
+							<!-- </div> -->
+						</form>
+					</div>
+
+					<!-- <% if (data.hidden == 1) { %>
+					<button id="unhideProfile">Unhide my profile</button>
+					<% } else { %>
+					<button id="hideProfile">Hide my profile</button>
+					<% } %> -->
 			<% }  %>
+				
 
 		</div>
 	</div>

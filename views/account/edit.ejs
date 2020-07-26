@@ -21,8 +21,6 @@
 
 		var userData = <%- JSON.stringify(data) %>;
 
-		console.log(userData);
-
 		$('#option_year').val(userData["year"]);
 
 		$('#select_location').val(userData["country"]);
@@ -32,7 +30,7 @@
 		var_options.forEach(function(key) {
 			for (var i = 0; i < userData[key].length; i++) {
 				if (userData[key][i] != null) {
-					var li = $('<li>' + userData[key][i] + ' <span class="close">×</span></li>');
+					var li = $('<li>' + userData[key][i] + '<span class="close"> ×</span></li>');
 					$("#"+key+"_list").after('<input type="hidden" id="option_'+key+'" name="option_'+key+'[]" value="' + userData[key][i] + '">');
 					$("#"+key+"_list").append(li);
 				}
@@ -446,7 +444,7 @@
 		<div id="div_race" class="connect-row">
 			<label for="race">Culture:</label>
 			<div id="option_race_div" class="results">
-				<input list="race_datalist" name="race" id="race" autocomplete="off" class="list_input">
+				<input list="race_datalist" name="race_ethnicity" id="race_ethnicity" autocomplete="off" class="list_input">
 				<datalist class="select_list" id="race_datalist">
 					<option value="Abazin" />
 					<option value="Abkhazian" />
