@@ -12,21 +12,32 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script> 
 <script src="https://kit.fontawesome.com/07e3f56f33.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var socket = io();
 
+		var id;
+
 		$('.viewProfileBtn').click(function() {
-			var id = $(this).attr('id');
+			id = $(this).attr('id');
 			window.location.href = '/profile?id='+id;
 		});
 
-		$('.deleteConnectionBtn').click(function() {
-			var id = $(this).attr('id');
-			console.log(id);
-			// some dialog popup here probably
-			socket.emit('deleteConnection', {'id': id});
+		$('.deleteConnectionBtn').on('click', function() {
+			id = $(this).attr('id');
+			$('#confirmationDialog').dialog('open');
+			// socket.emit('deleteConnection', {'id': id});
 		});
+
+		$('#closeBtn').click(function() {
+			$('#confirmationDialog').dialog('close');
+		});
+
+		$('#confirmBtn').click(function() {
+			socket.emit('deleteConnection', {'id': id});
+			$('#confirmationDialog').dialog('close');
+		})
 
 		socket.on('deleteResult', function(vals) {
 			if (vals['success']) {
@@ -34,7 +45,20 @@
 			} else {
 				// idk this should work so :shrug:
 			}
-		})
+		});
+
+		$('#confirmationDialog').css('position', 'absolute');
+
+		$("#confirmationDialog").dialog({
+			autoOpen: false,
+			modal: true,
+			resizable: false,
+			show: false,
+			draggable: false,
+			open: function(event, ui) {
+	        	$(".ui-dialog-titlebar-close", ui.dialog || ui).hide();
+	    	}
+		});
 
 	});
 </script>
@@ -42,56 +66,60 @@
 
 <body>
 
-<%- include("partials/header") %>
+	<%- include("partials/header") %>
 
 
-<% if (!verified) { %>
-<div id='not-verified'>
-	<h2>Please verify your email!</h2>
-	<p>Visit your email and verify your address to access Pinkmantaray Connect. <br /> Make sure to check your junk or spam folder if you cannot find the email.</p>
-</div>
-<% } %>
+	<% if (!verified) { %>
+	<div id='not-verified'>
+		<h2>Please verify your email!</h2>
+		<p>Visit your email and verify your address to access Pinkmantaray Connect. <br /> Make sure to check your junk or spam folder if you cannot find the email.</p>
+	</div>
+	<% } %>
 
-<h2>My Connections</h2>
-<div class="connect-subtitle">
-	You have (<%= results.length %>) connections.
-</div>
-
-
-
-<div id="my-connections">
+	<h2>My Connections</h2>
+	<div class="connect-subtitle">
+		You have (<%= results.length %>) connections.
+	</div>
 
 
 
-	<table>
+	<div id="my-connections">
 
-		<% if (results.length > 0) { %>
-			<% for(var i = 0; i < results.length; i++) { %>
-				<tr id="row<%= results[i].id %>">
-					<td><button class="viewProfileBtn" id="<%= results[i].id %>">View Profile</button></td>
-					<td><%= results[i].name %> </td>
-					<td><%= results[i].pronouns %> </td>
-					<!-- <td><a href="https://www.instagram.com/<%= results[i].instagram %>">
-						<img border="0" alt="www.instagram.com/<%=results[i].instagram %>" 
-						src="/views/imgs/instagram_logo.png" width="20vh" height="20vh"></a>
-					</td> -->
-					<td class='iconButton'><div class='iconButtonText'>IG</div><a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/<%= results[i].instagram %>">
-						<i class="fab fa-instagram fa-2x"></i></a>
-					</td>
-					
-					<td class='iconButton'><div class='iconButtonText'>Email</div><a target="_blank" rel="noopener noreferrer" href="mailto:<%= results[i].email %>"><i class="far fa-envelope fa-2x"></i></a></td>
-		
+		<table>
 
-					<td class='iconButton'><div class='iconButtonText'>Report</div><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
+			<% if (results.length > 0) { %>
+				<% for(var i = 0; i < results.length; i++) { %>
+					<tr id="row<%= results[i].id %>">
+						<td><button class="viewProfileBtn" id="<%= results[i].id %>">View Profile</button></td>
+						<td><%= results[i].name %> </td>
+						<td><%= results[i].pronouns %> </td>
+						<!-- <td><a href="https://www.instagram.com/<%= results[i].instagram %>">
+							<img border="0" alt="www.instagram.com/<%=results[i].instagram %>" 
+							src="/views/imgs/instagram_logo.png" width="20vh" height="20vh"></a>
+						</td> -->
+						<td class='iconButton'><div class='iconButtonText'>IG</div><a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/<%= results[i].instagram %>">
+							<i class="fab fa-instagram fa-2x"></i></a>
+						</td>
+						
+						<td class='iconButton'><div class='iconButtonText'>Email</div><a target="_blank" rel="noopener noreferrer" href="mailto:<%= results[i].email %>"><i class="far fa-envelope fa-2x"></i></a></td>
+			
 
-					<td class='iconButton'><div class='iconButtonText'>Delete</div><a href="/report?id=<%= results[i].id %>" class="deleteConnectionBtn" id="<%= results[i].id %>"><i class="fas fa-trash-alt fa-2x"></i></a></td>
+						<td class='iconButton'><div class='iconButtonText'>Report</div><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
 
-				</tr>
+						<td class='iconButton'><div class='iconButtonText'>Delete</div><a class="deleteConnectionBtn" id="<%= results[i].id %>"><i class="fas fa-trash-alt fa-2x"></i></a></td>
+
+					</tr>
+				<% } %>
 			<% } %>
-		<% } %>
 
-	</table>
-</div>
+		</table>
+	</div>
+
+	<div id="confirmationDialog">
+		<p>Are you sure you want to remove this connection?</p>
+		<button id="closeBtn">Cancel</button>
+		<button id="confirmBtn">Remove</button>
+	</div>
 
 </body>
 </html>

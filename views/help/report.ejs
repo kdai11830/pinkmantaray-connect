@@ -12,21 +12,34 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script> 
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var socket = io();
 
+		var user_id;
+
 		$('.reportBtn').click(function() {
-			var user_id = $(this).val();
+			user_id = $(this).val();
 			location.href = '/report?id='+user_id;
 		});
 
 		$('.deleteBtn').click(function() {
-			var user_id = $(this).val();
-			// maybe add a dialog or something, do this later
-			// for now, just delete it
-			socket.emit('deleteConnection', {"id": user_id});
+			user_id = $(this).val();
+			
+			$('#confirmationDialog').dialog('open');
+			
 		});
+
+		$('#closeBtn').click(function() {
+			$('#confirmationDialog').dialog('close');
+		});
+
+		$('#confirmBtn').click(function() {
+			socket.emit('deleteConnection', {"id": user_id});
+			$('#confirmationDialog').dialog('close');
+		});
+
 
 		socket.on('deleteResult', function(vals) {
 			if (vals['success']) {
@@ -34,7 +47,20 @@
 			} else {
 				$('#connection'+vals['id']).before('<h4>Something went wrong!</h4>')
 			}
-		})
+		});
+
+		$('#confirmationDialog').css('position', 'absolute');
+
+		$("#confirmationDialog").dialog({
+			autoOpen: false,
+			modal: true,
+			resizable: false,
+			show: false,
+			draggable: false,
+			open: function(event, ui) {
+	        	$(".ui-dialog-titlebar-close", ui.dialog || ui).hide();
+	    	}
+		});
 	});
 </script>
 
@@ -73,6 +99,11 @@
 			
 				<% } %>
 			</table>
+		</div>
+		<div id="confirmationDialog">
+			<p>Are you sure you want to remove this connection?</p>
+			<button id="closeBtn">Cancel</button>
+			<button id="confirmBtn">Remove</button>
 		</div>
 	</div>
 
