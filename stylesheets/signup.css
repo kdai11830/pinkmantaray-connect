@@ -49,6 +49,10 @@ body > form {
     /* height: 80vh; */
 }
 
+h1 {
+    margin-bottom: 0;
+}
+
 /* "Sign Up" */
 body > form > h1:first-child {
     /* position: absolute;
@@ -128,6 +132,8 @@ body > form > h1:first-child {
 .further-signup-info > div {
     display: flex;
     flex-direction: column;
+    /* height: 63vh; */
+    justify-content: space-evenly;
 }
 
 .further-signup-info div label{
@@ -150,7 +156,16 @@ body > form > h1:first-child {
     left: 50%;
 }
 
-.required, #select_country, #select_state, .select_list, datalist {
+#select_state {
+    width: 34vh;
+    height: 7vh;
+    border: 0.1vh solid rgba(255, 255, 255, 0);
+    border-radius: 1rem;
+    font-size: 2.5vh;
+    padding-left: 1.4rem;
+}
+
+.required, #select_country, .select_list, datalist, .req_state {
     width: 34vh;
     height: 7vh;
     border: 0.1vh solid rgba(255, 255, 255, 0);
@@ -192,7 +207,8 @@ body > form > h1:first-child {
 }  */
 
 #select_state:focus, #language_datalist:focus {
-    border-color: rgb(244, 156, 224);
+    /* border-color: rgb(244, 156, 224); */
+    border-color: none;
 }
 
 .signup-id-info {
@@ -200,7 +216,7 @@ body > form > h1:first-child {
     flex-direction: column;
     padding-top: 16vh;
     /* padding: 0 0vh 10vh 0; */
-    height: 44vh;
+    height: 46vh;
     justify-content: space-evenly;
 }
 
@@ -214,7 +230,7 @@ body > form > h1:first-child {
 
 
 .culture-page {
-    padding-top: 17vh;
+    padding-top: 20vh;
 }
 
 .signup-row {
@@ -249,10 +265,10 @@ label h3 {
     padding-left: 1vh; 
 }
 
-.signup-id-info input, #interests {
+.signup-id-info input, #interests, #select_language {
     width: 34vh;
     height: 7vh;
-    border: 0.1vh solid rgba(255, 255, 255, 0);
+    border: 0.1vh solid rgba(255, 255, 255, 0) !important;
     border-radius: 1rem;
     font-size: 2.5vh;
     padding-left: 1.4rem;
@@ -260,6 +276,10 @@ label h3 {
     background: none;
     color: white;
     margin: 2vh 0 3vh 0;
+}
+
+.gray_label {
+    color: gray;
 }
 
 /* .signup-id-info div {
@@ -293,7 +313,7 @@ label h3 {
     color: rgb(147, 220, 247);
     padding-top: 0vh;
     display: block;
-    padding-bottom: 6vh;
+    padding-bottom: 2vh;
     font-size: 2.2vh;
 }
 
@@ -419,4 +439,9 @@ li:hover {
     font-weight: bolder;
     padding-top: 2vh;
     color: white;
+}
+
+.lang-col {
+        display: flex;
+    flex-direction: column;
 }

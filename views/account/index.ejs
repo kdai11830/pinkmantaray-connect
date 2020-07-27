@@ -93,10 +93,10 @@
 		<% } %>
 
 		<table id="profileInfo">
-			<tr>
+			<tr >
 				<td class="name"><%= data.name %></td>
-				<td><%= new Date().getFullYear() - data.year %></td>
 				<td><%= data.pronouns %></td>
+				<td><%= new Date().getFullYear() - data.year %></td>
 				<% if (!data.myProfile) { %>
 
 					<td><a href="https://instagram.com/<%= data.instagram %>">
@@ -127,8 +127,7 @@
 				<td><span>Interests:</span> <%= data.interest.join(', ') %></td>
 			</tr>
 		</table>
-		<div>
-			​
+		<div>	​
 			<% if (!data.myProfile) { %>
 			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
 				<!-- <input type="hidden" name="userId" value="<%= data.id %>">
@@ -155,8 +154,6 @@
 					<button id="hideProfile">Hide my profile</button>
 					<% } %> -->
 			<% }  %>
-				
-
 		</div>
 	</div>
 	​

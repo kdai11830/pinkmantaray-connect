@@ -72,9 +72,11 @@ $(document).ready(function() {
 	$("#select_location").change(function() {
 		if ($("#select_location").val() == "USA") {
 			$("#select_state").prop('disabled', false);
+			$("#select_state").addClass('req_state');
 		} else {
 			$('#select_state option')[0].selected = true;
 			$("#select_state").prop('disabled','disabled');
+			$("#select_label").addClass('gray_label');
 		}
 	});
 
@@ -133,9 +135,15 @@ $(document).ready(function() {
 		if (empty) {
 			$("#resultsDisplay").empty();
 			$("#noResults").remove();
-			$('#resultsDiv').append('<h3 id="emptySearchMsg">Please enter search parameters!</h3>')
+			$('#resultsDiv').append('<div id="emptySearchMsg">Please enter search parameters!</div>')
+
+			$('html,body').animate({
+        scrollTop: $("#resultsDiv").offset().top},
+		1000);
+		$("#resultsDisplay").addClass("displayPadding")
 			return false;
 		}
+		
 
 		// get the information from form and add to dict to pass to socket
 		var emitVals = {

@@ -20,7 +20,7 @@ h2 {
 }
 
 #profileInfo {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -39,7 +39,11 @@ h2 {
     box-shadow:  7px 7px 14px #000000, 
                 -7px -7px 14px #455259;
 
-    overflow-y:auto;
+    overflow-y:auto; */
+
+    display: flex;
+    flex-direction: column;
+    font-size: 2vh;
 }
 
 .name, td > span {
@@ -150,6 +154,12 @@ tr {
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;
 }
+
+.name {
+    color: rgb(139, 218, 247);
+}
+
+
 /*
 
 #profileBody {

@@ -48,22 +48,9 @@ tr {
     border: none;
 }
 
-tr > td:nth-child(3), tr > td:nth-child(4), tr > td:nth-child(5) {
+tr > td:nth-child(4), tr > td:nth-child(5), tr > td:nth-child(6), tr > td:nth-child(7) {
     width: 10vh;
     /* border-radius: 1vh; */
-}
-
-tr > td:nth-child(5) {
-    /* background-color: #fbea2b8e; */
-    
-}
-
-tr > td:nth-child(4) {
-    /* background-color: rgba(139, 218, 247, 0.651); */
-}
-
-tr > td:nth-child(3) {
-    /* background-color: rgb(244, 156, 224); */
 }
 
 .connect-subtitle {
@@ -89,4 +76,39 @@ tr > td:nth-child(3) {
 }
 .iconButtonText{
   visibility: hidden;
+}
+
+/* button  */
+.viewProfileBtn {
+    height: 7vh;
+    width: 18vh;
+
+    color: white;
+    background: rgb(139, 218, 247);
+
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    outline: none;
+    border: none;
+	text-align: center;
+    cursor: pointer;
+    border-radius: 43px;
+}
+
+tr > td:first-child {
+    width: 38vh;
+}
+
+/* button active */
+.viewProfileBtn:active {
+    background-color: rgb(165, 223, 244);
+	box-shadow: 
+		inset rgba(70,70,70,0.4) 2px 2px 4px,
+		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+.viewProfileBtn:hover {
+    background-color: rgb(165, 223, 244);
 }

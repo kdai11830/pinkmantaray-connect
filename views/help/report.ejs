@@ -58,7 +58,7 @@
 			<table>
 				<% for (var i = 0; i < data.length; i++) { %>
 					<tr id='connection<%= data[i].id %>'>
-						<td>
+						<td id="reportBtnParents">
 							<button class='reportBtn' value='<%= data[i].id %>'>Report</button>
 							<button class='deleteBtn' value='<%= data[i].id %>'>Delete Connection</button>
 						</td>

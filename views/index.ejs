@@ -84,7 +84,8 @@
 
 					<td class='iconButton'><div class='iconButtonText'>Report</div><a href="/report?id=<%= results[i].id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td>
 
-					<td><button class='deleteConnectionBtn' id="<%= results[i].id %>">Delete</button></td>
+					<td class='iconButton'><div class='iconButtonText'>Delete</div><a href="/report?id=<%= results[i].id %>" class="deleteConnectionBtn" id="<%= results[i].id %>"><i class="fas fa-trash-alt fa-2x"></i></a></td>
+
 				</tr>
 			<% } %>
 		<% } %>

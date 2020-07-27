@@ -25,10 +25,10 @@ h2 {
     font-size: 3vh;
 }
 
-/* login button  */
-.reportBtn {
+/* report button  */
+.reportBtn, .deleteBtn {
     height: 7vh;
-    width: 18vh;
+    width: 16vh;
 
     color: white;
     background: rgb(244, 0, 0);
@@ -44,12 +44,22 @@ h2 {
     border-radius: 0.5vh;
 }
 
-/* login button active */
-.reportBtn:active {
+/* report button active */
+.reportBtn:active, .deleteBtn:active {
     background-color: rgb(252, 99, 99);
 	box-shadow: 
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;
+}
+
+.deleteBtn {
+    color: rgb(244, 0, 0);
+    background: white;
+
+}
+
+.deleteBtn:active {
+
 }
 
 td {
@@ -65,4 +75,14 @@ table {
     width: 74vh;
     border-collapse: separate;
   border-spacing: 0 2vh;
+}
+
+.deleteBtn {
+
+}
+
+#reportBtnParents {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }

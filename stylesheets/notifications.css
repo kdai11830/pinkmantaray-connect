@@ -14,9 +14,9 @@ body > div {
 /* middle line */
 body > div:after {
     content: "";
-    background-color: #59e9f6;
+    background-color: #c3e5e821;
     position: absolute;
-    width: 0.7vh;
+    width: 0.4vh;
     height: 77vh;
     top: 19vh;
     left: 99.6vh;
@@ -104,7 +104,7 @@ body > div:after {
 
     display: flex;
     margin-top: 3vh;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 #invitationsTable td {
@@ -130,4 +130,7 @@ tr {
     width: 100%;
 }
 
+h3 {
+    text-transform: none;
+}
 

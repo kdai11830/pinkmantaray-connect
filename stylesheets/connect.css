@@ -137,7 +137,7 @@ h2 {
 	text-align: center;
     cursor: pointer;
     border-radius: 43px;
-    margin-left: 79vh;
+    margin-left: 82vh;
 }
 
 /* connect button active */
@@ -350,5 +350,10 @@ h2 {
 
 #closeBtn:hover{
     cursor: pointer;
-    color: rgba(249, 249, 249, 0.452);
+    color: rgba(187, 78, 78, 0.452);
+}
+
+#emptySearchMsg {
+    padding-bottom: 7vh;
+    color: red;
 }

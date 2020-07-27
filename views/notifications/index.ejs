@@ -20,7 +20,8 @@
 <%- include("../partials/header") %>
 <div>
 	<div class="postcard">
-		<div class="notif-header">Requests</div>
+		<div class="notif-header">Incoming</div>
+		<h3>Accept or reject your new connection requests!</h3>
 		<table id="invitationsTable">
 			<% var counter = 0; %>
 			<% for (var i in data['invitations']) { %>
@@ -45,7 +46,8 @@
 	</div>
 	
 	<div class="postcard">
-		<div class="notif-header">Pending</div>
+		<div class="notif-header">Outgoing</div>
+		<h3>View or cancel your pending requests.</h3>
 		<table id="pendingTable">
 			<% var counter = 0; %>
 				<% for (var i in data['pending']) { %>
