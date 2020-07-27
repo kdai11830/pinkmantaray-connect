@@ -175,3 +175,7 @@ body {
     color: red;
     font-size: 2vh;
 }
+
+.loginFail a {
+    color: rgb(244, 156, 224);
+}

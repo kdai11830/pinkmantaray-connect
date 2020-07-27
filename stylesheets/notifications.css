@@ -19,7 +19,7 @@ body > div:after {
     width: 0.4vh;
     height: 77vh;
     top: 19vh;
-    left: 99.6vh;
+    left: 99.1vh;
     display: block;
 }
 
@@ -134,3 +134,7 @@ h3 {
     text-transform: none;
 }
 
+.successMsg {
+    width: 93vh;
+    text-transform: none;
+}

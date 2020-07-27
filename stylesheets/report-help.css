@@ -25,9 +25,7 @@ p {
     display: inline-flex;
 }
 
-p a {
+#divDesc > div > a {
     color: rgb(244, 156, 224);
-    display: inline-block;
-    padding-left: 1vh;
-    padding-right: .8vh;
+    font-weight: 700;
 }
