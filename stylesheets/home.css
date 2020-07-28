@@ -118,3 +118,73 @@ tr > td:first-child {
 .viewProfileBtn:hover {
     background-color: rgb(165, 223, 244);
 }
+
+#confirmationDialog {
+
+}
+
+#confirmationDialog {
+    width: 51.5vh !important;
+    height: 21vh !important;
+    border-radius: 1vh;
+    padding: 7vh 2vh;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background: #0d112e !important;
+    box-shadow:  7px 7px 14px #000000, 
+                0px -1px 14px #e3f0f9
+}
+
+#confirmationDialog > div {
+    display: flex;
+    justify-content: space-evenly;
+    width: 30vh;
+}
+
+#confirmationDialog button:first-child {
+       height: 7vh;
+    width: 16vh;
+    color: rgba(244, 0, 0, 0.75);
+    background: none;
+    font-size: 2vh;
+    font-weight: 800;
+    text-transform: uppercase;
+    outline: none;
+    border: 0.5vh solid rgba(244, 0, 0, 0.62);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.5vh;
+}
+
+#confirmationDialog button:first-child:hover {
+    color: red;
+    border-color: red;
+}
+
+#confirmationDialog button:nth-child(2) {
+    border: none;
+    outline: none;
+    text-decoration: underline;
+    color: rgba(139, 218, 247, 0.78);
+    background: none;
+    padding: 0;
+}
+
+#confirmationDialog button:nth-child(2):hover {
+    color: rgb(139, 218, 247);
+    cursor: pointer;
+}
+
+#confirmationDialog div span {
+    font-weight: bolder;
+    color: white;
+    padding-bottom: 3vh;
+    font-size: 2.3vh;
+}
+
+.ui-dialog-titlebar-close {
+    display: none;
+}

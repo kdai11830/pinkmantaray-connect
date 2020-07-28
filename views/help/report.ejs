@@ -90,7 +90,7 @@
 					<tr id='connection<%= data[i].id %>'>
 						<td id="reportBtnParents">
 							<button class='reportBtn' value='<%= data[i].id %>'>Report</button>
-							<button class='deleteBtn' value='<%= data[i].id %>'>Delete Connection</button>
+							<button class='deleteBtn' value='<%= data[i].id %>'>Delete</button>
 						</td>
 						<td><%= data[i].name %></td>
 						<td><%= data[i].pronouns %></td>
@@ -101,9 +101,11 @@
 			</table>
 		</div>
 		<div id="confirmationDialog">
-			<p>Are you sure you want to remove this connection?</p>
-			<button id="closeBtn">Cancel</button>
-			<button id="confirmBtn">Remove</button>
+			<p>Are you sure you want to delete this connection?</p>
+			<div>
+				<button id="confirmBtn">Delete Connection</button>
+				<button id="closeBtn">Cancel</button>
+			</div>
 		</div>
 	</div>
 
