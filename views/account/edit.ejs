@@ -68,6 +68,7 @@
 		<div id="div_location">
 			<label for="option_location">Location:</label> <!-- just use country for now, refine later -->
 			<select name="option_location" id="select_location" value="<%= data.country %>">
+				<option disabled="disabled" selected="selected">Please select an option</option>
 				<option value="">No Preference</option>
 				<option value="CURRENT LOC">Current Location</option>
 			    <option value="AFG">Afghanistan</option>
@@ -446,6 +447,7 @@
 			<div id="option_race_div" class="results">
 				<input list="race_datalist" name="race_ethnicity" id="race_ethnicity" autocomplete="off" class="list_input">
 				<datalist class="select_list" id="race_datalist">
+					<option disabled="disabled" selected="selected">Please select an option</option>
 					<option value="Abazin" />
 					<option value="Abkhazian" />
 					<option value="Acehnese" />
@@ -1196,6 +1198,7 @@
 			<div id='option_religion_div' class="results">
 				<input list="religion_datalist" name="religion" id="religion" autocomplete='off' class="list_input restrict_select">
 				<datalist class='select_list' id="religion_datalist">
+					<option disabled="disabled" selected="selected">Please select an option</option>
 					<option value="">Prefer not to answer</option>
 					<option value="Agnostic">Agnostic</option>
 					<option value="Ahmadiyya">Ahmadiyya</option>
