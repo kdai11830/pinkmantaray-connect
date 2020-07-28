@@ -70,10 +70,16 @@ tr > td:nth-child(4), tr > td:nth-child(5), tr > td:nth-child(6), tr > td:nth-ch
     font-size: 3vh;
     color: rgb(168, 224, 249);
 }
+
+.iconButton {
+    padding-bottom: 2vh;
+}
+
 .iconButton:hover .iconButtonText {
   visibility: visible;
   padding: 0.5vh;
 }
+
 .iconButtonText{
   visibility: hidden;
 }

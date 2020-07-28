@@ -34,20 +34,28 @@
 					$(".ui-dialog-titlebar-close", ui.dialog || ui).hide();
 				}
 			});
-			if (userData["myProfile"]) {
-				if (userData["hidden"] == 0) {
-					$("#profileForm").after('<button id="hideProfile">Hide my profile</button>');
-				} else {
-					$("#profileForm").after('<button id="unhideProfile">Unhide my profile</button>');
-				}
+			// hide profile button
+			// if (userData["myProfile"]) {
+			// 	if (userData["hidden"] == 0) {
+			// 		$("#profileForm").after('<button id="hideProfile">Hide my profile</button>');
+			// 	} else {
+			// 		$("#profileForm").after('<button id="unhideProfile">Unhide</button>');
+			// 	}
+			// }
+
+			// $('#myProfileOptions').on('click', '#hideProfile', function () {
+			// 	$('#hideDialog').dialog('open');
+			// });
+			// $('#myProfileOptions').on('click', '#unhideProfile', function () {
+			// 	$('#unhideDialog').dialog('open');
+			// });
+			//toggle switch BROKEN
+			if ($('input.checkbox').is(':checked')) {
+				$('#hideDialog').dialog('open');
+			} else {
+				$('#unhideDialog').dialog('open');
 			}
 
-			$('#myProfileOptions').on('click', '#hideProfile', function () {
-				$('#hideDialog').dialog('open');
-			});
-			$('#myProfileOptions').on('click', '#unhideProfile', function () {
-				$('#unhideDialog').dialog('open');
-			});
 			$('.closeBtn').click(function () {
 				$(this).parent().dialog('close');
 			});
@@ -55,7 +63,7 @@
 				socket.emit('hideProfile', { 'hide': true });
 				$(this).parent().dialog('close');
 				$('#hideProfile').remove();
-				$("#profileForm").after('<button id="unhideProfile">Unhide my profile</button>');
+				$("#profileForm").after('<button id="unhideProfile">Unhide</button>');
 				$('#myProfileOptions').on('click', '#hideProfile', function () {
 					$('#hideDialog').dialog('open');
 				});
@@ -64,7 +72,7 @@
 				socket.emit('hideProfile', { 'hide': false });
 				$(this).parent().dialog('close');
 				$('#unhideProfile').remove();
-				$("#profileForm").after('<button id="hideProfile">Hide my profile</button>');
+				$("#profileForm").after('<button id="hideProfile">Hide</button>');
 				$('#myProfileOptions').on('click', '#unhideProfile', function () {
 					$('#unhideDialog').dialog('open');
 				});
@@ -93,7 +101,7 @@
 		<% } %>
 
 		<table id="profileInfo">
-			<tr >
+			<tr style="width: 100%">
 				<td class="name"><%= data.name %></td>
 				<td><%= data.pronouns %></td>
 				<td><%= new Date().getFullYear() - data.year %></td>
@@ -104,27 +112,33 @@
 					<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>
 
 				<% } %>
+					<div class="button b2" id="button-13">
+						<input type="checkbox" class="checkbox">
+						<div class="knobs">
+							<span></span>
+						</div>
+					</div>
 			</tr>
 			<tr>
-				<td><span>Gender: </span> <%= data.gender.join(', ') %></td>
+				<td> <%= data.gender.join(', ') %></td>
 			</tr>
 			<tr>
-				<td><span>Sexuality: </span> <%= data.sexuality.join(', ') %></td>
+				<td> <%= data.sexuality.join(', ') %></td>
 			</tr>
 			<tr>
-				<td><span>Country: </span> <%= data.country %></td>
+				<td> <%= data.country %></td>
 			</tr>
 			<tr>
-				<td><span>Language: </span><%= data.language.join(', ') %></td>
+				<td> <%= data.language.join(', ') %></td>
 			</tr>
 			<tr>
-				<td><span>Culture: </span><%= data.race_ethnicity.join(', ') %></td>
+				<td> <%= data.race_ethnicity.join(', ') %></td>
 			</tr>
 			<tr>
-				<td><span>Religion: </span><%= data.religion.join(', ') %></td>
+				<td> <%= data.religion.join(', ') %></td>
 			</tr>
-			<tr>
-				<td><span>Interests:</span> <%= data.interest.join(', ') %></td>
+			<tr style="width: 100%">
+				<td> <%= data.interest.join(', ') %></td>
 			</tr>
 		</table>
 		<div>	​
@@ -159,15 +173,16 @@
 	​
 	​
 	<div id="hideDialog" class="dialog">
-		<p>Are you sure you want to hide your profile? Doing so will remove you from the connection pool; you will not
-			be presented when your profile matches others' search queries.</p>
+		<div><span>Are you sure you want to hide your profile?</span> </br> Doing so will remove you from the connection pool and you will not
+			be presented when your profile matches others' search queries.</div>
 		<!-- <button class='closeBtn'>Close</button> -->
-		<button id="hideConfirmBtn">Hide my profile</button>
+		<button id="hideConfirmBtn">Hide</button>
 	</div>
 	<div id="unhideDialog" class="dialog">
-		<p>Unhide your profile and make yourself visible to others' search queries?</p>
+		<div><span>Are you sure you want to hide your profile?</span> </br>Doing so will add you to the connection pool and will make yourself visible to others' search queries.</div>
 		<!-- <button class='closeBtn'>Close</button> -->
-		<button id="unhideConfirmBtn">Unhide my profile</button>
+		<button id="unhideConfirmBtn">Unhide</button>
+	</div>
 	</div>
 	<% } %>
 </body>

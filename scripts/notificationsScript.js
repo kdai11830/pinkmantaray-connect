@@ -13,7 +13,7 @@ $(document).ready(function() {
 		console.log(idx);
 		var id = $('#invitationsTable #userId' + idx).html();
 		$("#invitationsTable #"+idx).empty();
-		$("#invitationsTable #"+idx).append('<td class="successMsg">nice.</td>');
+		// $("#invitationsTable #"+idx).append('<td class="successMsg">nice.</td>');
 		$("#invitationsTable #"+idx).append('<td class="successMsg">Invitation accepted! You can now see their information at the <a href="/">homepage</a>.</td>');
 		$("#invitationsTable #buttons"+idx).remove();
 

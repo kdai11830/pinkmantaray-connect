@@ -30,13 +30,13 @@ app.set('view engine', 'ejs');
 // establish mysql connection and promisify
 
 //kevin's mysql connection
-var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : 'Jkmrhi11830!',
-	database : 'pinkmantaray_connect',
-	multipleStatements: 'true'
-});
+// var connection = mysql.createConnection({
+// 	host     : 'localhost',
+// 	user     : 'root',
+// 	password : 'Jkmrhi11830!',
+// 	database : 'pinkmantaray_connect',
+// 	multipleStatements: 'true'
+// });
 
 // var pool = mysql.createPool({
 // 	connectionLimit : 10,
@@ -51,13 +51,13 @@ var connection = mysql.createConnection({
 // vic's mysql connection
 // establish mysql connection
 
-// var connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "bearbear",
-//   database: "new_schema2",
-//   multipleStatements: "true",
-// })
+var connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "bearbear",
+  database: "new_schema2",
+  multipleStatements: "true",
+})
 
 
 // var connection = mysql.createConnection({

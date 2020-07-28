@@ -13,13 +13,13 @@ body > div {
 
 /* middle line */
 body > div:after {
-    content: "";
+    /* content: ""; */
     background-color: #c3e5e821;
     position: absolute;
     width: 0.4vh;
     height: 77vh;
     top: 19vh;
-    left: 99.1vh;
+    left: 100.7vh;
     display: block;
 }
 
@@ -114,10 +114,12 @@ tbody {
     /* border-collapse: separate; */
     border-spacing:0 15px;
     /* padding: 2vh; */
-    min-width: 80vh;
+    /* min-width: 80vh; */
     font-size: 1.7vh;
     text-shadow: 0.3px 0.5px rgba(88, 87, 87, 0.521);
     border-collapse: collapse;
+    width: 97vh;
+    display: table;
 }
 
 tbody tr:nth-child(odd) {
