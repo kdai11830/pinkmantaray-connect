@@ -15,7 +15,12 @@
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 	<script type="text/javascript">
+
 		$(document).ready(function () {
+
+			// WE DON'T WANT TO USE THIS! FIGURE OUT A WAY TO POST TO /profile
+			// history.replaceState(null, 'profile', '/profile');
+
 			var socket = io();
 
 			var userData = <%- JSON.stringify(data) %>
@@ -69,7 +74,8 @@
 					$('#unhideDialog').dialog('open');
 				});
 			});
-		})
+
+		});
 	</script>
 	​
 </head>
