@@ -47,14 +47,16 @@
 			// 	$('#hideDialog').dialog('open');
 			// });
 			// $('#myProfileOptions').on('click', '#unhideProfile', function () {
-			// 	$('#unhideDialog').dialog('open');
+			// 	$(c'#unhideDialog').dialog('open');
 			// });
 			//toggle switch BROKEN
-			if ($('input.checkbox').is(':checked')) {
-				$('#hideDialog').dialog('open');
-			} else {
-				$('#unhideDialog').dialog('open');
-			}
+			$('input.checkbox').change( ()=>{
+				if ($('input.checkbox').is(':checked')) {
+					$('#hideDialog').dialog('open');
+				} else {
+					$('#unhideDialog').dialog('open');
+				}
+			})
 
 			$('.closeBtn').click(function () {
 				$(this).parent().dialog('close');
@@ -95,9 +97,15 @@
 	<% } else { %>
 	<div id="profileInfoDiv">
 		<% if (!data.myProfile) { %>
-			<h2><%= data.name %>'s Profile</h2>
+			<h2 class="blue"><span><%= data.name %>'s Profile</h2>
 		<% } else { %>
-			<h2>My Profile</h2>
+			<h2 class="pink">My Profile</h2>
+			<div class="button b2" id="button-13">
+				<input type="checkbox" class="checkbox">
+				<div class="knobs">
+					<span></span>
+				</div>
+			</div>
 		<% } %>
 
 		<table id="profileInfo">
@@ -110,14 +118,9 @@
 					<td><a href="https://instagram.com/<%= data.instagram %>">
 							<i class="fab fa-instagram fa-2x"></i></a></td>
 					<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>
+					<!-- <td><a href="/report?id=<%= data.id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td> -->
 
 				<% } %>
-					<div class="button b2" id="button-13">
-						<input type="checkbox" class="checkbox">
-						<div class="knobs">
-							<span></span>
-						</div>
-					</div>
 			</tr>
 			<tr>
 				<td> <%= data.gender.join(', ') %></td>
@@ -142,8 +145,8 @@
 			</tr>
 		</table>
 		<div>	​
-			<% if (!data.myProfile) { %>
-			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
+			<!-- <% if (!data.myProfile) { %>
+			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET"> -->
 				<!-- <input type="hidden" name="userId" value="<%= data.id %>">
 				<input type="hidden" name="username" value="<%= data.username %>"> -->
 				<div id="reportDiv">
@@ -157,7 +160,7 @@
 					<div id="myProfileOptions">
 						<form id="profileForm" action="/profile?edit=" method="GET">
 							<!-- <div id="reportDiv"> -->
-								<button type="submit" name="edit">Edit Profile</button>
+								<button id="editProfile" type="submit" name="edit">Edit Profile</button>
 							<!-- </div> -->
 						</form>
 					</div>
@@ -179,7 +182,7 @@
 		<button id="hideConfirmBtn">Hide</button>
 	</div>
 	<div id="unhideDialog" class="dialog">
-		<div><span>Are you sure you want to hide your profile?</span> </br>Doing so will add you to the connection pool and will make yourself visible to others' search queries.</div>
+		<div><span>Are you sure you want to unhide your profile?</span> </br>Doing so will add you to the connection pool and will make yourself visible to others' search queries.</div>
 		<!-- <button class='closeBtn'>Close</button> -->
 		<button id="unhideConfirmBtn">Unhide</button>
 	</div>
