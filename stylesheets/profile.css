@@ -80,6 +80,7 @@
     flex-direction: column;
     height: 100%;
     justify-content: space-between;
+    color: black;
 }
 
 
@@ -210,14 +211,15 @@ tr {
 }
 
 .name {
-    color: rgb(139, 218, 247);
+    color: black;
+    font-size: 4vh;
 }
 
 .dialog {
     width: 51.5vh !important;
-    height: 19vh !important;
+    height: 27vh !important;
     border-radius: 1vh;
-    padding: 7vh 2vh;
+    padding: 6vh 2vh;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -352,14 +354,15 @@ tr {
 
 #button-13 .knobs:before, #button-13 .knobs:after
 {
-    color: #4e4e4e;
+    color:#d09696;
     z-index: 1;
 }
 
 #button-13 .knobs:before
 {
-        content: 'VISIBLE';
+    content: 'VISIBLE';
     left: 0vh;
+    color: #abe2a5;
 }
 
 #button-13 .knobs:after
