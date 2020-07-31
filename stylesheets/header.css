@@ -11,7 +11,7 @@ body {
   width: 14vh;
 }
 
-a {
+a{
   text-decoration: none;
   color: #ffffff;
   position: relative;
@@ -31,7 +31,7 @@ a:before {
   transition: all 0.3s ease-in-out;
 }
 
-a:hover:before {
+a::hover:before {
   visibility: visible;
   transform: scaleX(1);
 }

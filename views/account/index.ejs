@@ -14,6 +14,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css"></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
 			var socket = io();
@@ -50,35 +51,48 @@
 			// 	$(c'#unhideDialog').dialog('open');
 			// });
 			//toggle switch BROKEN
+
+			// $('input.checkbox').prop('checked', userData['hidden'] == 1)
+
 			$('input.checkbox').change( ()=>{
+				$('input.checkbox').prop('disabled', true);
 				if ($('input.checkbox').is(':checked')) {
 					$('#hideDialog').dialog('open');
 				} else {
 					$('#unhideDialog').dialog('open');
 				}
 			})
-
-			$('.closeBtn').click(function () {
-				$(this).parent().dialog('close');
-			});
-			$('#hideConfirmBtn').click(function () {
+			$('#hideConfirmBtn').click(function() {
+				// $('input.checkbox').css("pointer-events","auto");
+				// $('input.checkbox').on('click', true);
+				$('input.checkbox').prop('disabled', false);
 				socket.emit('hideProfile', { 'hide': true });
 				$(this).parent().dialog('close');
 				$('#hideProfile').remove();
-				$("#profileForm").after('<button id="unhideProfile">Unhide</button>');
+				// $("#profileForm").after('<button id="unhideProfile">Unhide</button>');
 				$('#myProfileOptions').on('click', '#hideProfile', function () {
 					$('#hideDialog').dialog('open');
 				});
 			});
-			$('#unhideConfirmBtn').click(function () {
+			$('#unhideConfirmBtn').click(function() {
+				// $('input.checkbox').css("pointer-events","auto");
+				// $('input.checkbox').on('click', true);
+				$('input.checkbox').prop('disabled', false);
 				socket.emit('hideProfile', { 'hide': false });
 				$(this).parent().dialog('close');
 				$('#unhideProfile').remove();
-				$("#profileForm").after('<button id="hideProfile">Hide</button>');
+				// $("#profileForm").after('<button id="hideProfile">Hide</button>');
 				$('#myProfileOptions').on('click', '#unhideProfile', function () {
 					$('#unhideDialog').dialog('open');
 				});
 			});
+
+			$('.cancelBtn').click(function() {
+				$(this).parent().dialog('close');
+				$('input.checkbox').prop('disabled', false);
+				$('input.checkbox').prop('checked', !$('input.checkbox').is(':checked'));
+				// $('input.checkbox').css("pointer-events","auto");
+			})
 		})
 	</script>
 	​
@@ -101,7 +115,11 @@
 		<% } else { %>
 			<h2 class="pink">My Profile</h2>
 			<div class="button b2" id="button-13">
-				<input type="checkbox" class="checkbox">
+				<% if (data['hidden'] == 1) { %>
+					<input type="checkbox" class="checkbox" checked>
+				<% } else { %>
+					<input type="checkbox" class="checkbox">
+				<% } %>
 				<div class="knobs">
 					<span></span>
 				</div>
@@ -115,9 +133,9 @@
 				<td><%= new Date().getFullYear() - data.year %></td>
 				<% if (!data.myProfile) { %>
 
-					<td><a href="https://instagram.com/<%= data.instagram %>">
+					<td><a target="_blank" rel="noopener noreferrer" href="https://instagram.com/<%= data.instagram %>">
 							<i class="fab fa-instagram fa-2x"></i></a></td>
-					<td><a href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>
+					<td><a target="_blank" rel="noopener noreferrer" href="mailto:<%= data.email %>"><i class="far fa-envelope fa-2x"></i></a></td>
 					<!-- <td><a href="/report?id=<%= data.id %>"><i class="fas fa-exclamation-triangle fa-2x"></i></a></td> -->
 
 				<% } %>
@@ -145,8 +163,8 @@
 			</tr>
 		</table>
 		<div>	​
-			<!-- <% if (!data.myProfile) { %>
-			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET"> -->
+			<% if (!data.myProfile) { %>
+			<form id="profileForm" action="/report?username=<%= data.username %>" method="GET">
 				<!-- <input type="hidden" name="userId" value="<%= data.id %>">
 				<input type="hidden" name="username" value="<%= data.username %>"> -->
 				<div id="reportDiv">
@@ -180,11 +198,13 @@
 			be presented when your profile matches others' search queries.</div>
 		<!-- <button class='closeBtn'>Close</button> -->
 		<button id="hideConfirmBtn">Hide</button>
+		<button class="cancelBtn">Cancel</button>
 	</div>
 	<div id="unhideDialog" class="dialog">
 		<div><span>Are you sure you want to unhide your profile?</span> </br>Doing so will add you to the connection pool and will make yourself visible to others' search queries.</div>
 		<!-- <button class='closeBtn'>Close</button> -->
 		<button id="unhideConfirmBtn">Unhide</button>
+		<button class="cancelBtn">Cancel</button>
 	</div>
 	</div>
 	<% } %>
