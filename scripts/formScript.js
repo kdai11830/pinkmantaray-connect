@@ -70,6 +70,10 @@ $(document).ready(function() {
 	var usernameDupe = false;
 	var instagramDupe = false;
 
+	$('#consentLabel').click(function() {
+		$('input[name="consent"]').prop('checked', !$('input[name="consent"]').prop('checked'));
+	})
+
 	var currentTab = 0;
 	showTab(currentTab);
 

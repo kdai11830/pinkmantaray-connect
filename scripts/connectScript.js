@@ -86,27 +86,27 @@ $(document).ready(function() {
 
 		// put all grouped info in arrays
 		var gender = [];
-		$('input[name="option_gender"]').each(function() {
+		$('input[name="option_gender[]"]').each(function() {
 			gender.push($(this).val());
 		});
 		var sexuality = [];
-		$('input[name="option_sexuality"]').each(function() {
+		$('input[name="option_sexuality[]"]').each(function() {
 			sexuality.push($(this).val());
 		});
 		var race = [];
-		$('input[name="option_race"]').each(function() {
+		$('input[name="option_race[]"]').each(function() {
 			race.push($(this).val());
 		});
 		var religion = [];
-		$('input[name="option_religion"]').each(function() {
+		$('input[name="option_religion[]"]').each(function() {
 			religion.push($(this).val());
 		});
 		var interests = [];
-		$('input[name="option_interest"]').each(function() {
+		$('input[name="option_interest[]"]').each(function() {
 			interests.push($(this).val());
 		});
 		var language = [];
-		$('input[name="option_language"]').each(function() {
+		$('input[name="option_language[]"]').each(function() {
 			interests.push($(this).val());
 		});
 
@@ -120,6 +120,8 @@ $(document).ready(function() {
 			empty = false;
 		}
 
+		console.log(empty);
+
 		var ageArray = [parseInt($('[name=option_age1]').val()), parseInt($('[name=option_age2]').val())];
 		var age1 = Math.min.apply(null,ageArray);
 		var age2 = Math.max.apply(null,ageArray);
@@ -127,15 +129,21 @@ $(document).ready(function() {
 			empty = false;
 		}
 
-		if ($('[name=option_location]').val() != '' || $('[name=option_state]').val() != '') {
+		console.log(empty);
+
+
+		if (($('[name=option_location]').val() != '' && $('[name=option_location]').val() != null) || 
+			($('[name=option_state]').val() != '' && $('[name=option_state]').val() != null)) {
 			empty = false;
 		}
+
+		console.log($('[name=option_location]').val());
 
 		// if no values added, don't search and display message
 		if (empty) {
 			$("#resultsDisplay").empty();
 			$("#noResults").remove();
-			$('#resultsDiv').append('<div id="emptySearchMsg">Please enter search parameters!</div>')
+			$('#resultsDiv').append('<div id="emptySearchMsg">Please enter search parameters! Make sure to hit ENTER for each text entry!</div>')
 
 			$('html,body').animate({
         scrollTop: $("#resultsDiv").offset().top},
@@ -144,6 +152,7 @@ $(document).ready(function() {
 			return false;
 		}
 		
+		console.log($('[name=option_location]').val())
 
 		// get the information from form and add to dict to pass to socket
 		var emitVals = {

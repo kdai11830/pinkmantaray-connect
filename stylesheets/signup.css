@@ -165,7 +165,7 @@ body > form > h1:first-child {
     padding-left: 1.4rem;
 }
 
-.required, #select_country, .select_list, datalist, .req_state {
+.required, #select_country, .select_list, datalist, .req_state, #select_state {
     width: 34vh;
     height: 7vh;
     border: 0.1vh solid rgba(255, 255, 255, 0);

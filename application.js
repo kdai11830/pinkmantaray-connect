@@ -30,13 +30,13 @@ app.set('view engine', 'ejs');
 // establish mysql connection and promisify
 
 //kevin's mysql connection
-// var connection = mysql.createConnection({
-// 	host     : 'localhost',
-// 	user     : 'root',
-// 	password : 'Jkmrhi11830!',
-// 	database : 'pinkmantaray_connect',
-// 	multipleStatements: 'true'
-// });
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : 'Jkmrhi11830!',
+	database : 'pinkmantaray_connect',
+	multipleStatements: 'true'
+});
 
 // var pool = mysql.createPool({
 // 	connectionLimit : 10,
@@ -51,13 +51,13 @@ app.set('view engine', 'ejs');
 // vic's mysql connection
 // establish mysql connection
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "bearbear",
-  database: "new_schema2",
-  multipleStatements: "true",
-})
+// var connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "bearbear",
+//   database: "new_schema2",
+//   multipleStatements: "true",
+// })
 
 
 // var connection = mysql.createConnection({
@@ -377,7 +377,7 @@ app.get('/notifications', restrict, verifyRestrict, function(req, res) {
 app.get('/profile', restrict, verifyRestrict, function(req, res) {
 	// get id from query parameters
 	// var id = ""
-	// if ('id' in req.query) {
+	// if ("id" in req.query) {
 	// 	id = req.query.id;
 	// } else {
 	// 	id = req.session.user_id;
@@ -468,7 +468,7 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 		}
 
 		// set profile ID to users ID
-		profileId = req.session.user_id;
+		// profileId = req.session.user_id;
 
 		// edit mode
 		if (edit) {
@@ -566,12 +566,18 @@ app.get('/logout', function(req, res) {
 var profileId = null;
 app.post('/profilePost', restrict, verifyRestrict, function(req, res) {
 	if (req.body.profile) {
-		profileId = req.body.profile;
+		console.log(req.body.profile)
+		if (req.body.profile == "") 
+			profileId = req.session.user_id;
+		else 
+			profileId = req.body.profile;
 	} else {
 		profileId = req.session.user_id;
 	}
+	console.log(profileId)
 	res.redirect('/profile');
-})
+});
+
 
 /** REPORT UPDATES **/
 app.post('/reported', restrict, verifyRestrict, function(req, res) {
@@ -1124,11 +1130,11 @@ io.sockets.on('connection', function(socket) {
 			sql = sql.substring(0, sql.length-1);
 			sql += `)) AND (info.reported != 1) AND (info.verified = 1) AND (info.hidden != 1) AND (info.on_hold != 1) AND `;
 
-			if (vals["location"] != '') {
+			if (vals["location"] != '' && vals["location"] != null) {
 				sql += '(info.country = ?) AND ';
 				insertVals.push(vals["location"]);
 			}
-			if (vals["state"] != '') {
+			if (vals["state"] != '' && vals["state"] != null) {
 				sql += '(info.state = ?) AND ';
 				insertVals.push(vals["state"]);
 			}
