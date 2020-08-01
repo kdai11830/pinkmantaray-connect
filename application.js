@@ -376,11 +376,18 @@ app.get('/notifications', restrict, verifyRestrict, function(req, res) {
 /** PAGES FOR INDIVIDUAL PROFILES **/
 app.get('/profile', restrict, verifyRestrict, function(req, res) {
 	// get id from query parameters
-	var id = ""
-	if ("id" in req.query) {
-		id = req.query.id;
-	} else {
+	// var id = ""
+	// if ('id' in req.query) {
+	// 	id = req.query.id;
+	// } else {
+	// 	id = req.session.user_id;
+	// }
+	var id;
+	if (profileId == null) {
 		id = req.session.user_id;
+		profileId = req.session.user_id;
+	} else {
+		id = profileId;
 	}
 
 	// only allow edit if it is your own profile
@@ -459,6 +466,9 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 		} else {
 			infoVals["myProfile"] = false;
 		}
+
+		// set profile ID to users ID
+		profileId = req.session.user_id;
 
 		// edit mode
 		if (edit) {
@@ -548,6 +558,20 @@ app.get('/logout', function(req, res) {
 	res.redirect('/welcome');
 });
 
+
+/******************** BEGIN POST ROUTES *********************/
+
+/** GET USER PROFILES VIA POST **/
+// privacy for each user
+var profileId = null;
+app.post('/profilePost', restrict, verifyRestrict, function(req, res) {
+	if (req.body.profile) {
+		profileId = req.body.profile;
+	} else {
+		profileId = req.session.user_id;
+	}
+	res.redirect('/profile');
+})
 
 /** REPORT UPDATES **/
 app.post('/reported', restrict, verifyRestrict, function(req, res) {

@@ -89,10 +89,7 @@ $(document).ready(function() {
 	$(".variable_list").delegate(".close", "click", function() {
 		// remove hidden input with corresponding value
 		var liTxt = $(this).parent().clone().children().remove().end().text();
-		liTxt = liTxt.substring(0, liTxt.length - 1);
 		var listID = $(this).parent().parent().siblings('input').attr('id');
-		console.log(liTxt);
-		console.log(listID);
 		$('#option_'+listID+'[value="' + liTxt + '"]').remove();	
 		// remove li item
 		$(this).parent().remove();
@@ -179,7 +176,6 @@ $(document).ready(function() {
 					$(this).siblings('.variable_list').append(li);
 					$(this).val('');
 					// insert interest as hidden input with list attribute
-					console.log(datatype);
 					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'[]" value="'+value+'">');
 
 				// otherwise, show message

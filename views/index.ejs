@@ -86,10 +86,12 @@
 	<div id="my-connections">
 
 		<table>
+			<!-- <form id='mainForm' action='/profile' method='POST'> -->
 
 			<% if (results.length > 0) { %>
 				<% for(var i = 0; i < results.length; i++) { %>
 					<tr id="row<%= results[i].id %>">
+						<!-- <td><button class="viewProfileBtn" type='submit' name='profile' value="<%= results[i].id %>">View Profile</button></td> -->
 						<td><button class="viewProfileBtn" id="<%= results[i].id %>">View Profile</button></td>
 						<td><%= results[i].name %> </td>
 						<td><%= results[i].pronouns %> </td>
@@ -111,6 +113,8 @@
 					</tr>
 				<% } %>
 			<% } %>
+
+			<!-- </form> -->
 
 		</table>
 	</div>
