@@ -49,7 +49,7 @@
 	</h2>
 	<form id="editForm" action="/edited" method="POST">
 
-		<div id="div_info" >
+		<div id="div_info">
 			<label for="option_name">Name: </label>
 			<input type="text" name="option_name" value="<%= data.name %>">
 			<label for="option_year">Birth Year: </label>
@@ -326,7 +326,7 @@
 		<div id="div_language" class="connect-row">
 			<label for="language">Language: </label>
 			<div id="option_language_div" class="results">
-				<input class="list_input restrict_select" list="language_datalist" id="language" name="language">
+				<input class="list_input restrict_select" list="language_datalist" id="language" name="language" placeholder="Press enter after typing/selecting">
 				<datalist class="select_list" id="language_datalist">
 					<option value=""></option>
 					<option value="Afrikaans">Afrikaans</option>
@@ -411,7 +411,7 @@
 		<div id="div_gender" class="connect-row">
 			<label for="gender">Gender:</label>
 			<div id="option_gender_div" class="results">
-				<input list="gender_datalist" name="gender" id="gender" autocomplete="off" class="list_input">
+				<input list="gender_datalist" name="gender" id="gender" autocomplete="off" class="list_input" placeholder="Press enter after typing/selecting">
 				<datalist class="select_list" id="gender_datalist">
 					<option value="Transgender"/>
 					<option value="Cisgender"/>
@@ -429,7 +429,7 @@
 		<div id="div_sexuality" class="connect-row">
 			<label for="sexuality">Sexuality:</label>
 			<div id="option_sexuality_div" class="results"> 
-				<input list="sexuality_datalist" name="sexuality" id="sexuality" autocomplete="off" class="list_input">
+				<input list="sexuality_datalist" name="sexuality" id="sexuality" autocomplete="off" class="list_input" placeholder="Press enter after typing/selecting">
 				<datalist class="select_list" id="sexuality_datalist">
 					<option value="Straight"/>
 					<option value="Queer"/>
@@ -445,7 +445,7 @@
 		<div id="div_race" class="connect-row">
 			<label for="race">Culture:</label>
 			<div id="option_race_div" class="results">
-				<input list="race_datalist" name="race_ethnicity" id="race_ethnicity" autocomplete="off" class="list_input">
+				<input list="race_datalist" name="race_ethnicity" id="race_ethnicity" autocomplete="off" class="list_input" placeholder="Press enter after typing/selecting">
 				<datalist class="select_list" id="race_datalist">
 					<option disabled="disabled" selected="selected">Please select an option</option>
 					<option value="Abazin" />
@@ -1196,7 +1196,7 @@
 		<div id="div_religion" class="connect-row">
 			<label>Religion: </label>
 			<div id='option_religion_div' class="results">
-				<input list="religion_datalist" name="religion" id="religion" autocomplete='off' class="list_input restrict_select">
+				<input list="religion_datalist" name="religion" id="religion" autocomplete='off' class="list_input restrict_select" placeholder="Press enter after typing/selecting">
 				<datalist class='select_list' id="religion_datalist">
 					<option disabled="disabled" selected="selected">Please select an option</option>
 					<option value="">Prefer not to answer</option>
@@ -1303,7 +1303,7 @@
 		<div id="div_interests" class="connect-row">
 			<label for="interest">Interests: </label>
 			<div id='option_interest_div' class="results">
-				<input list="interests_datalist" name="interest" id="interest" class="list_input" autocomplete='off'>
+				<input list="interests_datalist" name="interest" id="interest" class="list_input" autocomplete='off' placeholder="Press enter after typing/selecting">
 				<datalist class='select_list' id="interests_datalist">
 					<option value="Aircraft Spotting" />
 					<option value="Airbrushing" />

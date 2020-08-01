@@ -55,6 +55,7 @@ h2 {
 
 .results > input {
     padding: 1vh 2vh;
+    width: 34vh;
 }
 
 .results > ul > li {
@@ -283,13 +284,8 @@ h2 {
     padding-top: 2vh;
 }
 
-#select_location {
-    width: 28vh;
-    height: 5vh;
-}
-
-#select_state {
-    width: 28vh;
+#select_location, #select_state {
+    width: 39vh;
     height: 5vh;
 }
 

@@ -32,7 +32,7 @@ h2 {
 
 #editForm > div {
     display: flex;
-    width: 135vh;
+    width: 176vh;
     text-align: left;
 }
 
@@ -218,4 +218,19 @@ label {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
+}
+
+input {
+    width: 39vh;
+    height: 3vh;
+}
+
+select {
+    width: 40vh;
+    height: 4vh;
+}
+
+label {
+    /* width: 15vh; */
+    /* color: red; */
 }
