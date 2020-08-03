@@ -488,7 +488,7 @@ app.get('/report', restrict, verifyRestrict, function(req, res) {
 	if (!('id' in req.query)) {
 		var sql = `SELECT info.id, info.name, info.pronouns, info.instagram FROM user_info info 
 			LEFT JOIN connections conn ON conn.user_id = info.id 
-			WHERE conn.connection_id = ? AND info.reported != 1 AND info.on_hold != 1;`;
+			WHERE conn.connection_id = ? AND conn.pending != 1 AND info.reported != 1 AND info.on_hold != 1;`;
 		connection.query(sql, req.session.user_id, function(error, results, fields) {
 			if (error) throw error;
 			console.log(results);

@@ -134,6 +134,7 @@ tr {
 
 h3 {
     text-transform: none;
+    font-style: italic;
 }
 
 .successMsg {

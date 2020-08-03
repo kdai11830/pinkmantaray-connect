@@ -15,6 +15,7 @@ a, form button {
   text-decoration: none;
   color: #ffffff;
   position: relative;
+  font-size: 2vh;
   /* transition-duration: 0.2s; */
 }
 
