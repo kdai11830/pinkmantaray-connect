@@ -200,6 +200,12 @@ body > form > h1:first-child {
     padding-top: 2vh;
 }
 
+#move-buttons > div:first-child{
+    width: 38vh;
+    display: flex;
+    justify-content: space-around;
+}
+
 
 /* .further-signup-info {
     display: flex;
