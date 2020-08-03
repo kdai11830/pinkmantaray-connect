@@ -211,7 +211,7 @@ tr {
 }
 
 .name {
-    color: black;
+    color: rgb(255, 255, 255);
     font-size: 4vh;
 }
 
@@ -302,8 +302,6 @@ tr {
 		inset rgba(70,70,70,0.4) 2px 2px 4px,
 		inset rgb(208, 210, 211) -2px -2px 4px;
 }
-
-
 
 .button
 {
