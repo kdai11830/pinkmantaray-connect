@@ -247,7 +247,7 @@ tr {
     display: none;
 }
 
-#hideConfirmBtn, #unhideConfirmBtn  {
+#hideConfirmBtn, #unhideConfirmBtn, .cancelBtn  {
     border: 2px solid rgba(255, 255, 255, 0.74);
     color: rgba(255, 255, 255, 0.74);
     background: none;
@@ -256,13 +256,24 @@ tr {
     padding: 1vh 2vh;
 }
 
-#hideConfirmBtn:focus, #unhideConfirmBtn:focus {
+.cancelBtn {
+    border: 2px solid rgba(255, 255, 255, 0.336);
+    color: rgba(255, 255, 255, 0.336);
+}
+
+#hideConfirmBtn:focus, #unhideConfirmBtn:focus, .cancelBtn:focus {
     outline: none;
 }
 
 #hideConfirmBtn:hover, #unhideConfirmBtn:hover {
     color: white;
     border: 2px solid white;
+    cursor: pointer;
+} 
+
+.cancelBtn:hover {
+    color: rgba(255, 255, 255, 0.600);
+    border-color: rgba(255, 255, 255, 0.600);
     cursor: pointer;
 }
 
@@ -389,3 +400,5 @@ tr {
 {
     background-color: #fcebeb;
 }
+
+
