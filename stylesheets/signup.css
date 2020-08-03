@@ -165,6 +165,10 @@ body > form > h1:first-child {
     padding-left: 1.4rem;
 }
 
+#select_state:disabled {
+    color: #808080c4;
+}
+
 .required, #select_country, .select_list, datalist, .req_state, #select_state {
     width: 34vh;
     height: 7vh;
