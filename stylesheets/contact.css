@@ -31,6 +31,7 @@ h2 {
 }
 
 .text a {
+    font-size: 3.5vh;
     color: rgb(139, 218, 247);
     font-weight: bold;
 }
