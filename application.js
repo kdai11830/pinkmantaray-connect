@@ -383,11 +383,11 @@ app.get('/profile', restrict, verifyRestrict, function(req, res) {
 	// 	id = req.session.user_id;
 	// }
 	var id;
-	if (profileId == null) {
+	if (!req.session.profileId) {
 		id = req.session.user_id;
-		profileId = req.session.user_id;
+		req.session.profileId = req.session.user_id;
 	} else {
-		id = profileId;
+		id = req.session.profileId;
 	}
 
 	// only allow edit if it is your own profile
@@ -563,18 +563,17 @@ app.get('/logout', function(req, res) {
 
 /** GET USER PROFILES VIA POST **/
 // privacy for each user
-var profileId = null;
 app.post('/profilePost', restrict, verifyRestrict, function(req, res) {
 	if (req.body.profile) {
 		console.log(req.body.profile)
 		if (req.body.profile == "") 
-			profileId = req.session.user_id;
+			req.session.profileId = req.session.user_id;
 		else 
-			profileId = req.body.profile;
+			req.session.profileId = req.body.profile;
 	} else {
-		profileId = req.session.user_id;
+		req.session.profileId = req.session.user_id;
 	}
-	console.log(profileId)
+	// console.log(profileId)
 	res.redirect('/profile');
 });
 

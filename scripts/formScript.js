@@ -249,34 +249,6 @@ $(document).ready(function() {
 	});
 
 
-	// $(".list_input").on('input', function () {
-	//     var val = this.value;
-	//     if($(this).siblings('.select_list').children().filter(function(){
-	//         return this.value.toUpperCase() === val.toUpperCase();        
-	//     }).length) {
-	//         var exists = false;
-	// 		for (let li of $(this).siblings('.variable_list').children('li')) {
-	// 			var liTxt = $(li).clone().children().remove().end().text();
-	// 			if (value === liTxt) {
-	// 				exists = true;
-	// 			}
-	// 		}
-	// 		// if new interest, add to list
-	// 		if (!exists) {
-	// 			var li = $("<li>" + value + '<span class="close"> ×</span></li>');
-	// 			$(this).siblings('.variable_list').append(li);
-	// 			$(this).val('');
-	// 			// insert interest as hidden input with list attribute
-	// 			$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'" value="'+value+'">');
-	// 		// otherwise, show message
-	// 		} else {
-	// 			$(this).after('<div class="duplicate_msg">Interest already added!</div>');
-	// 			$(this).siblings('.duplicate_msg').css("color", "red");
-	// 			$(this).val('');
-	// 		}
-	//     }
-	// });
-
 	$('#select_language').change(function() {
 		var value = $(this).val();
 
@@ -295,6 +267,40 @@ $(document).ready(function() {
 			$(this).val('');
 			// insert interest as hidden input with list attribute
 			$(this).siblings('.variable_list').after('<input type="hidden" id="entry_language" name="entry_language[]" value="'+value+'">');
+		}
+	});
+
+
+	$('.list_input').bind('input', function(e) {
+		var isInputEvent = (Object.prototype.toString.call(e.originalEvent).indexOf("InputEvent") > -1);
+
+		if (!isInputEvent) {
+			var value = $(this).val();
+			if (value != '') {
+				var datatype = $(this).attr('id');
+
+				// check to see if already entered interest
+				var exists = false;
+				for (let li of $(this).siblings('.variable_list').children('li')) {
+					var liTxt = $(li).clone().children().remove().end().text();
+					if (value === liTxt) {
+						exists = true;
+					}
+				}
+
+				// if new interest, add to list
+				if (!exists) {
+					var li = $("<li>" + value + '<span class="close"> ×</span></li>');
+					$(this).siblings('.variable_list').append(li);
+					$(this).val('');
+					// insert interest as hidden input with list attribute
+					$(this).siblings('.variable_list').after('<input type="hidden" id="entry_'+datatype+'" name="entry_'+datatype+'[]" value="'+value+'">');
+
+				// otherwise, reset field
+				} else {
+					$(this).val('');
+				}
+			}
 		}
 	})
 

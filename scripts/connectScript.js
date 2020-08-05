@@ -298,6 +298,39 @@ $(document).ready(function() {
 		}
 	});
 
+	$('.list_input').bind('input', function(e) {
+		var isInputEvent = (Object.prototype.toString.call(e.originalEvent).indexOf("InputEvent") > -1);
+
+		if (!isInputEvent) {
+			var value = $(this).val();
+			if (value != '') {
+				var datatype = $(this).attr('id');
+
+				// check to see if already entered interest
+				var exists = false;
+				for (let li of $(this).siblings('.variable_list').children('li')) {
+					var liTxt = $(li).clone().children().remove().end().text();
+					if (value === liTxt) {
+						exists = true;
+					}
+				}
+
+				// if new interest, add to list
+				if (!exists) {
+					var li = $("<li>" + value + '<span class="close"> ×</span></li>');
+					$(this).siblings('.variable_list').append(li);
+					$(this).val('');
+					// insert interest as hidden input with list attribute
+					$(this).siblings('.variable_list').after('<input type="hidden" id="option_'+datatype+'" name="option_'+datatype+'[]" value="'+value+'">');
+
+				// otherwise, reset field
+				} else {
+					$(this).val('');
+				}
+			}
+		}
+	});
+
 
 	$('.list_input').bind('keydown', function(e) {
 		// clear error message if start typing

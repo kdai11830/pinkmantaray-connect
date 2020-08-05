@@ -87,8 +87,8 @@
 tr {
     /* margin: 2vh; */
     /* width: 100%; */
-    text-align: center;
-    text-align: -webkit-center;
+    text-align: left;
+    text-align: -webkit-left;
 
     display: flex;
     justify-content: space-between;
