@@ -90,6 +90,7 @@ table {
 #divDesc > div > a {
     color: rgb(139, 218, 247);
     font-weight: 700;
+    font-size: 3vh;
 }
 
 #divDesc > div > a:before {

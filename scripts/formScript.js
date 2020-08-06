@@ -125,6 +125,7 @@ $(document).ready(function() {
 
 		$('#pwd-notMatched').remove();
 		$('#email-notValid').remove();
+		$('#username-notValid').remove();
 		$('#notRead').remove();
 
 		$(".tab:eq("+currentTab+")").find(".required").each(function(idx) {
@@ -143,7 +144,7 @@ $(document).ready(function() {
 			}
 		});
 
-		// validate password equality and email validity on second tab
+		// validate password equality, username validity, and email validity on second tab
 		if (currentTab === 1) {
 			if ($('#pwd').val() !== $('#confirm').val()) {
 				valid = false;
@@ -158,6 +159,19 @@ $(document).ready(function() {
 				$('#entry_email').css('border-color', 'red');
 				$(".tab:eq("+currentTab+")").append('<p id="email-notValid">Please enter a valid email!</p>');
 				$('#email-notValid').css('color', 'red');
+			}
+
+			var invalidUsernames = [
+				'kevinxdai',
+				'gregorbailar',
+				'schuylerbailar',
+				'jinwonbailar'];
+
+			if (invalidUsernames.includes($('#username').val()) || bannedWords.includes($('#username').val())) {
+				valid = false;
+				$('#username').css('border-color', 'red');
+				$(".tab:eq("+currentTab+")").append('<p id="username-notValid">Username is invalid!</p>');
+				$('#username-notValid').css('color', 'red');
 			}
 
 			// check if username and email already exist

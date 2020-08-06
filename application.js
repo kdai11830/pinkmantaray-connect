@@ -164,6 +164,25 @@ function adminRestrict(req, res, next) {
 	}
 }
 
+/** MIDDLEWEARE TO USE res.locals **/
+app.use(function (req, res, next) {
+	if (req.session.user_id) {
+		console.log("AKSDGAJKSDGKAJSGJAE");
+		var sql = `SELECT COUNT(*) AS count FROM connections WHERE connection_id = ? AND PENDING = 1;`;
+		connection.query(sql, req.session.user_id, function(error, results, fields) {
+			if (error) throw error;
+			res.locals.n_notifications = results[0].count;
+			console.log(res.locals.n_notifications);
+			next();
+			return;
+		});
+	} else {
+		next();
+		return;
+	}
+});
+
+
 /** WELCOME PAGE **/
 app.get('/welcome', function(req, res) {
 	req.session.destroy();
@@ -247,8 +266,9 @@ app.get('/connect', restrict, verifyRestrict, function(req, res) {
 	var sql = `SELECT MIN(year) AS youngest 
 		FROM user_info; 
 		SELECT MAX(year) AS oldest 
-		FROM user_info;`
-	connection.query(sql, function(error, results, fields) {
+		FROM user_info;
+		SELECT hidden FROM user_info WHERE id = ?`
+	connection.query(sql, [req.session.user_id], function(error, results, fields) {
 		if (error) throw error;
 		console.log(results);
 		res.render('connect/index', {"results": results});
@@ -800,6 +820,7 @@ app.post('/auth', function(req, res) {
 						req.session.loggedin = true;
 						req.session.username = username;
 						req.session.email = results[0].email;
+						req.session.profileId = req.session.user_id;
 
 						// set remember me cookie
 						if (req.body.remember) {
@@ -808,6 +829,14 @@ app.post('/auth', function(req, res) {
 							req.session.cookie.expires = false;
 						}
 
+						// TODO: ADD QUERY AND res.locals HERE FOR NOTIFICATIONS BADGE ICON FUNCTIONALITY
+						// var sql = `SELECT COUNT(*) AS count FROM connections WHERE connection_id = ? AND PENDING = 1;`;
+						// connection.query(sql, req.session.user_id, function(error, results, fields) {
+						// 	if (error) throw error;
+						// 	res.locals.n_notifications = results[0].count;
+						// 	res.redirect('/');
+						// 	return;
+						// });
 						res.redirect('/');
 						return;
 					} else {
@@ -1033,6 +1062,7 @@ app.post('/new-user-auth', function(req, res) {
 										} else {
 											console.log(response);
 											req.session.email = email;
+											// res.locals.n_notifications = 0;
 											// log user in with unverified restrictions
 											res.redirect('/?verified=false');
 											return

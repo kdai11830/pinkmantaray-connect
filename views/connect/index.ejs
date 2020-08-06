@@ -29,6 +29,13 @@
 	Use the following areas to refine your search.
 </div>
 
+<% if (results[2][0].hidden == 1) { %>
+	<div id='hiddenMsg'>
+		<p>Your account is currently hidden. You cannot connect to others while you are hidden. <br>If you'd like to connect to others, please visit your</p> <form action='/profilePost' method='POST' id='hiddenMsgForm'><button id='hiddenMsgBtn' type='submit'>Profile</button></form> <p>to make your account visible.</p>
+	</div>
+
+<% } %>
+
 <div id="searchDiv">
 	<form id="connectForm">
 
@@ -1361,6 +1368,7 @@
 				<option value="Astronomy" />
 				<option value="Backgammon" />
 				<option value="Badminton" />
+				<option value="Baking" />
 				<option value="Baseball" />
 				<option value="Base Jumping" />
 				<option value="Basketball" />
@@ -1413,7 +1421,6 @@
 				<option value="Cooking" />
 				<option value="Cosplay" />
 				<option value="Crafts" />
-				<option value="Crafts (unspecified)" />
 				<option value="Crochet" />
 				<option value="Crocheting" />
 				<option value="Cross-Stitch" />
@@ -1633,8 +1640,11 @@
 		</div>
 	</div>
 			
-
-	<button type="submit" id="submitButton">Search <i class="fas fa-search"></i></button>
+	<% if (results[2][0].hidden == 1) { %>
+		<button type="submit" id="submitButton" disabled>Search <i class="fas fa-search"></i></button>
+	<% } else { %>
+		<button type="submit" id="submitButton">Search <i class="fas fa-search"></i></button>
+	<% } %>
 	</div>
 		
 	</form>

@@ -403,6 +403,18 @@ li:hover {
     text-align: left;
 }
 
+#username-notValid {
+    color: red;
+    position: absolute;
+    height: 3.5vh;
+    top: 16.5vh;
+    right: 7vh;
+    /* padding: 2vh 15vh; */
+    margin: 0;
+    font-size: 2vh;
+    text-align: left;
+}
+
 #duplicateUsername p{
     padding: 0;
     margin: 0;

@@ -128,3 +128,17 @@ ul li ul li:hover {
   padding-bottom: 2.5vh;
   padding-top: 1vh;
 }
+
+.badge {
+  background-color: #fa3e3e;
+  border-radius: 20%;
+  color: white;
+ 
+  padding: .2vh .2vh;
+  font-size: 1.4vh;
+  
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: -.7vh;
+  right: -2vh;
+  min-width: 1.5vh;
+}

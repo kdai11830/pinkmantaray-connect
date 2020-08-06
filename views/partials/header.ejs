@@ -10,7 +10,13 @@
 	<div>
 		<ul>
 			<li><a href="/connect" class="headerBtn">Connect</a></li>
-			<li><a href="/notifications" class="headerBtn">Notifications</a></li>
+			<li><a href="/notifications" class="headerBtn"><span>Notifications</span>
+				<% if (n_notifications) { %>
+					<% if (n_notifications > 0) { %>
+						<span class="badge"><%= n_notifications.toString() %></span>
+					<% } %>
+				<% } %>
+				</a></li>
 			<li><div class="dropdownBtn"> My Account <span class="arrow">⌵</span></div>
 				<ul class="dropdown">
 					<li><a><form action="/profilePost" method="POST"><button name='profile' value="">Profile</button></form></a></li>
