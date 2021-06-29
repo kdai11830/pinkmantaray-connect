@@ -33,7 +33,7 @@ app.set('view engine', 'ejs');
 var connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'root',
-	password : 'Jkmrhi11830!',
+	password : '********',
 	database : 'pinkmantaray_connect',
 	multipleStatements: 'true'
 });
