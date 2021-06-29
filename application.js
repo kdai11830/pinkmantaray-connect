@@ -38,36 +38,6 @@ var connection = mysql.createConnection({
 	multipleStatements: 'true'
 });
 
-// var pool = mysql.createPool({
-// 	connectionLimit : 10,
-// 	host     : 'localhost',
-// 	user     : 'root',
-// 	password : 'Jkmrhi11830!',
-// 	database : 'pinkmantaray_connect',
-// })
-
-// const query = util.promisify(connection.query).bind(connection);
-
-// vic's mysql connection
-// establish mysql connection
-
-// var connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "bearbear",
-//   database: "new_schema2",
-//   multipleStatements: "true",
-// })
-
-
-// var connection = mysql.createConnection({
-// 	host 	 : 'localhost',
-// 	user 	 : 'root',
-// 	password : 'Jkmrhi11830!',
-// 	database : 'pinkmantaray_connect',
-// 	multipleStatements: 'true'
-// })
-
 // set session
 var sess = {
 	secret: ['2HtUJd4731oZrpg', 'eaOJ6zlsWwUPP78', 'vbMBElHHGhkM0NF'],
